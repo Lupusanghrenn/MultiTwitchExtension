@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Option | Multi Twitch</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="javascript" type="text/javascript" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+	<link rel="javascript" type="text/javascript" href="script_option.js">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style type="text/css">
+		.form-horizontal .form-group{
+			margin-right: -10px;
+			margin-left: -10px;
+		}
+	</style>
+</head>
+
+<body>
+<div class="container">
+	<h1>Options de l'extension</h1>
+		<h2>Paramétrage généraux</h2>
+		<div class="checkbox">
+		  <label><input type="checkbox" id="showOffline" name="showOffline" value="">Cocher cette case si vous souhaitez l'affichage des channels offline</label>
+		</div>
+		<div class="checkbox" id="optimisation">
+		  <label><input type="checkbox" id="optimisationC" name="optimisation" value="">Cocher cette case si vous souhaitez l'affichage optimiser des channels offline (mais moins jolie) <br>Cochez cette case si vous avez une mauvaise connexion</label>
+		</div>
+		<button class="button button-default">
+			Enregistrer
+		</button>
+
+		<h2>Paramétrage des channels</h2>
+		<div class="row">
+			<form class="form-horizontal" id="channels">
+			 
+
+			</form>
+
+			<form class="form-horizontal col-lg-12" id="save">
+			 
+			 <div class="form-group" >
+			    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+			    <div class="input-group">
+			      <div class="input-group-addon" id="savediv"><i class="fa fa-save" aria-hidden="true"></i></div>
+			      <input type="text" class="form-control" id="toSave" placeholder="nom de la chaine (dans l'URL)">
+			    </div>
+			  </div>
+
+			</form>
+		</div>
+		<br>
+	
+</div>
+
+</body>
+<script type="text/javascript" src="script_option.js"></script>
+</html>

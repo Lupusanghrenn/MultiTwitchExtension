@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Multi twitch</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="javascript" type="text/javascript" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+	<style>
+		body{
+			background-color:black;
+			color: white;
+			width: 300px;/*taille de la fenêtre*/
+		}
+		#online{
+			background-color: green;
+		}
+		a{
+			text-decoration: none;
+			color: white;
+		}
+		button{
+			background-color: white;
+			color:black;
+		}
+		small{
+			font-size: 75%;
+		}
+		.col-xs-12{
+			padding: 0px;
+		}
+		.back-white{
+			background-color: white;
+			color: black;
+		}
+		.ellipsis{
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			font-size: 11.5px;
+		}
+	</style>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row" id="afficher">
+		<div class="col-xs-12"></div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<button class="button button-default" id="refresh" style="width: 100%;">Rafraichir</button>
+		</div>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript" src="script.js"></script>
+</html>

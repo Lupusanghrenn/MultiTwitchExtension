@@ -1,0 +1,20 @@
+{
+"name" :"Multi twitch",
+"manifest_version": 2,
+"version" :"1.0",
+"description" :"Addon qui vous permet de savoir quel sont vos streamers en live et d'être notifié lors qu'ils lancent leur live, le tout en une seule extension",
+"options_page":"page_option.html",
+"icons": {
+	"64":"icone.png"
+},
+"permissions":[
+		"https://api.twitch.tv/kraken/streams/",
+		"notifications"
+	],
+"browser_action" :
+	{
+		"default_icon":"icone.png",
+		"default_popup" :"index.html",
+		"default_title":"Multi twitch"
+	}
+}
