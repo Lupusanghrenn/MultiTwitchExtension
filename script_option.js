@@ -127,6 +127,7 @@ function save(){
 		//chaine non rempli
 		alert("Chaine non rempli");
 	}
+	document.getElementById('toSave').focus();
 }
 
 function testRetour(httpRequest,nomChaine){

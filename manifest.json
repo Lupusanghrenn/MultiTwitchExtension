@@ -9,7 +9,8 @@
 },
 "permissions":[
 		"https://api.twitch.tv/kraken/streams/",
-		"notifications"
+		"notifications",
+		"tabs"
 	],
 "browser_action" :
 	{
