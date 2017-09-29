@@ -45,10 +45,26 @@ function init(){
 		div.innerHTML="<p class='text-justify'>Vous n'avez pour l'instant enregistré aucun channel</p>"
 		row.appendChild(div);
 	}
-	
+	boutonMulti = document.getElementById('multi');
+	boutonMulti.addEventListener('click',lauchMulti)
 }
 
 //myajax("https://api.twitch.tv/kraken/streams/ogaminglol",retour,urls);
+
+function lauchMulti() {
+	var tab=document.getElementsByTagName('input');
+	var chainne = "http://www.multitwitch.tv/";
+	for (var i = 0; i < tab.length; i++) {
+		if (tab[i].checked) {
+			//si check on ajoute
+			chainne+=tab[i].value+"/";
+		}
+	}
+
+	//maintenant on redirige vers le multitwitch
+	chrome.tabs.create({ url: chainne });
+}
+
 
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
