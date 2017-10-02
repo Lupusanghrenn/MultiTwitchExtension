@@ -4,6 +4,7 @@
 "version" :"1.0",
 "description" :"Addon qui vous permet de savoir quel sont vos streamers en live et d'être notifié lors qu'ils lancent leur live, le tout en une seule extension",
 "options_page":"page_option.html",
+"background_page":"background.html",
 "icons": {
 	"64":"icone.png"
 },

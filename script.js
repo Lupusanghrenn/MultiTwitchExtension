@@ -104,7 +104,13 @@ function afficherStream(){
 	}
 	channelString =channelString.substr(0,channelString.length-1);
 	myajax(channelString,returnHttpRequest);
-
+	if (request._total==0) {
+		var div = document.createElement("div");
+		div.setAttribute("class","col-xs-12");
+		div.style.margin="3px 0";
+		div.innerHTML='Aucune chaine n\'est en live pour le moment';
+		row.appendChild(div);
+	}
 
 	for (var i = 0; i < request._total; i++) {
 		var div = document.createElement("div");
