@@ -46,7 +46,10 @@ function init(){
 		row.appendChild(div);
 	}
 	boutonMulti = document.getElementById('multi');
-	boutonMulti.addEventListener('click',lauchMulti)
+	boutonMulti.addEventListener('click',lauchMulti);
+
+	boutonAdd = document.getElementById('addCurrent');
+	boutonAdd.addEventListener('click',getTabs);
 }
 
 //myajax("https://api.twitch.tv/kraken/streams/ogaminglol",retour,urls);
@@ -135,7 +138,7 @@ function afficherStream(){
 		var divxs7=document.createElement('div');
 		divxs7.setAttribute("class","col-xs-7");
 		var row1=document.createElement('div');
-		row1.class="row";
+		row1.setAttribute("class","row");
 		var div1=document.createElement('div');
 		div1.setAttribute("class","col-xs-12 ellipsis");
 		div1.innerHTML="<a href='"+request["streams"][i]["channel"]["url"]+"' id='online' target='_BLANK'>"+request["streams"][i]["channel"]['display_name']+"</a> - "+request['streams'][i]['game'];
@@ -237,4 +240,60 @@ function returnHttpRequest(httpRequest){
 
 function returnOffline(httpRequest){
 	requestOffline=JSON.parse(httpRequest.responseText);
+}
+
+function getTabs(){
+	chrome.tabs.query({ currentWindow: true, active: true },getCurrent);
+}
+
+function getCurrent(tab) {
+	tabUrl = tab[0]['url'];
+	var slash =false;
+
+	//on récupère la fin du site (apres le dernier / )
+	for (var i = (tabUrl.length - 1); i >= 0 && !slash; i--) {
+		if(tabUrl[i]=="/"){
+			slash=true;
+			console.log(i);
+		}
+	}
+	index=i+1;
+	var name = tabUrl.substring(index+1, tabUrl.length);
+
+	//on récupère maintenant le 'site' pour voir si c est twitch
+	slash=false;
+	for (i = 0; i < tabUrl.length-2; i++) {
+		if(tabUrl[i]==':'&&tabUrl[i+1]=='/'&&tabUrl[i+2]=='/'){
+			var indexsite=i+3;
+			break;
+		}
+	}
+	var site = tabUrl.substring(indexsite, index);
+
+	//test si site est twitch
+	if (site=='go.twitch.tv') {
+		console.log('surtwitch');
+		if (!urls.includes(name)) {
+			console.log(name);
+			//on test enfin si la chaine existe
+			myajax2(name,saveTab);
+		}else{
+			alert("Chaîne déjà ajouté");
+		}
+	}else{
+		alert("Ce n'est pas une chaine twitch");
+	}
+
+}
+
+function saveTab(event) {
+	var reponse = JSON.parse(event.responseText);
+	console.log(reponse);
+	if (reponse["error"]==null) {
+		urls.push(reponse['name']);
+		localStorage['streams']=JSON.stringify(urls);
+		afficherStream();
+	}else{
+		alert("Cette chaine n'existe pas");
+	}
 }
