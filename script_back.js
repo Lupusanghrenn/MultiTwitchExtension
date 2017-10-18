@@ -95,7 +95,11 @@ function displayStream(request) {
 			var name =request['streams'][i]['channel']['display_name'];
 			var titre =request['streams'][i]['channel']['status'];
 			var icon = request['streams'][i]['channel']['logo'];
-			new Notification(name+" vient de venir en live", {body: titre,icon:icon,});
+			var jeu = request['streams'][i]['channel']['game'];
+			new Notification(name+" vient de venir en live", {
+				body: titre+'\n'+jeu,
+				icon:icon,
+				tag:'Multi twitch Extension'});
 		}
 	}
 
@@ -110,4 +114,5 @@ function displayStream(request) {
 		}
 	}
 }
-//TO DO SELF DESTROY les notiications et améliorer la taille de l'icone
+//TO DO SELF DESTROY les notiications et améliorer la taille de l'iconeza
+//eventuellement display les lives en cours lors du lancement
