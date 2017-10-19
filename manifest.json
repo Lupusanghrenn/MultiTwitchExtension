@@ -1,24 +1,29 @@
 {
-"name" :"Multi twitch",
-"manifest_version": 2,
-"version" :"1.0",
-"description" :"Addon qui vous permet de savoir quel sont vos streamers en live et d'être notifié lors qu'ils lancent leur live, le tout en une seule extension",
-"options_page":"page_option.html",
-"background": {
-    "scripts": ["script_back.js"]
+	"manifest_version": 2,
+	"name": "Multi Twitch Extension",
+	"short_name":"Multi Twitch",
+  "background": {
+    "scripts": [ "script_back.js" ]
   },
-"icons": {
-	"64":"icone.png"
-},
-"permissions":[
-		"https://api.twitch.tv/kraken/streams/",
-		"notifications",
-		"tabs"
-	],
-"browser_action" :
-	{
-		"default_icon":"icone.png",
-		"default_popup" :"index.html",
-		"default_title":"Multi twitch"
-	}
+  "browser_action": {
+    "default_icon": "icone.png",
+    "default_popup": "index.html",
+    "default_title": "Multi twitch"
+  },
+  "description": "Chrome Extension who allow you to easely follow when your streamers goes live.",
+  "icons": {
+    "128": "icone128.png",
+    "64": "icone64.png",
+    "32": "icone32.png",
+    "16": "icone16.png"
+  },
+  "options_page": "page_option.html",
+  "permissions": [
+    "https://api.twitch.tv/kraken/streams/",
+    "notifications",
+    "tabs"
+  ],
+  "version": "1.0",
+  "version_name":"Première version",
+  "author":"Lupusanghren @Lupusanghrenn"
 }
