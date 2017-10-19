@@ -136,7 +136,7 @@ function afficherStream(){
 
 		//col-xs-7
 		var divxs7=document.createElement('div');
-		divxs7.setAttribute("class","col-xs-7");
+		divxs7.setAttribute("class","col-xs-8");
 		var row1=document.createElement('div');
 		row1.setAttribute("class","row");
 		var div1=document.createElement('div');
