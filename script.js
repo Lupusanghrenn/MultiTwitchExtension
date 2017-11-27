@@ -285,7 +285,11 @@ function getCurrent(tab) {
 	console.log(site);
 
 	//test si site est twitch
+<<<<<<< HEAD
 	if (site=='go.twitch.tv'||site=='www.twitch.tv') {
+=======
+	if (site=='go.twitch.tv' || site=='go.twitch.tv') {
+>>>>>>> dba2653ed9e760c7aa94b3b6d15d8a6452192b5d
 		console.log('surtwitch');
 		if (!urls.includes(name)) {
 			console.log(name);
