@@ -271,7 +271,7 @@ function getCurrent(tab) {
 	var site = tabUrl.substring(indexsite, index);
 
 	//test si site est twitch
-	if (site=='go.twitch.tv') {
+	if (site=='go.twitch.tv' || site=='go.twitch.tv') {
 		console.log('surtwitch');
 		if (!urls.includes(name)) {
 			console.log(name);
