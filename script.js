@@ -21,8 +21,15 @@ if (localStorage["streams"]==undefined) {
 	urls=JSON.parse(localStorage['streams']);
 }
 
+if (localStorage["multitwitch"]=undefined) {
+	multitwitch=true;
+} else {
+	multitwitch=localStorage["multitwitch"];
+}
+
 showOffline=localStorage["showOffline"]=="true";
 optimisation=localStorage["optimisation"]=="true";
+
 
 
 //texte=document.getElementById('titre');
@@ -56,16 +63,22 @@ function init(){
 
 function lauchMulti() {
 	var tab=document.getElementsByTagName('input');
-	var chainne = "http://www.multitwitch.tv/";
+	if (multitwitch==false) {
+		//lauch sur miltitwitch
+		var chaine = "http://www.multitwitch.tv/";
+	} else {
+		var chaine = "https://multistre.am/";
+	}
+	
 	for (var i = 0; i < tab.length; i++) {
 		if (tab[i].checked) {
 			//si check on ajoute
-			chainne+=tab[i].value+"/";
+			chaine+=tab[i].value+"/";
 		}
 	}
 
 	//maintenant on redirige vers le multitwitch
-	chrome.tabs.create({ url: chainne });
+	chrome.tabs.create({ url: chaine });
 }
 
 
@@ -269,9 +282,10 @@ function getCurrent(tab) {
 		}
 	}
 	var site = tabUrl.substring(indexsite, index);
+	console.log(site);
 
 	//test si site est twitch
-	if (site=='go.twitch.tv') {
+	if (site=='go.twitch.tv'||site=='www.twitch.tv') {
 		console.log('surtwitch');
 		if (!urls.includes(name)) {
 			console.log(name);

@@ -9,6 +9,13 @@ if (localStorage["streams"]==undefined) {
 }else{
 	urls=JSON.parse(localStorage['streams']);
 }
+
+if (localStorage["multitwitch"]=undefined) {
+	multitwitch=true;
+} else {
+	multitwitch=localStorage["multitwitch"];
+}
+
 urlsOnline=[];
 urlsOffline=[];
 flag=0;

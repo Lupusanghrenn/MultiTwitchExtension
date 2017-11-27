@@ -1,6 +1,7 @@
 function enregistrer()//enregistrer les options, fonction appelée par le click sur le bouton
 {
 	localStorage["showOffline"]=checkboxShowOffline.checked;
+	localStorage['multitwitch']=checkboxMulti.checked;
 	showOffline=localStorage["showOffline"]=="true";
 	if (!showOffline) {
 		//si showoffline = false, on cache le checkbox
@@ -20,6 +21,11 @@ function init(){
 	//initialisation des variables globales
 	showOffline=localStorage["showOffline"]=="true";
 	optimisation=localStorage["optimisation"]=="true";
+	multitwitch=localStorage["multitwitch"]=="true"
+
+	checkboxMulti=document.getElementById("multitwitch");
+	checkboxMulti.checked=showOffline;
+	checkboxMulti.addEventListener("change",enregistrer);
 
 	checkboxShowOffline=document.getElementById("showOffline");
 	checkboxShowOffline.checked=showOffline;
