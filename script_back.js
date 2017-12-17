@@ -100,14 +100,37 @@ function displayStream(request) {
 	for (var i = 0; i < request._total; i++) {
 		if(urlsOnline.indexOf(request['streams'][i]['channel']['name'])==-1){
 			var name =request['streams'][i]['channel']['display_name'];
+			var urlName= request['streams'][i]['channel']['name'];
 			var titre =request['streams'][i]['channel']['status'];
 			var icon = request['streams'][i]['channel']['logo'];
 			var jeu = request['streams'][i]['channel']['game'];
-			new Notification(name+" vient de venir en live", {
+			var notif = new Notification(name+" vient de venir en live", {
 				body: titre+'\n'+jeu,
 				icon:icon,
-				tag:'Multi twitch Extension'});
+				tag:null});
+			notif.addEventListener("click",function(event){
+				console.log(event);	
+				chrome.tabs.create({url:'https://www.twitch.tv/'+urlName})
+			});
 		}
+		/*
+		var forumUrl = 'https://example.com/thread/42';
+		var options = {
+		  type: "basic",
+		  title: "NEW THREAD!",
+		  message: "I made a new thread blah blah blah",
+		  iconUrl: "url_to_small_icon"
+		}
+
+		// create notification using forumUrl as id
+		chrome.notifications.create(forumUrl, options, function(notificationId){ }); 
+
+		// create a on Click listener for notifications
+		chrome.notifications.onClicked.addListener(function(notificationId) {
+		  chrome.tabs.create({url: notificationId});
+		});  
+		*/
+		
 	}
 
 	//on reconstruit urlOnline et urlOffline

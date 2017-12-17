@@ -45,6 +45,8 @@ function init(){
 	savediv.addEventListener('click',save);
 	myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
 
+	feedback = document.getElementById("feedback");
+
 	if (!showOffline) {
 		//si showoffline = false, on cache le checkbox
 		divOptimisation.style.display="none";
@@ -113,6 +115,9 @@ function deleteChannel(event){
 	var index=tab.indexOf(name);
 	var tab2=tab.splice(index,1);
 	localStorage['streams']=JSON.stringify(tab);
+
+	feedback.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Chaîne supprimé avec succès !</div>';
+	feedback.addEventListener("click",close);
 	displayChannel();
 }
 
@@ -123,7 +128,9 @@ function save(){
 		document.getElementById('toSave').value="";
 		if (tab.indexOf(name)!=-1) {
 			//si deja dans tab
-			alert("Deja dans vos chaines");
+			//alert("Deja dans vos chaines");
+			feedback.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Vous avez déjà enregistré cette chaine</div>';
+			feedback.addEventListener("click",close);
 		}else{
 			myajax(name,testRetour);
 			console.log(name);
@@ -131,7 +138,9 @@ function save(){
 		
 	}else{
 		//chaine non rempli
-		alert("Chaine non rempli");
+		//alert("Chaine non rempli");
+		feedback.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Nom de la chaine vide</div>';
+		feedback.addEventListener("click",close);
 	}
 	document.getElementById('toSave').focus();
 }
@@ -140,7 +149,9 @@ function testRetour(httpRequest,nomChaine){
 	reponse=JSON.parse(httpRequest.response);
 	if (reponse['error']!=null) {
 		//il y a une error
-		alert("Cet utilisateur n'existe pas");
+		//alert("Cet utilisateur n'existe pas");
+		feedback.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Utilisateur inconnu</div>';
+		feedback.addEventListener("click",close);
 	}else{
 		//on add le channel au données de l'user
 		//et on refresh la page
@@ -150,6 +161,9 @@ function testRetour(httpRequest,nomChaine){
 		console.log(t);
 		t= JSON.stringify(t);
 		localStorage['streams']=t;
+
+		feedback.innerHTML='<div class="alert alert-success alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="success" aria-label="close">&times;</a><strong>Success!</strong> Chaîne ajouté avec succès !</div>';
+		feedback.addEventListener("click",close);
 
 		displayChannel();
 	}
@@ -172,6 +186,11 @@ function enter(event){
 		//on appuie sur enter
 		save();
 	}
+}
+
+function close(){
+	feedback.innerHTML="";
+	feedback.removeEventListener("click",close);
 }
 
 window.onload=init();
