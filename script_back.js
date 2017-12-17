@@ -10,10 +10,16 @@ if (localStorage["streams"]==undefined) {
 	urls=JSON.parse(localStorage['streams']);
 }
 
-if (localStorage["multitwitch"]=undefined) {
+if (localStorage["multitwitch"]==undefined) {
 	multitwitch=true;
 } else {
 	multitwitch=localStorage["multitwitch"];
+}
+
+if (localStorage["notifOnLaunch"]==undefined) {
+	notifOnLaunch=true;
+} else {
+	notifOnLaunch=localStorage["notifOnLaunch"];
 }
 
 urlsOnline=[];
@@ -56,6 +62,24 @@ function iniUrls(httpRequest) {
 	urlsOffline=[];
 	for (var i = 0; i < tabrequest._total; i++) {
 		urlsOnline.push(tabrequest['streams'][i]['channel']['name']);
+
+		//test selon le onLauch
+		if (notifOnLaunch) {
+			var name =tabrequest['streams'][i]['channel']['display_name'];
+			var urlName= tabrequest['streams'][i]['channel']['name'];
+			var titre =tabrequest['streams'][i]['channel']['status'];
+			var icon = tabrequest['streams'][i]['channel']['logo'];
+			var jeu = tabrequest['streams'][i]['channel']['game'];
+			var notif = new Notification(name+" vient de venir en live", {
+				body: titre+'\n'+jeu,
+				icon:icon,
+				tag:null});
+			notif.addEventListener("click",function(event){
+				console.log(this);	
+				chrome.tabs.create({url:'https://www.twitch.tv/'+urlName});
+				this.close();
+			});
+		}
 	}
 
 	for (var i = 0; i < urls.length; i++) {
@@ -110,7 +134,7 @@ function displayStream(request) {
 				tag:null});
 			notif.addEventListener("click",function(event){
 				console.log(event);	
-				chrome.tabs.create({url:'https://www.twitch.tv/'+urlName})
+				chrome.tabs.create({url:'https://www.twitch.tv/'+urlName});
 			});
 		}
 		/*

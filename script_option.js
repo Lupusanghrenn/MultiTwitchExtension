@@ -2,7 +2,10 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 {
 	localStorage["showOffline"]=checkboxShowOffline.checked;
 	localStorage['multitwitch']=checkboxMulti.checked;
+	localStorage['notifOnLaunch']=checkboxOnLaunch.checked;
+	notifOnLaunch=checkboxOnLaunch.checked;
 	showOffline=localStorage["showOffline"]=="true";
+	enregistrerOpti();
 	if (!showOffline) {
 		//si showoffline = false, on cache le checkbox
 		divOptimisation.style.display="none";
@@ -23,11 +26,12 @@ function init(){
 	//initialisation des variables globales
 	showOffline=localStorage["showOffline"]=="true";
 	optimisation=localStorage["optimisation"]=="true";
-	multitwitch=localStorage["multitwitch"]=="true"
+	multitwitch=localStorage["multitwitch"]=="true";
+	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 
 	checkboxMulti=document.getElementById("multitwitch");
 	checkboxMulti.checked=showOffline;
-	checkboxMulti.addEventListener("change",enregistrer);
+	//checkboxMulti.addEventListener("change",enregistrer);
 
 	checkboxShowOffline=document.getElementById("showOffline");
 	checkboxShowOffline.checked=showOffline;
@@ -37,7 +41,10 @@ function init(){
 	checkboxOptimisation=document.getElementById("optimisationC");
 	checkboxOptimisation.checked=optimisation;
 	divOptimisation=document.getElementById("optimisation");
-	checkboxOptimisation.addEventListener("change",enregistrerOpti);
+	//checkboxOptimisation.addEventListener("change",enregistrerOpti);
+
+	checkboxOnLaunch=document.getElementById("notifOnLaunch");
+	checkboxOnLaunch.checked=notifOnLaunch;
 
 	bouton=document.getElementsByTagName('button')[0];
 	bouton.addEventListener('click',enregistrer);
