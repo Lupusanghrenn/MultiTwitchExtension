@@ -19,7 +19,7 @@ if (localStorage["multitwitch"]==undefined) {
 if (localStorage["notifOnLaunch"]==undefined) {
 	notifOnLaunch=true;
 } else {
-	notifOnLaunch=localStorage["notifOnLaunch"];
+	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 }
 
 urlsOnline=[];
@@ -73,12 +73,14 @@ function iniUrls(httpRequest) {
 			var notif = new Notification(name+" vient de venir en live", {
 				body: titre+'\n'+jeu,
 				icon:icon,
-				tag:null});
+				tag:urlName});
+			console.log(urlName);
 			notif.addEventListener("click",function(event){
 				console.log(this);	
-				chrome.tabs.create({url:'https://www.twitch.tv/'+urlName});
-				this.close();
+				chrome.tabs.create({url:'https://www.twitch.tv/'+this.tag});
+				notif.close.bind(notif);
 			});
+			setTimeout(notif.close.bind(notif),9000);
 		}
 	}
 
