@@ -9,6 +9,8 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	}else{
 		divOptimisation.style.display="inherit";
 	}
+	feedback2.innerHTML='<div class="alert alert-success alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="success" aria-label="close">&times;</a><strong>Success!</strong> Options modifiés avec succès !</div>';
+	feedback2.addEventListener("click",close2);
 }
 
 function enregistrerOpti()//enregistrer les options, fonction appelée par le click sur le bouton
@@ -46,6 +48,7 @@ function init(){
 	myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
 
 	feedback = document.getElementById("feedback");
+	feedback2 = document.getElementById("feedback2");
 
 	if (!showOffline) {
 		//si showoffline = false, on cache le checkbox
@@ -191,6 +194,11 @@ function enter(event){
 function close(){
 	feedback.innerHTML="";
 	feedback.removeEventListener("click",close);
+}
+
+function close2(){
+	feedback2.innerHTML="";
+	feedback2.removeEventListener("click",close2);
 }
 
 window.onload=init();
