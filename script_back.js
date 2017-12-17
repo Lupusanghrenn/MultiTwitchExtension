@@ -125,19 +125,22 @@ function displayStream(request) {
 	console.log("displayStream");
 	for (var i = 0; i < request._total; i++) {
 		if(urlsOnline.indexOf(request['streams'][i]['channel']['name'])==-1){
-			var name =request['streams'][i]['channel']['display_name'];
-			var urlName= request['streams'][i]['channel']['name'];
-			var titre =request['streams'][i]['channel']['status'];
-			var icon = request['streams'][i]['channel']['logo'];
-			var jeu = request['streams'][i]['channel']['game'];
+			var name =tabrequest['streams'][i]['channel']['display_name'];
+			var urlName= tabrequest['streams'][i]['channel']['name'];
+			var titre =tabrequest['streams'][i]['channel']['status'];
+			var icon = tabrequest['streams'][i]['channel']['logo'];
+			var jeu = tabrequest['streams'][i]['channel']['game'];
 			var notif = new Notification(name+" vient de venir en live", {
 				body: titre+'\n'+jeu,
 				icon:icon,
-				tag:null});
+				tag:urlName});
+			console.log(urlName);
 			notif.addEventListener("click",function(event){
-				console.log(event);	
-				chrome.tabs.create({url:'https://www.twitch.tv/'+urlName});
+				console.log(this);	
+				chrome.tabs.create({url:'https://www.twitch.tv/'+this.tag});
+				notif.close.bind(notif);
 			});
+			setTimeout(notif.close.bind(notif),9000);
 		}
 		/*
 		var forumUrl = 'https://example.com/thread/42';
