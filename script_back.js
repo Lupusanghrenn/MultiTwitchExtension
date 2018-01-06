@@ -130,6 +130,9 @@ function displayStream(request) {
 			var titre =tabrequest['streams'][i]['channel']['status'];
 			var icon = tabrequest['streams'][i]['channel']['logo'];
 			var jeu = tabrequest['streams'][i]['channel']['game'];
+			var titre = " vient de venir en live";
+			//récupération des données en ligne via le serveur
+			//via un if else selon les choix de l utilisateur (optimisation)
 			var notif = new Notification(name+" vient de venir en live", {
 				body: titre+'\n'+jeu,
 				icon:icon,
