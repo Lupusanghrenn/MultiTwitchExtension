@@ -56,6 +56,18 @@ function myajax(nomChaine,  callBack) {
     httpRequest.send();
 }
 
+function myajaxNotif(nomChaine,  callBack) {
+    var httpRequest = new XMLHttpRequest();
+    var url="https://api.twitch.tv/kraken/streams?channel="+nomChaine;
+    httpRequest.open("GET", url, true);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.addEventListener("load", function () {
+        callBack(httpRequest);
+    });
+    httpRequest.send();
+}
+
 function iniUrls(httpRequest) {
 	var tabrequest=JSON.parse(httpRequest.response);
 	urlsOnline=[];
@@ -70,6 +82,7 @@ function iniUrls(httpRequest) {
 			var titre =tabrequest['streams'][i]['channel']['status'];
 			var icon = tabrequest['streams'][i]['channel']['logo'];
 			var jeu = tabrequest['streams'][i]['channel']['game'];
+			myajaxNotif(urlName,console.log);
 			var notif = new Notification(name+" vient de venir en live", {
 				body: titre+'\n'+jeu,
 				icon:icon,
@@ -107,7 +120,7 @@ function checkStreamAjax(argument) {
 
 function checkStream(httpRequest) {
 	var request = JSON.parse(httpRequest.response);
-	console.log(request);
+	//console.log(request);
 	if (request._total>urlsOnline.length) {
 		//quelqu un vient de lancer soon live
 		console.log("dans le if");
@@ -116,7 +129,7 @@ function checkStream(httpRequest) {
 		//quelqu un vient de shutdown sont live
 		iniUrls(httpRequest);
 	}
-	console.log("checkStream");
+	//console.log("checkStream");
 	
 }
 
@@ -125,15 +138,19 @@ function displayStream(request) {
 	console.log("displayStream");
 	for (var i = 0; i < request._total; i++) {
 		if(urlsOnline.indexOf(request['streams'][i]['channel']['name'])==-1){
-			var name =tabrequest['streams'][i]['channel']['display_name'];
-			var urlName= tabrequest['streams'][i]['channel']['name'];
-			var titre =tabrequest['streams'][i]['channel']['status'];
-			var icon = tabrequest['streams'][i]['channel']['logo'];
-			var jeu = tabrequest['streams'][i]['channel']['game'];
+			var name =request['streams'][i]['channel']['display_name'];
+			var urlName= request['streams'][i]['channel']['name'];
+			var titre =request['streams'][i]['channel']['status'];
+			var icon = request['streams'][i]['channel']['logo'];
+			var jeu = request['streams'][i]['channel']['game'];
 			var titre = " vient de venir en live";
+			myajaxNotif(urlName,function(httpRequest){
+				var req = JSON.parse(httpRequest.responseText);
+				console.log(req);
+			});
 			//récupération des données en ligne via le serveur
 			//via un if else selon les choix de l utilisateur (optimisation)
-			var notif = new Notification(name+" vient de venir en live", {
+			var notif = new Notification(name+titre, {
 				body: titre+'\n'+jeu,
 				icon:icon,
 				tag:urlName});

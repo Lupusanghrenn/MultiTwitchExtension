@@ -140,7 +140,7 @@ function afficherStream(){
 		divImage.setAttribute("class","col-xs-3");
 		divImage.style.paddingLeft="0px";
 		divImage.id=url;
-		divImage.addEventListener("click", function(){chrome.tabs.create({url:this.id})},false);
+		divImage.addEventListener("click", function(){console.log("divImage");chrome.tabs.create({url:this.id})},false);
 		var image = document.createElement('img');
 		image.src=request["streams"][i]["channel"]['logo'];
 		image.setAttribute("class","img-responsive");
@@ -155,14 +155,12 @@ function afficherStream(){
 		var divxs7=document.createElement('div');
 		divxs7.setAttribute("class","col-xs-8");
 		divxs7.id=url;
-		divxs7.addEventListener("click", function(){chrome.tabs.create({url:this.id})},false);
+		divxs7.addEventListener("click", function(){console.log("divxs7");chrome.tabs.create({url:this.id})},false);
 		var row1=document.createElement('div');
 		row1.setAttribute("class","row");
 		var div1=document.createElement('div');
 		div1.id=url;
-		div1.addEventListener("click", function(){chrome.tabs.create({url:this.id})},false);
 		div1.setAttribute("class","col-xs-12 ellipsis");
-		//div1.innerHTML="<a href='"+request["streams"][i]["channel"]["url"]+"' id='online' target='_BLANK'>"+request["streams"][i]["channel"]['display_name']+"</a> - "+request['streams'][i]['game'];
 		div1.innerHTML=request["streams"][i]["channel"]['display_name']+" - <i class='tw-live-indicator'>"+request['streams'][i]['game'];
 		row1.appendChild(div1);
 		divxs7.appendChild(row1);
@@ -320,7 +318,3 @@ function saveTab(event) {
 	}
 }
 
-
-function openChannel(lien){
-	chrome.tabs.create({url:lien});
-}
