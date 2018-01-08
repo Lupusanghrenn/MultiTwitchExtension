@@ -161,7 +161,7 @@ function displayStream(request) {
 			var icon = request['streams'][i]['channel']['logo'];
 			var jeu = request['streams'][i]['channel']['game'];
 			var userid=request['streams'][i]['channel']['_id'];
-			var titre = " vient de venir en live";
+			//var titre = " vient de venir en live";
 			/*myajaxNotif(urlName,function(httpRequest){
 				var req = JSON.parse(httpRequest.responseText);
 				console.log(req);
