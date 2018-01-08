@@ -1,5 +1,9 @@
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
-timeInterval=10000;
+timeInterval=parseInt(localStorage["timeInterval"]);
+if (timeInterval==undefined) {
+	timeInterval=10000;
+	localStorage["timeInterval"]=timeInterval;
+}
 
 if (localStorage["streams"]==undefined) {
 	var t = [];
@@ -56,9 +60,10 @@ function myajax(nomChaine,  callBack) {
     httpRequest.send();
 }
 
-function myajaxNotif(nomChaine,  callBack) {
+function myajaxNotif(userid,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/streams?channel="+nomChaine;
+    var url="https://api.twitch.tv/kraken/users/"+userid+"/notifications";
+    //var url="https://api.twitch.tv/kraken/users/"+userid;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -82,12 +87,24 @@ function iniUrls(httpRequest) {
 			var titre =tabrequest['streams'][i]['channel']['status'];
 			var icon = tabrequest['streams'][i]['channel']['logo'];
 			var jeu = tabrequest['streams'][i]['channel']['game'];
-			myajaxNotif(urlName,console.log);
+			/*myajaxNotif(urlName,function(httpRequest){
+				var req = JSON.parse(httpRequest.responseText);
+				console.log(req);
+				//console.log(userid);
+			});*/
+			if(titre.length>20){
+				titre=titre.substring(0,20)+'...';
+			}
+			if (jeu.length>17) {
+				jeu=jeu.substring(0,17);
+			}
 			var notif = new Notification(name+" vient de venir en live", {
-				body: titre+'\n'+jeu,
+				type:'basic',
+				body: titre+' - '+jeu,
 				icon:icon,
-				tag:urlName});
-			console.log(urlName);
+				tag:urlName,
+			});
+			console.log(notif);
 			notif.addEventListener("click",function(event){
 				console.log(this);	
 				chrome.tabs.create({url:'https://www.twitch.tv/'+this.tag});
@@ -129,7 +146,7 @@ function checkStream(httpRequest) {
 		//quelqu un vient de shutdown sont live
 		iniUrls(httpRequest);
 	}
-	//console.log("checkStream");
+	console.log("checkStream");
 	
 }
 
@@ -143,15 +160,25 @@ function displayStream(request) {
 			var titre =request['streams'][i]['channel']['status'];
 			var icon = request['streams'][i]['channel']['logo'];
 			var jeu = request['streams'][i]['channel']['game'];
+			var userid=request['streams'][i]['channel']['_id'];
 			var titre = " vient de venir en live";
-			myajaxNotif(urlName,function(httpRequest){
+			console.log(request);
+			/*myajaxNotif(urlName,function(httpRequest){
 				var req = JSON.parse(httpRequest.responseText);
 				console.log(req);
-			});
+				console.log(userid);
+			});*/
 			//récupération des données en ligne via le serveur
 			//via un if else selon les choix de l utilisateur (optimisation)
-			var notif = new Notification(name+titre, {
-				body: titre+'\n'+jeu,
+			if(titre.length>20){
+				titre=titre.substring(0,20)+'...';
+			}
+			if (jeu.length>17) {
+				jeu=jeu.substring(0,17);
+			}
+			var notif = new Notification(name+" vient de venir en live", {
+				type:'basic',
+				body: titre+' - '+jeu,
 				icon:icon,
 				tag:urlName});
 			console.log(urlName);

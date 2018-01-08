@@ -3,6 +3,11 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage["showOffline"]=checkboxShowOffline.checked;
 	localStorage['multitwitch']=checkboxMulti.checked;
 	localStorage['notifOnLaunch']=checkboxOnLaunch.checked;
+	timeInterval=parseInt(inputTimeInterval.value)*1000;
+	if (timeInterval<10000) {
+		timeInterval=10000;
+	}
+	localStorage['timeInterval']=timeInterval;
 	notifOnLaunch=checkboxOnLaunch.checked;
 	showOffline=localStorage["showOffline"]=="true";
 	enregistrerOpti();
@@ -28,6 +33,11 @@ function init(){
 	optimisation=localStorage["optimisation"]=="true";
 	multitwitch=localStorage["multitwitch"]=="true";
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
+	timeInterval=parseInt(localStorage["timeInterval"]);
+	if (timeInterval==undefined) {
+		timeInterval=10000;
+		localStorage["timeInterval"]=timeInterval;
+	}
 
 	checkboxMulti=document.getElementById("multitwitch");
 	checkboxMulti.checked=showOffline;
@@ -45,6 +55,10 @@ function init(){
 
 	checkboxOnLaunch=document.getElementById("notifOnLaunch");
 	checkboxOnLaunch.checked=notifOnLaunch;
+
+	inputTimeInterval=document.getElementById('timeInterval').children[0].children[0];
+	inputTimeInterval.value=timeInterval/1000;
+	console.log(inputTimeInterval);
 
 	bouton=document.getElementsByTagName('button')[0];
 	bouton.addEventListener('click',enregistrer);
