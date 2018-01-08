@@ -20,6 +20,7 @@
   "options_page": "page_option.html",
   "permissions": [
     "https://api.twitch.tv/kraken/streams/",
+    "https://static-cdn.jtvnw.net/jtv_user_pictures/",
     "notifications",
     "tabs"
   ],

@@ -62,7 +62,7 @@ function myajax(nomChaine,  callBack) {
 
 function myajaxNotif(userid,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/users/"+userid+"/notifications";
+    var url="https://api.twitch.tv/kraken/users/"+userid+"/notifications/custom?notification_type=streamup&api_version=5";
     //var url="https://api.twitch.tv/kraken/users/"+userid;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
@@ -87,10 +87,11 @@ function iniUrls(httpRequest) {
 			var titre =tabrequest['streams'][i]['channel']['status'];
 			var icon = tabrequest['streams'][i]['channel']['logo'];
 			var jeu = tabrequest['streams'][i]['channel']['game'];
-			/*myajaxNotif(urlName,function(httpRequest){
+			var userid=tabrequest['streams'][i]['channel']['_id'];
+			//var titre = " vient de venir en live";
+			/*myajaxNotif(userid,function(httpRequest){
 				var req = JSON.parse(httpRequest.responseText);
-				console.log(req);
-				//console.log(userid);
+				userid = req.message
 			});*/
 			if(titre.length>20){
 				titre=titre.substring(0,20)+'...';
@@ -104,7 +105,6 @@ function iniUrls(httpRequest) {
 				icon:icon,
 				tag:urlName,
 			});
-			console.log(notif);
 			notif.addEventListener("click",function(event){
 				console.log(this);	
 				chrome.tabs.create({url:'https://www.twitch.tv/'+this.tag});
@@ -162,7 +162,6 @@ function displayStream(request) {
 			var jeu = request['streams'][i]['channel']['game'];
 			var userid=request['streams'][i]['channel']['_id'];
 			var titre = " vient de venir en live";
-			console.log(request);
 			/*myajaxNotif(urlName,function(httpRequest){
 				var req = JSON.parse(httpRequest.responseText);
 				console.log(req);
@@ -181,7 +180,6 @@ function displayStream(request) {
 				body: titre+' - '+jeu,
 				icon:icon,
 				tag:urlName});
-			console.log(urlName);
 			notif.addEventListener("click",function(event){
 				console.log(this);	
 				chrome.tabs.create({url:'https://www.twitch.tv/'+this.tag});
