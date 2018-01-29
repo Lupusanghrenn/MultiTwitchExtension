@@ -10,7 +10,7 @@ if (localStorage["showOffline"]==undefined) {
 }
 
 if (localStorage["optimisation"]==undefined) {
-	localStorage["optimisation"]="true";	
+	localStorage["optimisation"]="true";
 }
 
 if (localStorage["streams"]==undefined) {

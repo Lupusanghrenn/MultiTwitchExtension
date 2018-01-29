@@ -1,9 +1,11 @@
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
-timeInterval=parseInt(localStorage["timeInterval"]);
-if (timeInterval==undefined) {
+if (localStorage["timeInterval"]==undefined) {
 	timeInterval=10000;
 	localStorage["timeInterval"]=timeInterval;
+}else{
+	timeInterval=parseInt(localStorage["timeInterval"]);
 }
+console.log(timeInterval);
 
 if (localStorage["streams"]==undefined) {
 	var t = [];
@@ -25,6 +27,7 @@ if (localStorage["notifOnLaunch"]==undefined) {
 } else {
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 }
+var firstLaucnh=true;
 
 urlsOnline=[];
 urlsOffline=[];
@@ -81,7 +84,8 @@ function iniUrls(httpRequest) {
 		urlsOnline.push(tabrequest['streams'][i]['channel']['name']);
 
 		//test selon le onLauch
-		if (notifOnLaunch) {
+		if (notifOnLaunch && firstLaucnh) {
+			
 			var name =tabrequest['streams'][i]['channel']['display_name'];
 			var urlName= tabrequest['streams'][i]['channel']['name'];
 			var titre =tabrequest['streams'][i]['channel']['status'];
@@ -93,13 +97,13 @@ function iniUrls(httpRequest) {
 				var req = JSON.parse(httpRequest.responseText);
 				userid = req.message
 			});*/
-			if(titre.length>20){
-				titre=titre.substring(0,20)+'...';
+			if(titre.length>17){
+				titre=titre.substring(0,18)+'.';
 			}
 			if (jeu.length>17) {
 				jeu=jeu.substring(0,17);
 			}
-			var notif = new Notification(name+" vient de venir en live", {
+			var notif = new Notification(name+" just went live", {
 				type:'basic',
 				body: titre+' - '+jeu,
 				icon:icon,
@@ -109,10 +113,12 @@ function iniUrls(httpRequest) {
 				console.log(this);	
 				chrome.tabs.create({url:'https://www.twitch.tv/'+this.tag});
 				notif.close.bind(notif);
+				this.close();
 			});
 			setTimeout(notif.close.bind(notif),9000);
 		}
 	}
+	firstLaucnh=false;
 
 	for (var i = 0; i < urls.length; i++) {
 		if (urlsOnline.indexOf(urls[i])==-1) {

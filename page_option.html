@@ -17,9 +17,9 @@
 
 <body>
 <div class="container" style="padding-left: 0px">
-	<h1>Options de l'extension</h1>
+	<h2 class="text-center">Options de l'extension</h2>
 
-	<h2>Paramétre généraux</h2>
+	<h3 class="text-center">Paramétre généraux</h3>
 	<div id="feedback2" style=""></div>
 	<div id="timeInterval">
 		<label>Temps entre chaque requête (min. 10s)  <input type="number" name="timeInterval" style="text-align: right;width: 100px;">s</label>
@@ -36,11 +36,11 @@
 	<div class="checkbox">
 	  <label><input type="checkbox" id="notifOnLaunch" name="notifOnLaunch" value="">Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome</label>
 	</div>
-	<button class="button button-default">
+	<button class="btn btn-default">
 		Enregistrer
 	</button>
 
-	<h2>Paramétre des channels</h2>
+	<h3 class="text-center">Paramétre des channels</h3>
 	<div id="feedback" style=""></div>
 	<div class="row">
 		<form class="form-horizontal" id="channels">
@@ -48,7 +48,7 @@
 
 		</form>
 
-		<form class="form-horizontal col-lg-12" id="save">
+		<div class="form-horizontal col-lg-12" id="save">
 		 
 		 <div class="form-group" >
 		    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
@@ -58,9 +58,24 @@
 		    </div>
 		  </div>
 
-		</form>
+		</div>
 	</div>
 	<br>
+
+	<h3 class="text-center">Récupérer les chaines que vous suivez</h3>
+	<div id="feedback3" style=""></div>
+	<div class="row">
+		<div class="form-inline" >
+		  <div class="form-group" style="width: 80%;">
+		    <label class="sr-only" for="toChannelName"></label>
+		    <div class="input-group col-xs-12">
+		      <div class="input-group-addon" style="width: 5%;"><i class="fa fa-user-circle" aria-hidden="true"></i></div>
+		      <input type="text" class="form-control" id="toChannelName" placeholder="Votre pseudo (comme dans l'URL)">
+		    </div>
+		  </div>
+		  <button type="submit" class="btn btn-default" id="buttonChannelName">Récupérer vos follows</button>
+		</div>
+	</div>
 	
 </div>
 

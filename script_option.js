@@ -56,6 +56,10 @@ function init(){
 	checkboxOnLaunch=document.getElementById("notifOnLaunch");
 	checkboxOnLaunch.checked=notifOnLaunch;
 
+	buttonInputChannelFollow=document.getElementById("buttonChannelName");
+	buttonInputChannelFollow.addEventListener("click",getFollow);
+
+
 	inputTimeInterval=document.getElementById('timeInterval').children[0].children[0];
 	inputTimeInterval.value=timeInterval/1000;
 	console.log(inputTimeInterval);
@@ -70,6 +74,7 @@ function init(){
 
 	feedback = document.getElementById("feedback");
 	feedback2 = document.getElementById("feedback2");
+	feedback3 = document.getElementById('feedback3');
 
 	if (!showOffline) {
 		//si showoffline = false, on cache le checkbox
@@ -102,7 +107,7 @@ function displayName(httpRequest, opti){
 	}
 	
 	var div=document.createElement('div');
-	div.setAttribute('class',"form-group col-lg-6");
+	div.setAttribute('class',"form-group col-xs-4");
 
 	var label=document.createElement('label')
 	label.setAttribute('class','sr-only');
@@ -205,6 +210,54 @@ function myajax(nomChaine, callBack) {
     httpRequest.send();
 }
 
+
+function myajaxName(nomChaine, callBack) {
+    var httpRequest = new XMLHttpRequest();
+    var url="https://api.twitch.tv/helix/users?id="+nomChaine;
+    httpRequest.open("GET", url, false);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.addEventListener("load", function () {
+        callBack(JSON.parse(httpRequest.responseText));
+    });
+    httpRequest.send();
+}
+
+function myajaxId(nomChaine, callBack) {
+    var httpRequest = new XMLHttpRequest();
+    var url="https://api.twitch.tv/kraken/users/"+nomChaine;
+    httpRequest.open("GET", url, false);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.addEventListener("load", function () {
+        //callBack(httpRequest,false);
+        var req = JSON.parse(httpRequest.responseText);
+        console.log(req['error']);
+        if (req.error!=null) {
+        	feedback3.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Erreur!</strong> Utilisateur inconnu</div>';
+			feedback3.addEventListener("click",close3);
+        } else {
+        	var idchaine=req._id;
+	        console.log(idchaine);
+	        myajaxFollow(idchaine,callBack);
+        }
+    });
+    httpRequest.send();
+}
+
+function myajaxFollow(userid, callBack) {
+    var httpRequest = new XMLHttpRequest();
+    var url = "https://api.twitch.tv/helix/users/follows?from_id="+userid;
+    httpRequest.open("GET", url, false);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.addEventListener("load", function () {
+        callBack(JSON.parse(httpRequest.responseText).data);
+    });
+    httpRequest.send();
+}	
+
+
 function enter(event){
 	if (event.keyCode==13) {
 		//on appuie sur enter
@@ -220,6 +273,47 @@ function close(){
 function close2(){
 	feedback2.innerHTML="";
 	feedback2.removeEventListener("click",close2);
+}
+
+function close3(){
+	feedback3.innerHTML="";
+	feedback3.removeEventListener("click",close3);
+}
+
+function getFollow() {
+	var username=document.getElementById("toChannelName").value;
+	document.getElementById("toChannelName").value="";
+	console.log(username);
+	feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a>Récupération en cours !</div>';
+	feedback3.addEventListener("click",close3);
+	myajaxId(username,updateTab);
+	
+
+}
+
+function updateTab(tab) {
+	feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Récupération réalisé avec succès !</div>';
+	feedback3.addEventListener("click",close3);
+	total=tab.length;
+	for (var i = 0; i <tab.length-1; i++) {
+		myajaxName(tab[i].to_id,checkandaddTab);
+	}
+}
+
+function checkandaddTab(name){
+	var username=name.data[0].login;
+	total--;
+	console.log(total);
+	if (!tab.includes(username)) {
+		console.log(username);
+		tab.push(username);
+	}
+	if (total<=1) {
+		console.log("total");
+		document.getElementById("toChannelName").value="";
+		localStorage["streams"]=JSON.stringify(tab);
+		displayChannel();
+	}
 }
 
 window.onload=init();
