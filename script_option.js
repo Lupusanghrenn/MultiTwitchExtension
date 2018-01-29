@@ -38,6 +38,10 @@ function init(){
 		timeInterval=10000;
 		localStorage["timeInterval"]=timeInterval;
 	}
+	if (multitwitch==undefined) {
+		multitwitch=true;
+		localStorage['multitwitch']=true;
+	}
 
 	checkboxMulti=document.getElementById("multitwitch");
 	checkboxMulti.checked=showOffline;
@@ -58,6 +62,9 @@ function init(){
 
 	buttonInputChannelFollow=document.getElementById("buttonChannelName");
 	buttonInputChannelFollow.addEventListener("click",getFollow);
+
+	buttonSort=document.getElementById("sort");
+	buttonSort.addEventListener("click",sortChannel);
 
 
 	inputTimeInterval=document.getElementById('timeInterval').children[0].children[0];
@@ -314,6 +321,34 @@ function checkandaddTab(name){
 		localStorage["streams"]=JSON.stringify(tab);
 		displayChannel();
 	}
+}
+
+function min(tabl){
+	//return la plus petit chaine de caractère du tab
+	var min = tabl[0];
+	for (var i = 1; i < tabl.length; i++) {
+		if (tabl[i]<min) {
+			min=tabl[i];
+		}
+	}
+	return min;
+}
+
+function sortChannel(){
+	//Trie le tableau des streamers, met a jour le localStorage, Feedback et réaffiche les tabs
+	var tabl = [];
+	//tableau avec les streamers == tab
+	var length=tab.length;
+	for (var i = 0; i < length; i++) {
+		var tmp = min(tab);
+		tabl.push(tmp);
+		var index=tab.indexOf(tmp);
+		tab.splice(index,1);
+	}
+	localStorage['streams']=JSON.stringify(tabl);
+	feedback.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Chaînes triées avec succès !</div>';
+	feedback.addEventListener("click",close);
+	displayChannel();
 }
 
 window.onload=init();
