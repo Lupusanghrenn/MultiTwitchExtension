@@ -175,8 +175,8 @@ function displayStream(request) {
 			});*/
 			//récupération des données en ligne via le serveur
 			//via un if else selon les choix de l utilisateur (optimisation)
-			if(titre.length>20){
-				titre=titre.substring(0,20)+'...';
+			if(titre.length>17){
+				titre=titre.substring(0,18)+'.';
 			}
 			if (jeu.length>17) {
 				jeu=jeu.substring(0,17);
