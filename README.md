@@ -1,6 +1,7 @@
 # MultiTwitchExtension
 This is the github of the multi twitch extension for chrome. 
 This extension allow you to follow your favorites streamers easely.
+https://chrome.google.com/webstore/detail/multi-twitch-extension/jpgnbiffpoelgpegopldffmpbmfdojga?hl=fr
 
 Actually, you will be up to set up your own feed of streamers who can be configurate in the option part.
 The extension itself shows for every onlive steamers they logo, name (display_name == official name), the game they are playing and also the title of the current stream.
