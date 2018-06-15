@@ -54,21 +54,29 @@
 		    color:red;
 		}
 
+		.btn{
+			border-radius: 0px;
+		}
+
 	</style>
 </head>
 <body>
 <div class="container-fluid">
+	
 	<form>
 	<div class="row" id="afficher">
 		<p class="text-center" style="background-color: white;">ONLINE</p>
-		<!-- Affichage d un seul stream -->
+		<div id=loading>
+			<img src="loading.gif" style="width: 100%">
+		</div>
+		<!-- Affichage d un seul stream --
 		<div class="col-xs-12" style="margin: 3px 0;">
 			<div class="col-xs-3" style="padding-left: 0px;">
-				<!-- Image -->
+				<!-- Image --
 				<img src="icone64.png" class="img-responsive">
 			</div>
 			<div class="col-xs-7">
-				<!-- Affichage du texte -->
+				<!-- Affichage du texte --
 				<div class="row" >
 					<div class="col-xs-12 ellipsis">
 						<span id="online">Zerator</span>
@@ -87,14 +95,14 @@
 		</div>
 
 
-		<!-- Affichage d un seul stream -->
+		<!-- Affichage d un seul stream --
 		<div class="col-xs-12" style="margin: 3px 0;">
 			<div class="col-xs-3" style="padding-left: 0px;">
-				<!-- Image -->
+				<!-- Image --
 				<img src="icone.png" class="img-responsive">
 			</div>
 			<div class="col-xs-7">
-				<!-- Affichage du texte -->
+				<!-- Affichage du texte --
 				<div class="row" ">
 					<div class="col-xs-12 ellipsis">
 						<span id="online">Zeratorfdfdfdfd dfd dfdf dfd</span>
@@ -110,7 +118,7 @@
 			<div class="col-xs-1">
 				<input type="checkbox" name="zerator" value="zerator">				
 			</div>
-		</div>
+		</div>-->
 	</div>
 </form>
 	<div class="row">
@@ -124,5 +132,5 @@
 </div>
 
 </body>
-<script type="text/javascript" src="script.js"></script>
 </html>
+<script type="text/javascript" src="script.js" defer></script>

@@ -45,7 +45,7 @@ window.onload=init();
 function init(){
 	bouton=document.getElementById('refresh');
 	bouton.addEventListener('click',afficherStream);
-	cleanAffichage();
+	//cleanAffichage();
 	if (urls.length!=0) {afficherStream();}
 	else {
 		var div = document.createElement("div");
@@ -86,7 +86,7 @@ function lauchMulti() {
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/kraken/streams?channel="+nomChaine;
-    httpRequest.open("GET", url, false);
+    httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
@@ -112,15 +112,17 @@ function retour(httpRequest,nomChaine){
 	//arrayStream[nomChaine]=(JSON.parse(httpRequest.responseText));
 }
 
-function afficherStream(){
-	cleanAffichage();
-	
+function afficherStream(){	
 	var channelString="";
 	for (var i = 0; i < urls.length; i++) {
 		channelString+=urls[i]+",";
 	}
 	channelString =channelString.substr(0,channelString.length-1);
 	myajax(channelString,returnHttpRequest);
+}
+
+function displayStreamAsync(reauest){
+
 	if (request._total==0) {
 		var div = document.createElement("div");
 		div.setAttribute("class","col-xs-12");
@@ -222,10 +224,7 @@ function afficherStream(){
 				div.innerHTML="<p class='text-center'>"+requestOffline['display_name']+"- Offline</p>";
 				row.appendChild(div);
 			}
-		}
-
-		
-		
+		}		
 	}else{
 		console.log("ne rien montrer");
 	}
@@ -233,6 +232,7 @@ function afficherStream(){
 
 function cleanAffichage(){
 	row.innerHTML='';
+	//document.getElementById("loading").style.display="none";
 	var online = document.createElement("p");
 	online.setAttribute("class","text-center");
 	online.style.backgroundColor="white";
@@ -243,6 +243,8 @@ function cleanAffichage(){
 
 function returnHttpRequest(httpRequest){
 	request=JSON.parse(httpRequest.responseText);
+	cleanAffichage();
+	displayStreamAsync(request);
 	//on enelve les chaines en live
 	urlsOffline=[];
 	for (var i = 0; i < urls.length; i++) {
