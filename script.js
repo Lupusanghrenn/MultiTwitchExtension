@@ -79,7 +79,20 @@ function lauchMulti() {
 	}
 
 	//maintenant on redirige vers le multitwitch
-	chrome.tabs.create({ url: chaine });
+	localStorage["chaine"]=JSON.stringify(chaine);
+	chrome.tabs.query({ currentWindow: true, active: true },lauchMultiAsync);
+	// chrome.tabs.create({ url: chaine });
+}
+
+function lauchMultiAsync(tab){
+	console.log(tab);
+	var chaine=JSON.parse(localStorage["chaine"]);
+	if (tab[0]["url"]=="chrome://newtab/" || tab[0]["url"]=="https://www.google.com/") {
+		//tabs dans le meme onglet
+		chrome.tabs.update({ url: chaine });
+	}else{
+		chrome.tabs.create({ url: chaine });
+	}	
 }
 
 
