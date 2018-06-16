@@ -41,6 +41,7 @@ function init() {
 		chaine+=urls[i]+",";
 	}
 	myajax(chaine,iniUrls);
+	chrome.notifications.onClicked.addListener(replyBtnClick);
 }
 
 function init2() {
@@ -92,30 +93,22 @@ function iniUrls(httpRequest) {
 			var icon = tabrequest['streams'][i]['channel']['logo'];
 			var jeu = tabrequest['streams'][i]['channel']['game'];
 			var userid=tabrequest['streams'][i]['channel']['_id'];
-			//var titre = " vient de venir en live";
-			/*myajaxNotif(userid,function(httpRequest){
-				var req = JSON.parse(httpRequest.responseText);
-				userid = req.message
-			});*/
-			if(titre.length>17){
-				titre=titre.substring(0,18)+'.';
+
+			if(titre.length>39){
+				titre=titre.substring(0,36)+'...';
 			}
-			if (jeu.length>17) {
-				jeu=jeu.substring(0,17);
+			if (jeu.length>43) {
+				jeu=jeu.substring(0,43);
 			}
-			var notif = new Notification(name+" just went live", {
-				type:'basic',
-				body: titre+' - '+jeu,
-				icon:icon,
-				tag:urlName,
-			});
-			notif.addEventListener("click",function(event){
-				console.log(this);	
-				chrome.tabs.create({url:'https://www.twitch.tv/'+this.tag});
-				notif.close.bind(notif);
-				this.close();
-			});
-			setTimeout(notif.close.bind(notif),9000);
+
+			var notif = chrome.notifications.create(urlName,{
+			  type: "basic",
+			  title: name+" just went live",
+			  message: titre,
+			  contextMessage:jeu,
+			  iconUrl: icon,
+			});//name = id
+			console.log(notif);
 		}
 	}
 	firstLaucnh=false;
@@ -167,50 +160,22 @@ function displayStream(request) {
 			var icon = request['streams'][i]['channel']['logo'];
 			var jeu = request['streams'][i]['channel']['game'];
 			var userid=request['streams'][i]['channel']['_id'];
-			//var titre = " vient de venir en live";
-			/*myajaxNotif(urlName,function(httpRequest){
-				var req = JSON.parse(httpRequest.responseText);
-				console.log(req);
-				console.log(userid);
-			});*/
-			//récupération des données en ligne via le serveur
-			//via un if else selon les choix de l utilisateur (optimisation)
-			if(titre.length>17){
-				titre=titre.substring(0,18)+'.';
+			if(titre.length>39){
+				titre=titre.substring(0,36)+'...';
 			}
-			if (jeu.length>17) {
-				jeu=jeu.substring(0,17);
+			if (jeu.length>43) {
+				jeu=jeu.substring(0,43);
 			}
-			var notif = new Notification(name+" vient de venir en live", {
-				type:'basic',
-				body: titre+' - '+jeu,
-				icon:icon,
-				tag:urlName});
-			notif.addEventListener("click",function(event){
-				console.log(this);	
-				chrome.tabs.create({url:'https://www.twitch.tv/'+this.tag});
-				notif.close.bind(notif);
-			});
-			setTimeout(notif.close.bind(notif),9000);
-		}
-		/*
-		var forumUrl = 'https://example.com/thread/42';
-		var options = {
-		  type: "basic",
-		  title: "NEW THREAD!",
-		  message: "I made a new thread blah blah blah",
-		  iconUrl: "url_to_small_icon"
-		}
 
-		// create notification using forumUrl as id
-		chrome.notifications.create(forumUrl, options, function(notificationId){ }); 
-
-		// create a on Click listener for notifications
-		chrome.notifications.onClicked.addListener(function(notificationId) {
-		  chrome.tabs.create({url: notificationId});
-		});  
-		*/
-		
+			var notif = chrome.notifications.create(urlName,{
+			  type: "basic",
+			  title: name+" just went live",
+			  message: titre,
+			  contextMessage:jeu,
+			  iconUrl: icon,
+			});//name = id
+			console.log(notif);
+		}		
 	}
 
 	//on reconstruit urlOnline et urlOffline
@@ -224,5 +189,10 @@ function displayStream(request) {
 		}
 	}
 }
-//TO DO SELF DESTROY les notiications et améliorer la taille de l'iconeza
-//eventuellement display les lives en cours lors du lancement
+
+function replyBtnClick(notificationId) {
+	//Write function to respond to user action.
+	console.log(notificationId);
+	chrome.tabs.create({url:'https://www.twitch.tv/'+notificationId});
+	chrome.notifications.clear(notificationId);
+}
