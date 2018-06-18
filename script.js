@@ -70,16 +70,19 @@ function lauchMulti() {
 	} else {
 		var chaine = "https://multistre.am/";
 	}
-	
+	var chainebis="/";
 	for (var i = 0; i < tab.length; i++) {
 		if (tab[i].checked) {
 			//si check on ajoute
 			chaine+=tab[i].value+"/";
+			chainebis+=tab[i].value+"/";
 		}
 	}
 
 	//maintenant on redirige vers le multitwitch
 	localStorage["chaine"]=JSON.stringify(chaine);
+	localStorage["chainebis"]=JSON.stringify(chainebis);
+
 	chrome.tabs.query({ currentWindow: true, active: true },lauchMultiAsync);
 	// chrome.tabs.create({ url: chaine });
 }
@@ -87,11 +90,28 @@ function lauchMulti() {
 function lauchMultiAsync(tab){
 	console.log(tab);
 	var chaine=JSON.parse(localStorage["chaine"]);
+	var chainebis=JSON.parse(localStorage["chainebis"]);
+	var compteurslash=0;
+	for (var i = 0; i < tab[0]["url"].length; i++) {
+		if(tab[0]["url"][i]=='/'){
+			compteurslash++;
+		}
+		if (compteurslash==3) {
+			break;
+		}
+	}
+	var site = tab[0]["url"].substring(0,i);
+	console.log(site);
+	console.log(site=="https://multistre.am");
 	if (tab[0]["url"]=="chrome://newtab/" || tab[0]["url"]=="https://www.google.com/") {
 		//tabs dans le meme onglet
 		chrome.tabs.update({ url: chaine });
+	}else if(site=="https://multistre.am" || site=="http://www.multitwitch.tv"){
+		//deja sur multitwitch
+		chrome.tabs.update({url:tab[0]["url"]+chainebis});
 	}else{
-		chrome.tabs.create({ url: chaine });
+		console.log("Dans le else");
+		//chrome.tabs.create({ url: chaine });
 	}	
 }
 
