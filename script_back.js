@@ -55,7 +55,7 @@ function init2() {
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/kraken/streams?channel="+nomChaine;
-    httpRequest.open("GET", url, false);
+    httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
