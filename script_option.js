@@ -221,7 +221,7 @@ function testRetour(httpRequest,nomChaine){
 function myajax(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/kraken/channels/"+nomChaine;
-    httpRequest.open("GET", url, false);
+    httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
@@ -234,7 +234,7 @@ function myajax(nomChaine, callBack) {
 function myajaxName(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/helix/users?id="+nomChaine;
-    httpRequest.open("GET", url, false);
+    httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
@@ -246,7 +246,7 @@ function myajaxName(nomChaine, callBack) {
 function myajaxId(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/kraken/users/"+nomChaine;
-    httpRequest.open("GET", url, false);
+    httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
@@ -269,7 +269,7 @@ function myajaxId(nomChaine, callBack) {
 function myajaxFollow(userid, callBack) {
     var httpRequest = new XMLHttpRequest();
     var url = "https://api.twitch.tv/helix/users/follows?from_id="+userid;
-    httpRequest.open("GET", url, false);
+    httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
@@ -310,33 +310,36 @@ function getFollow() {
 	//feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a>Récupération en cours !</div>';
 	feedback3.addEventListener("click",close3);
 	myajaxId(username,updateTab);
-	
-
 }
 
 function updateTab(tab) {
-	feedback3.innerHTML="";
-	feedback3.appendChild(createFeedback("alert-info","<strong>Success!</strong> Récupération réalisé avec succès !"));
+	//feedback3.innerHTML="";
+	console.log(tab);
+	//feedback3.appendChild(createFeedback("alert-info","<strong>Success!</strong> Récupération réalisé avec succès !"));
 	//feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Récupération réalisé avec succès !</div>';
-	feedback3.addEventListener("click",close3);
+	//feedback3.addEventListener("click",close3);
 	total=tab.length;
-	for (var i = 0; i <tab.length-1; i++) {
+	for (var i = 0; i <tab.length; i++) {
 		myajaxName(tab[i].to_id,checkandaddTab);
 	}
 }
 
 function checkandaddTab(name){
 	var username=name.data[0].login;
+	console.log(username);
 	total--;
 	console.log(total);
 	if (!tab.includes(username)) {
-		console.log(username);
 		tab.push(username);
 	}
-	if (total<=1) {
+	if (total==0) {
 		console.log("total");
 		document.getElementById("toChannelName").value="";
 		localStorage["streams"]=JSON.stringify(tab);
+		feedback3.innerHTML="";
+		feedback3.appendChild(createFeedback("alert-info","<strong>Success!</strong> Récupération réalisé avec succès !"));
+		//feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Récupération réalisé avec succès !</div>';
+		feedback3.addEventListener("click",close3);
 		displayChannel();
 	}
 }
