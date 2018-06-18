@@ -254,7 +254,7 @@ function myajaxId(nomChaine, callBack) {
         var req = JSON.parse(httpRequest.responseText);
         console.log(req['error']);
         if (req.error!=null) {
-        	feedback3.appendChild(createFeedback("alert-danger","<strong>Success!</strong> Récupération réalisé avec succès !"));
+        	feedback3.appendChild(createFeedback("alert-danger","<strong>Erreur!</strong> Utilisateur inconnu"));
         	//feedback3.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Erreur!</strong> Utilisateur inconnu</div>';
 			feedback3.addEventListener("click",close3);
         } else {
@@ -365,7 +365,7 @@ function sortChannel(){
 	}
 	localStorage['streams']=JSON.stringify(tabl);
 	feedback.innerHTML="";
-	feedback.appendChild(createFeedback("alert-info","<strong>Success!</strong> Récupération réalisé avec succès !"));
+	feedback.appendChild(createFeedback("alert-info","<strong>Success!</strong> Chaînes triées avec succès !"));
 	//feedback.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Chaînes triées avec succès !</div>';
 	feedback.addEventListener("click",close);
 	displayChannel();
