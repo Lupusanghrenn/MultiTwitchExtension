@@ -294,8 +294,6 @@ function cleanAffichage(){
 function returnHttpRequest(httpRequest){
 	request=JSON.parse(httpRequest.responseText);
 	cleanAffichage();
-	displayStreamAsync(request);
-	//on enelve les chaines en live
 	urlsOffline=[];
 	for (var i = 0; i < urls.length; i++) {
 		var isOnline=false;
@@ -307,6 +305,9 @@ function returnHttpRequest(httpRequest){
 		}
 		if (!isOnline) {urlsOffline.push(urls[i]);}
 	}
+	displayStreamAsync(request);
+	//on enelve les chaines en live
+	
 }
 
 function returnOffline(httpRequest){

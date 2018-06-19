@@ -11,12 +11,12 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage['timeInterval']=timeInterval;
 	notifOnLaunch=checkboxOnLaunch.checked;
 	showOffline=localStorage["showOffline"]=="true";
-	enregistrerOpti();
+	//enregistrerOpti();
 	if (!showOffline) {
 		//si showoffline = false, on cache le checkbox
-		divOptimisation.style.display="none";
+		//divOptimisation.style.display="none";
 	}else{
-		divOptimisation.style.display="inherit";
+		//divOptimisation.style.display="inherit";
 	}
 	feedback2.innerHTML="";
 	feedback2.appendChild(createFeedback("alert-success","<strong>Success!</strong> Options modifiés avec succès !"));
@@ -55,9 +55,9 @@ function init(){
 	checkboxShowOffline.addEventListener("change",enregistrer);
 	//checkboxShowOffline.addEventListener("change",cacheOpti);
 
-	checkboxOptimisation=document.getElementById("optimisationC");
-	checkboxOptimisation.checked=optimisation;
-	divOptimisation=document.getElementById("optimisation");
+	// checkboxOptimisation=document.getElementById("optimisationC");
+	// checkboxOptimisation.checked=optimisation;
+	// divOptimisation=document.getElementById("optimisation");
 	//checkboxOptimisation.addEventListener("change",enregistrerOpti);
 
 	checkboxOnLaunch=document.getElementById("notifOnLaunch");
@@ -88,7 +88,7 @@ function init(){
 
 	if (!showOffline) {
 		//si showoffline = false, on cache le checkbox
-		divOptimisation.style.display="none";
+		//divOptimisation.style.display="none";
 	}
 
 	//enregistrer();
