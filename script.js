@@ -58,6 +58,9 @@ function init(){
 
 	boutonAdd = document.getElementById('addCurrent');
 	boutonAdd.addEventListener('click',getTabs);
+
+	boutonOption=document.getElementById("options");
+	boutonOption.addEventListener('click',goToOption);
 }
 
 //myajax("https://api.twitch.tv/kraken/streams/ogaminglol",retour,urls);
@@ -163,7 +166,7 @@ function displayStreamAsync(reauest){
 		div.innerHTML='Aucune chaine n\'est en live pour le moment';
 		row.appendChild(div);
 	}
-	console.log(request);
+	//console.log(request);
 
 	for (i = 0; i < request._total; i++) {
 		var div = document.createElement("div");
@@ -275,8 +278,6 @@ function displayStreamAsync(reauest){
 				row.appendChild(div);
 			}
 		}		
-	}else{
-		console.log("ne rien montrer");
 	}
 }
 
@@ -369,5 +370,10 @@ function saveTab(event) {
 	}else{
 		alert("Cette chaine n'existe pas");
 	}
+}
+
+function goToOption(){
+	console.log("goToOption");
+	chrome.tabs.create({url:"page_option.html"});
 }
 
