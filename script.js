@@ -163,6 +163,7 @@ function displayStreamAsync(reauest){
 		div.innerHTML='Aucune chaine n\'est en live pour le moment';
 		row.appendChild(div);
 	}
+	console.log(request);
 
 	for (i = 0; i < request._total; i++) {
 		var div = document.createElement("div");
@@ -195,9 +196,25 @@ function displayStreamAsync(reauest){
 		row1.setAttribute("class","row");
 		var div1=document.createElement('div');
 		div1.id=url;
-		div1.setAttribute("class","col-xs-12 ellipsis");
+		div1.setAttribute("class","col-xs-9 ellipsis");
+		div1.style.paddingLeft="0px";
 		div1.innerHTML=request["streams"][i]["channel"]['display_name']+" - <i class='tw-live-indicator'>"+request['streams'][i]['game'];
+		
+		//nombre de viewer
+		var divViewer= document.createElement("div");
+		divViewer.setAttribute("class","col-xs-3 pull-right divViewer");
+		var spanViewer=document.createElement("span");
+		spanViewer.setAttribute("class","pull-right");
+		spanViewer.style.color="rgb(137, 131, 149)";
+		spanViewer.innerHTML=request["streams"][i]["viewers"];
+		divViewer.appendChild(spanViewer);
+		var divPoint=document.createElement("div");
+		divPoint.setAttribute("class","pointTwitch pull-right");
+		divViewer.appendChild(divPoint);
+
+
 		row1.appendChild(div1);
+		row1.appendChild(divViewer);
 		divxs7.appendChild(row1);
 
 		var row1=document.createElement('div');
