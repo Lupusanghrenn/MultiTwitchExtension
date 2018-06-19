@@ -111,7 +111,7 @@ function lauchMultiAsync(tab){
 		chrome.tabs.update({url:tab[0]["url"]+chainebis});
 	}else{
 		console.log("Dans le else");
-		//chrome.tabs.create({ url: chaine });
+		chrome.tabs.create({ url: chaine });
 	}	
 }
 
