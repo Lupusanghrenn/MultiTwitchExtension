@@ -52,7 +52,7 @@ function init(){
 
 	checkboxShowOffline=document.getElementById("showOffline");
 	checkboxShowOffline.checked=showOffline;
-	checkboxShowOffline.addEventListener("change",enregistrer);
+	//checkboxShowOffline.addEventListener("change",enregistrer);
 	//checkboxShowOffline.addEventListener("change",cacheOpti);
 
 	// checkboxOptimisation=document.getElementById("optimisationC");
@@ -377,8 +377,8 @@ function sortChannel(){
 function createFeedback(alertType,texte){
 	var feedbackDiv = document.createElement("div");
 	feedbackDiv.setAttribute("class","alert "+alertType+" alert-dismissable");
-	feedbackDiv.style.marginLeft="-10px";
-	feedbackDiv.style.marginRight="30px";
+	feedbackDiv.style.marginLeft="-1%";
+	feedbackDiv.style.marginRight="4%";
 		var a = document.createElement("a");
 		a.setAttribute("class","close");
 		a.setAttribute("data-dismiss","info");

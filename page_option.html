@@ -12,6 +12,10 @@
 			margin-right: -10px;
 			margin-left: -10px;
 		}
+
+		.col-lg-12{
+			width: 95%;
+		}
 	</style>
 </head>
 
@@ -21,24 +25,26 @@
 
 	<h3 class="text-center">Paramétre généraux</h3>
 	<div id="feedback2" style=""></div>
-	<div id="timeInterval">
-		<label>Temps entre chaque requête (min. 10s)  <input type="number" name="timeInterval" style="text-align: right;width: 100px;">s</label>
-	</div>
-	<div class="checkbox">
-	  <label><input type="checkbox" id="showOffline" name="showOffline" value="">Cocher cette case si vous souhaitez l'affichage des channels offline</label>
-	</div>
-	<!-- <div class="checkbox" id="optimisation">
-	  <label><input type="checkbox" id="optimisationC" name="optimisation" value="">Cocher cette case si vous souhaitez l'affichage optimiser des channels offline (mais moins jolie) <br>Cochez cette case si vous avez une mauvaise connexion</label>
-	</div> -->
-	<div class="checkbox">
-	  <label><input type="checkbox" id="multitwitch" name="multitwitch" value="">Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch</label>
-	</div>
-	<div class="checkbox">
-	  <label><input type="checkbox" id="notifOnLaunch" name="notifOnLaunch" value="">Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome</label>
-	</div>
-	<button class="btn btn-default">
-		Enregistrer
-	</button>
+	<form style="margin-left: -0.7%">
+		<div id="timeInterval">
+			<label>Temps entre chaque requête (min. 10s)  <input type="number" name="timeInterval" style="text-align: right;width: 100px;">s</label>
+		</div>
+		<div class="checkbox">
+		  <label><input type="checkbox" id="showOffline" name="showOffline" value="">Cocher cette case si vous souhaitez l'affichage des channels offline</label>
+		</div>
+		<!-- <div class="checkbox" id="optimisation">
+		  <label><input type="checkbox" id="optimisationC" name="optimisation" value="">Cocher cette case si vous souhaitez l'affichage optimiser des channels offline (mais moins jolie) <br>Cochez cette case si vous avez une mauvaise connexion</label>
+		</div> -->
+		<div class="checkbox">
+		  <label><input type="checkbox" id="multitwitch" name="multitwitch" value="">Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch</label>
+		</div>
+		<div class="checkbox">
+		  <label><input type="checkbox" id="notifOnLaunch" name="notifOnLaunch" value="">Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome</label>
+		</div>
+		<button class="btn btn-default">
+			Enregistrer
+		</button>
+	</form>
 
 	<h3 class="text-center">Paramétre des channels</h3>
 	<div id="feedback" style=""></div>
@@ -67,7 +73,7 @@
 
 	<h3 class="text-center">Récupérer les chaines que vous suivez</h3>
 	<div id="feedback3" style=""></div>
-	<div class="row">
+	<div class="row" style="margin-bottom: 5%">
 		<div class="form-inline" >
 		  <div class="form-group" style="width: 80%;">
 		    <label class="sr-only" for="toChannelName"></label>
