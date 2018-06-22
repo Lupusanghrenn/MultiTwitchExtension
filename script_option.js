@@ -339,6 +339,7 @@ function getFollow() {
 
 function updateTab(tab) {
 	//feedback3.innerHTML="";
+	close3();
 	console.log(tab);
 	//feedback3.appendChild(createFeedback("alert-info","<strong>Success!</strong> Récupération réalisé avec succès !"));
 	//feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Récupération réalisé avec succès !</div>';
