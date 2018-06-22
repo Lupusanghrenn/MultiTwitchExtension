@@ -1,6 +1,6 @@
 {
 	"manifest_version": 2,
-	"name": "Multi Twitch Extension",
+	"name": "__MSG_appName__",
 	"short_name":"Multi Twitch",
   "background": {
     "scripts": [ "script_back.js" ]
@@ -10,7 +10,7 @@
     "default_popup": "index.html",
     "default_title": "Multi twitch"
   },
-  "description": "Chrome Extension who allow you to easely follow when your streamers goes live.",
+  "description": "__MSG_appDescription__",
   "icons": {
     "128": "icone128.png",
     "64": "icone64.png",
@@ -24,6 +24,7 @@
     "notifications",
     "tabs"
   ],
+  "default_locale":"en",
   "version": "1.9.5",
   "author":"Lupusanghren @Lupusanghrenn"
 }

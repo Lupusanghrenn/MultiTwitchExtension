@@ -1,0 +1,90 @@
+{
+	"appName" : {
+		"message" : "Multi Twitch Extension"
+	},
+	"appDescription": {
+		"message":"Chrome Extension qui vous permet de facilement savoir quand vos streamers préféré sont en ligne."
+	},
+	"online" : {
+		"message":"En ligne",
+		"description": "Main page - En ligne"
+	},
+	"addCurrentChannel":{
+		"message":"Ajouter la chaîne actuelle"
+	},
+	"lauchMultiTwitch":{
+		"message":"Lancer le Multi Twitch"
+	},
+	"refresh":{
+		"message":"Rafraîchir"
+	},
+	"option":{
+		"message":"Options"
+	},
+	"timeRequest":{
+		"message":"Temps entre chaque requête (min. 10s)"
+	},
+	"checkOffline":{
+		"message": "Cocher cette case si vous souhaitez l'affichage des channels offline"
+	},
+	"checkMultistream":{
+		"message":"Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch"
+	},
+	"CheckOnLaunch":{
+		"message":"Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome"
+	},
+	"save":{
+		"message":"Enregistrer"
+	},
+	"extensionOption":{
+		"message":"Options de l'extension"
+	},
+	"GeneralParameters":{
+		"message":"Paramètres généraux"
+	},
+	"ChannelParameters":{
+		"message":"Paramètres des chaînes"
+	},
+	"SortChannels":{
+		"message":"Trier les chaînes"
+	},
+	"GetFollowTitle":{
+		"message":"Récupérez les chaines que vous suivez"
+	},
+	"GetFollow":{
+		"message":"Récupérez vos follows"
+	},
+	"placeholderUrlChannel":{
+		"message":"nom de la chaine (dans l'URL)"
+	},
+	"placeholderUrlFollow":{
+		"message":"Votre pseudo (comme dans l'URL)"
+	},
+	"FeebackOptionSucess":{
+		"message":"<strong>Succès!</strong> Options modifiés avec succès !"
+	},
+	"FeebackDeletedChannel":{
+		"message":"<strong>Succès!</strong> Chaîne supprimé avec succès !"
+	},
+	"FeebackAlreadySave":{
+		"message":"<strong>Erreur!</strong> Vous avez déjà enregistré cette chaine !"
+	},
+	"FeebackChannelEmpty":{
+		"message":"<strong>Erreur!</strong> Nom de la chaine vide"
+	},
+	"FeedbackUserUnknow":{
+		"message":"<strong>Error!</strong> Utilisateur inconnu"
+	},
+	"FeebackAddChannelSuccess":{
+		"message":"<strong>Success!</strong> Chaîne ajouté avec succès !"
+	},
+	"FeedbackGettingInProgress":{
+		"message":"Récupération en cours !"
+	},
+	"FeebackGettingSuccesfull":{
+		"message":"<strong>Success!</strong> Récupération réalisé avec succès !"
+	},
+	"FeedbackSortSucess":{
+		"message":"<strong>Success!</strong> Chaînes triées avec succès !"
+	}
+}

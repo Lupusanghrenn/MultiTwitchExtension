@@ -1,0 +1,66 @@
+{
+	"appName" : {
+		"message" : "Multi Twitch Extension"
+	},
+	"appDescription": {
+		"message":"Chrome Extension who allow you to easely follow when your streamers goes live."
+	},
+	"online":{
+		"message":"Online",
+		"description":"Main page > En ligne"
+	},
+	"addCurrentChannel":{
+		"message":"Add current channel"
+	},
+	"lauchMultiTwitch":{
+		"message":"Launch Multi Twitch"
+	},
+	"refresh":{
+		"message":"Refresh"
+	},
+	"option":{
+		"message":"Options"
+	},
+	"timeRequest":{
+		"message":"Time between each request (min. 10s)"
+	},
+	"checkOffline":{
+		"message": "ENG Cocher cette case si vous souhaitez l'affichage des channels offline"
+	},
+	"checkMultistream":{
+		"message":"ENG Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch"
+	},
+	"CheckOnLaunch":{
+		"message":"ENG Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome"
+	},
+	"save":{
+		"message":"Save"
+	},
+	"extensionOption":{
+		"message":"ENG Options de l'extension"
+	},
+	"GeneralParameters":{
+		"message":"ENG Paramètres généraux"
+	},
+	"ChannelParameters":{
+		"message":"ENG Paramètres des chaînes"
+	},
+	"SortChannels":{
+		"message":"Sort the channels"
+	},
+	"GetFollowTitle":{
+		"message":"ENG Récupérez les chaines que vous suivez"
+	},
+	"GetFollow":{
+		"message":"ENG Récupérez vos follows"
+	},
+	"placeholderUrlChannel":{
+		"message":"ENG nom de la chaine (dans l'URL)"
+	},
+	"placeholderUrlFollow":{
+		"message":"ENG Votre pseudo (comme dans l'URL)"
+	},
+	"FeebackOptionSucess":{
+		"message":"ENG Options modifiés avec succès !"
+	}
+}

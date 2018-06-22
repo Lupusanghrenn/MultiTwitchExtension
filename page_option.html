@@ -16,37 +16,40 @@
 		.col-lg-12{
 			width: 95%;
 		}
+		.checkbox input[type=checkbox]{
+			margin-left: 0px;
+		}
 	</style>
 </head>
 
 <body>
 <div class="container" style="padding-left: 0px">
-	<h2 class="text-center">Options de l'extension</h2>
+	<h2 class="text-center" id="extensionOption">Options de l'extension</h2>
 
-	<h3 class="text-center">Paramétre généraux</h3>
+	<h3 class="text-center" id="GeneralParameters">Paramétre généraux</h3>
 	<div id="feedback2" style=""></div>
 	<form style="margin-left: -0.7%">
 		<div id="timeInterval">
-			<label>Temps entre chaque requête (min. 10s)  <input type="number" name="timeInterval" style="text-align: right;width: 100px;">s</label>
+			<label id="timeRequest">Temps entre chaque requête (min. 10s)</label><input type="number" name="timeInterval" style="text-align: right;width: 100px;">s
 		</div>
 		<div class="checkbox">
-		  <label><input type="checkbox" id="showOffline" name="showOffline" value="">Cocher cette case si vous souhaitez l'affichage des channels offline</label>
+		  <input type="checkbox" id="showOffline" name="showOffline" value=""><label id="checkOffline">Cocher cette case si vous souhaitez l'affichage des channels offline</label>
 		</div>
 		<!-- <div class="checkbox" id="optimisation">
 		  <label><input type="checkbox" id="optimisationC" name="optimisation" value="">Cocher cette case si vous souhaitez l'affichage optimiser des channels offline (mais moins jolie) <br>Cochez cette case si vous avez une mauvaise connexion</label>
 		</div> -->
 		<div class="checkbox">
-		  <label><input type="checkbox" id="multitwitch" name="multitwitch" value="">Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch</label>
+		  <input type="checkbox" id="multitwitch" name="multitwitch" value=""><label id="checkMultistream">Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch</label>
 		</div>
 		<div class="checkbox">
-		  <label><input type="checkbox" id="notifOnLaunch" name="notifOnLaunch" value="">Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome</label>
+		  <input type="checkbox" id="notifOnLaunch" name="notifOnLaunch" value=""><label id="CheckOnLaunch">Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome</label>
 		</div>
-		<button class="btn btn-default">
+		<button class="btn btn-default" id="save">
 			Enregistrer
 		</button>
 	</form>
 
-	<h3 class="text-center">Paramétre des channels</h3>
+	<h3 class="text-center" id="ChannelParameters">Paramétre des channels</h3>
 	<div id="feedback" style=""></div>
 	<div class="row">
 		<form class="form-horizontal" id="channels">
@@ -65,13 +68,13 @@
 		  </div>
 
 		</div>
-		<div class="col-xs-12">
-			<button id="sort">Sort the channel</button>
+		<div class="col-xs-12" style="padding-left: 5px;">
+			<button id="sort" class="btn btn-default">Sort the channel</button>
 		</div>
 	</div>
 	<br>
 
-	<h3 class="text-center">Récupérer les chaines que vous suivez</h3>
+	<h3 class="text-center" id="GetFollowTitle">Récupérer les chaines que vous suivez</h3>
 	<div id="feedback3" style=""></div>
 	<div class="row" style="margin-bottom: 5%">
 		<div class="form-inline" >

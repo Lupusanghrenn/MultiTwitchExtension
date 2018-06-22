@@ -44,6 +44,7 @@ window.onload=init();
 
 function init(){
 	bouton=document.getElementById('refresh');
+	bouton.innerHTML=chrome.i18n.getMessage("refresh");
 	bouton.addEventListener('click',afficherStream);
 	//cleanAffichage();
 	if (urls.length!=0) {afficherStream();}
@@ -54,13 +55,19 @@ function init(){
 		row.appendChild(div);
 	}
 	boutonMulti = document.getElementById('multi');
+	boutonMulti.innerHTML=chrome.i18n.getMessage("lauchMultiTwitch");
 	boutonMulti.addEventListener('click',lauchMulti);
 
 	boutonAdd = document.getElementById('addCurrent');
+	boutonAdd.innerHTML=chrome.i18n.getMessage("addCurrentChannel");
 	boutonAdd.addEventListener('click',getTabs);
 
 	boutonOption=document.getElementById("options");
+	boutonOption.innerHTML=chrome.i18n.getMessage("option");
 	boutonOption.addEventListener('click',goToOption);
+
+	divTexteOnline=document.getElementById("online");
+	divTexteOnline.innerHTML=chrome.i18n.getMessage("online");
 }
 
 //myajax("https://api.twitch.tv/kraken/streams/ogaminglol",retour,urls);
@@ -157,7 +164,7 @@ function afficherStream(){
 	myajax(channelString,returnHttpRequest);
 }
 
-function displayStreamAsync(reauest){
+function displayStreamAsync(request){
 
 	if (request._total==0) {
 		var div = document.createElement("div");
@@ -288,7 +295,7 @@ function cleanAffichage(){
 	online.setAttribute("class","text-center");
 	online.style.backgroundColor="white";
 	online.style.color="black";
-	online.innerHTML="ONLINE";
+	online.innerHTML=chrome.i18n.getMessage("online");;
 	row.appendChild(online);
 }
 
