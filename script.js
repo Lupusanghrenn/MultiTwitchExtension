@@ -1,5 +1,4 @@
-		//ajout
-//localStorage['streams']=JSON.stringify(["ogaminglol","zerator","gobgg"]);
+//idapp = "jfaoecnmdknjhbjadnpifengnndehddh"
 
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
 row = document.getElementById("afficher");
@@ -68,6 +67,9 @@ function init(){
 
 	divTexteOnline=document.getElementById("online");
 	divTexteOnline.innerHTML=chrome.i18n.getMessage("online");
+
+	boutonWatch = document.getElementById('watchCurrent');
+	boutonWatch.addEventListener('click',getTabs2);
 }
 
 //myajax("https://api.twitch.tv/kraken/streams/ogaminglol",retour,urls);
@@ -326,6 +328,10 @@ function getTabs(){
 	chrome.tabs.query({ currentWindow: true, active: true },getCurrent);
 }
 
+function getTabs2(){
+	chrome.tabs.query({ currentWindow: true, active: true },WatchCurrent);
+}
+
 function getCurrent(tab) {
 	tabUrl = tab[0]['url'];
 	var slash =false;
@@ -384,3 +390,44 @@ function goToOption(){
 	chrome.tabs.create({url:"page_option.html"});
 }
 
+function WatchCurrent(tab) {
+	tabUrl = tab[0]['url'];
+	var slash =false;
+
+	//on récupère la fin du site (apres le dernier / )
+	for (var i = (tabUrl.length - 1); i >= 0 && !slash; i--) {
+		if(tabUrl[i]=="/"){
+			slash=true;
+		}
+	}
+	index=i+1;
+	var name = tabUrl.substring(index+1, tabUrl.length);
+	console.log(name);
+
+	chrome.runtime.sendMessage("jfaoecnmdknjhbjadnpifengnndehddh","ogaminglol");
+
+	// var screenWidth = screen.availWidth;
+	// var screenHeight = screen.availHeight;
+	// var width = 440;
+	// var height = 247;
+
+	// chrome.windows.create({
+	// 	url:"stream.html",
+	// 	type:"panel",
+	// 	width:width,
+	// 	height:height,
+
+	// 	alwaysOnTop: true,
+	// 	frame: {
+	// 		type: 'none'
+	// 	},
+	// 	innerBounds: {
+	// 		width: width,
+	// 		height: height,
+	// 		left: screenWidth-(width + 20),
+	// 		top: screenHeight-(height + 20),
+	// 		minWidth: 340,
+	// 		minHeight: 190
+	// 	}
+	// },function(window){});
+}
