@@ -22,7 +22,7 @@ if (localStorage["streams"]==undefined) {
 	urls=JSON.parse(localStorage['streams']);
 }
 
-if (localStorage["multitwitch"]=undefined) {
+if (localStorage["multitwitch"]==undefined) {
 	multitwitch=true;
 } else {
 	multitwitch=localStorage["multitwitch"];
@@ -74,7 +74,7 @@ function init(){
 
 function lauchMulti() {
 	var tab=document.getElementsByTagName('input');
-	if (multitwitch==false) {
+	if (multitwitch=="false") {
 		//lauch sur miltitwitch
 		var chaine = "http://www.multitwitch.tv/";
 	} else {

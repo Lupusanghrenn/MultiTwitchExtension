@@ -1,8 +1,7 @@
-
 function enregistrer()//enregistrer les options, fonction appelée par le click sur le bouton
 {
 	localStorage["showOffline"]=checkboxShowOffline.checked;
-	localStorage['multitwitch']=checkboxMulti.checked;
+	localStorage["multitwitch"]=JSON.stringify(checkboxMulti.checked);
 	localStorage['notifOnLaunch']=checkboxOnLaunch.checked;
 	timeInterval=parseInt(inputTimeInterval.value)*1000;
 	if (timeInterval<10000) {
@@ -25,21 +24,22 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	setTimeout(close2,5000);
 }
 
-function enregistrerOpti()//enregistrer les options, fonction appelée par le click sur le bouton
-{
-	localStorage["optimisation"]=checkboxOptimisation.checked;
-	optimisation=localStorage["optimisation"]=="true";
-}
+// function enregistrerOpti()//enregistrer les options, fonction appelée par le click sur le bouton
+// {
+// 	localStorage["optimisation"]=checkboxOptimisation.checked;
+// 	optimisation=localStorage["optimisation"]=="true";
+// }
 
 function init(){
+	console.log("init");
 	//initialisation des variables globales
 	showOffline=localStorage["showOffline"]=="true";
-	optimisation=localStorage["optimisation"]=="true";
+	//optimisation=localStorage["optimisation"]=="true";
 	multitwitch=localStorage["multitwitch"]=="true";
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 	timeInterval=parseInt(localStorage["timeInterval"]);
 	if (timeInterval==undefined) {
-		timeInterval=10000;
+		timeInterval=30000;
 		localStorage["timeInterval"]=timeInterval;
 	}
 	if (multitwitch==undefined) {
@@ -48,7 +48,7 @@ function init(){
 	}
 
 	checkboxMulti=document.getElementById("multitwitch");
-	checkboxMulti.checked=showOffline;
+	checkboxMulti.checked=multitwitch;
 	//checkboxMulti.addEventListener("change",enregistrer);
 
 	checkboxShowOffline=document.getElementById("showOffline");
@@ -73,11 +73,10 @@ function init(){
 
 	inputTimeInterval=document.getElementById('timeInterval').children[1];
 	inputTimeInterval.value=timeInterval/1000;
-	console.log(inputTimeInterval);
 
-	bouton=document.getElementsByTagName('button')[0];
+	bouton=document.getElementById("save");
 	bouton.addEventListener('click',enregistrer);
-	bouton.addEventListener('click',enregistrerOpti);
+	//bouton.addEventListener('click',enregistrerOpti);
 	channels=document.getElementById('channels');
 	savediv=document.getElementById('savediv');
 	savediv.addEventListener('click',save);
@@ -87,10 +86,10 @@ function init(){
 	feedback2 = document.getElementById("feedback2");
 	feedback3 = document.getElementById('feedback3');
 
-	if (!showOffline) {
-		//si showoffline = false, on cache le checkbox
-		//divOptimisation.style.display="none";
-	}
+	// if (!showOffline) {
+	// 	//si showoffline = false, on cache le checkbox
+	// 	//divOptimisation.style.display="none";
+	// }
 
 	//MESSAGES . JSON
 	document.getElementById("extensionOption").innerHTML=chrome.i18n.getMessage("extensionOption");
@@ -115,13 +114,13 @@ function displayChannel(){
 	clearChannel();
 	tab=JSON.parse(localStorage['streams']);
 	for (var i = 0; i < tab.length; i++) {
-		if(!optimisation){
-			myajax(tab[i],displayName);
-		}else{
-			var request=[];
-			request["display_name"]=tab[i];
-			displayName(request, true);
-		}
+		// if(!optimisation){
+		// 	myajax(tab[i],displayName);
+		// }else{
+		var request=[];
+		request["display_name"]=tab[i];
+		displayName(request, true);
+		//}
 	}
 }
 
@@ -421,5 +420,5 @@ function createFeedback(alertType,texte){
 window.onload=init();
 
 //var body=document.getElementsByTagName('body')[0];
-//document.body.addEventListener('onkeydown',enter);
-document.body.onkeydown=enter;
+document.body.addEventListener('onkeydown',enter);
+//document.body.onkeydown=enter;
