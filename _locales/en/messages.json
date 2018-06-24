@@ -25,42 +25,78 @@
 		"message":"Time between each request (min. 10s)"
 	},
 	"checkOffline":{
-		"message": "ENG Cocher cette case si vous souhaitez l'affichage des channels offline"
+		"message": "Check this if you want to see the offline channels"
 	},
 	"checkMultistream":{
-		"message":"ENG Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch"
+		"message":"Check this if you want to use KBMOD Multistream au lieu de Multitwitch"
 	},
 	"CheckOnLaunch":{
-		"message":"ENG Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome"
+		"message":"Check this if you want to be notify about the streamers you are online when you launch Chrome"
 	},
 	"save":{
 		"message":"Save"
 	},
 	"extensionOption":{
-		"message":"ENG Options de l'extension"
+		"message":"Extension options"
 	},
 	"GeneralParameters":{
-		"message":"ENG Paramètres généraux"
+		"message":"General parameters"
 	},
 	"ChannelParameters":{
-		"message":"ENG Paramètres des chaînes"
+		"message":"Channel parameters"
 	},
 	"SortChannels":{
 		"message":"Sort the channels"
 	},
 	"GetFollowTitle":{
-		"message":"ENG Récupérez les chaines que vous suivez"
+		"message":"Get the channels you follow"
 	},
 	"GetFollow":{
-		"message":"ENG Récupérez vos follows"
+		"message":"Get your follows"
 	},
 	"placeholderUrlChannel":{
-		"message":"ENG nom de la chaine (dans l'URL)"
+		"message":"Name of the channel (in the URL)"
 	},
 	"placeholderUrlFollow":{
-		"message":"ENG Votre pseudo (comme dans l'URL)"
+		"message":"Your nickname (like in the URL)"
 	},
 	"FeebackOptionSucess":{
-		"message":"ENG Options modifiés avec succès !"
+		"message":"Options successfully updated"
+	},
+	"FeebackDeletedChannel":{
+		"message":"<strong>Success !</strong> Channel successfully deleted !"
+	},
+	"FeebackAlreadySave":{
+		"message":"<strong>Error !</strong> You already register this channel !"
+	},
+	"FeebackChannelEmpty":{
+		"message":"<strong>Error !</strong> Channel name empty !"
+	},
+	"FeedbackUserUnknow":{
+		"message":"<strong>Error !</strong> User unknow"
+	},
+	"FeebackAddChannelSuccess":{
+		"message":"<strong>Success !</strong> Channel successfully added !"
+	},
+	"FeedbackGettingInProgress":{
+		"message":"Getting in progress !"
+	},
+	"FeebackGettingSuccesfull":{
+		"message":"<strong>Success !</strong> Getting successfully made !"
+	},
+	"FeedbackSortSucess":{
+		"message":"<strong>Success !</strong> Channem successfully sorted !"
+	},
+	"noChannelOnline":{
+		"message":"No channel available"
+	},
+	"noSavedChannel":{
+		"message":"No channel register yet"
+	},
+	"alreadyAddedChannel":{
+		"message":"Channel already added"
+	},
+	"notATwitchChannel":{
+		"message":"This isn't a Twitch channel"
 	}
 }

@@ -61,30 +61,42 @@
 		"message":"Votre pseudo (comme dans l'URL)"
 	},
 	"FeebackOptionSucess":{
-		"message":"<strong>Succès!</strong> Options modifiés avec succès !"
+		"message":"<strong>Succès !</strong> Options modifiés avec succès !"
 	},
 	"FeebackDeletedChannel":{
-		"message":"<strong>Succès!</strong> Chaîne supprimé avec succès !"
+		"message":"<strong>Succès !</strong> Chaîne supprimé avec succès !"
 	},
 	"FeebackAlreadySave":{
-		"message":"<strong>Erreur!</strong> Vous avez déjà enregistré cette chaine !"
+		"message":"<strong>Erreur !</strong> Vous avez déjà enregistré cette chaine !"
 	},
 	"FeebackChannelEmpty":{
-		"message":"<strong>Erreur!</strong> Nom de la chaine vide"
+		"message":"<strong>Erreur !</strong> Nom de la chaine vide"
 	},
 	"FeedbackUserUnknow":{
-		"message":"<strong>Error!</strong> Utilisateur inconnu"
+		"message":"<strong>Erreur !</strong> Utilisateur inconnu"
 	},
 	"FeebackAddChannelSuccess":{
-		"message":"<strong>Success!</strong> Chaîne ajouté avec succès !"
+		"message":"<strong>Succès !</strong> Chaîne ajouté avec succès !"
 	},
 	"FeedbackGettingInProgress":{
 		"message":"Récupération en cours !"
 	},
 	"FeebackGettingSuccesfull":{
-		"message":"<strong>Success!</strong> Récupération réalisé avec succès !"
+		"message":"<strong>Succès !</strong> Récupération réalisé avec succès !"
 	},
 	"FeedbackSortSucess":{
-		"message":"<strong>Success!</strong> Chaînes triées avec succès !"
+		"message":"<strong>Succès !</strong> Chaînes triées avec succès !"
+	},
+	"noChannelOnline":{
+		"message":"Aucune chaine n'est en live pour le moment"
+	},
+	"noSavedChannel":{
+		"message":"Vous n'avez pour l'instant enregistré aucun channel"
+	},
+	"alreadyAddedChannel":{
+		"message":"Chaîne déjà ajouté"
+	},
+	"notATwitchChannel":{
+		"message":"Ce n'est pas une chaine Twitch"
 	}
 }

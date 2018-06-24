@@ -24,7 +24,7 @@
     "notifications",
     "tabs"
   ],
-  "default_locale":"en",
-  "version": "2.0.0",
+  "default_locale":"fr",
+  "version": "1.9.7",
   "author":"Lupusanghren @Lupusanghrenn"
 }

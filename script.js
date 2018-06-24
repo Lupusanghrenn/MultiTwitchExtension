@@ -21,7 +21,7 @@ if (localStorage["streams"]==undefined) {
 	urls=JSON.parse(localStorage['streams']);
 }
 
-if (localStorage["multitwitch"]=undefined) {
+if (localStorage["multitwitch"]==undefined) {
 	multitwitch=true;
 } else {
 	multitwitch=localStorage["multitwitch"];
@@ -50,7 +50,7 @@ function init(){
 	else {
 		var div = document.createElement("div");
 		div.class="col-md-12";
-		div.innerHTML="<p class='text-justify'>Vous n'avez pour l'instant enregistré aucun channel</p>"
+		div.innerHTML="<p class='text-justify'>"+chrome.i18n.getMessage("noSavedChannel")+"</p>"
 		row.appendChild(div);
 	}
 	boutonMulti = document.getElementById('multi');
@@ -76,7 +76,7 @@ function init(){
 
 function lauchMulti() {
 	var tab=document.getElementsByTagName('input');
-	if (multitwitch==false) {
+	if (multitwitch=="false") {
 		//lauch sur miltitwitch
 		var chaine = "http://www.multitwitch.tv/";
 	} else {
@@ -170,9 +170,9 @@ function displayStreamAsync(request){
 
 	if (request._total==0) {
 		var div = document.createElement("div");
-		div.setAttribute("class","col-xs-12");
+		div.setAttribute("class","col-xs-12 text-center");
 		div.style.margin="3px 0";
-		div.innerHTML='Aucune chaine n\'est en live pour le moment';
+		div.innerHTML=chrome.i18n.getMessage("nChannelOnline");
 		row.appendChild(div);
 	}
 	//console.log(request);
@@ -365,10 +365,10 @@ function getCurrent(tab) {
 			//on test enfin si la chaine existe
 			myajax2(name,saveTab);
 		}else{
-			alert("Chaîne déjà ajouté");
+			alert(chrome.i18n.getMessage("alreadyAddedChannel"));
 		}
 	}else{
-		alert("Ce n'est pas une chaine twitch");
+		alert(chrome.i18n.getMessage("notATwitchChannel"));
 	}
 
 }
@@ -381,7 +381,7 @@ function saveTab(event) {
 		localStorage['streams']=JSON.stringify(urls);
 		afficherStream();
 	}else{
-		alert("Cette chaine n'existe pas");
+		alert(chrome.i18n.getMessage("FeedbackUserUnknow"));
 	}
 }
 
