@@ -2,6 +2,8 @@
 
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
 row = document.getElementById("afficher");
+//var extensionID="obpmmenioddcpffdelecfoogjomfhekm";//online
+var extensionID="jfaoecnmdknjhbjadnpifengnndehddh";//local
 
 //Initialisation des valeurs
 if (localStorage["showOffline"]==undefined) {
@@ -114,6 +116,7 @@ function lauchMultiAsync(tab){
 	}
 	var site = tab[0]["url"].substring(0,i);
 	console.log(site);
+
 	console.log(site=="https://multistre.am");
 	if (tab[0]["url"]=="chrome://newtab/" || tab[0]["url"]=="https://www.google.com/") {
 		//tabs dans le meme onglet
@@ -221,7 +224,11 @@ function displayStreamAsync(request){
 		spanViewer.innerHTML=request["streams"][i]["viewers"];
 		divViewer.appendChild(spanViewer);
 		var divPoint=document.createElement("div");
-		divPoint.setAttribute("class","pointTwitch pull-right");
+		if (request["streams"][i]["stream_type"]=="rerun") {
+			divPoint.setAttribute("class","pointTwitch pointTwitch--grey pull-right");
+		}else{
+			divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
+		}
 		divViewer.appendChild(divPoint);
 
 
@@ -391,43 +398,116 @@ function goToOption(){
 }
 
 function WatchCurrent(tab) {
+	
+	//TEST DE L EXTENSION
+	//send message et attente de la réponse
+	chrome.runtime.sendMessage(extensionID,"install",function(response){
+		console.log(response);
+		console.log(chrome.runtime.lastError);
+		if(response=="installed"){
+			extensionIsInstalled(tab);
+		}else{
+			extensionIsNotInstalled();
+		}
+	});
+
+}
+
+function extensionIsInstalled(tab){
+	//VAR autre
+
+	//on récupère maintenant le 'site' pour voir si c est twitch
 	tabUrl = tab[0]['url'];
 	var slash =false;
 
+	for (i = 0; i < tabUrl.length-2; i++) {
+		if(tabUrl[i]==':'&&tabUrl[i+1]=='/'&&tabUrl[i+2]=='/'){
+			var indexsite=i+3;
+			break;
+		}
+	}
 	//on récupère la fin du site (apres le dernier / )
 	for (var i = (tabUrl.length - 1); i >= 0 && !slash; i--) {
 		if(tabUrl[i]=="/"){
 			slash=true;
+			console.log(i);
 		}
 	}
 	index=i+1;
 	var name = tabUrl.substring(index+1, tabUrl.length);
-	console.log(name);
 
-	chrome.runtime.sendMessage("jfaoecnmdknjhbjadnpifengnndehddh","ogaminglol");
+	//on récupère maintenant le 'site' pour voir si c est twitch
+	slash=false;
+	for (i = 0; i < tabUrl.length-2; i++) {
+		if(tabUrl[i]==':'&&tabUrl[i+1]=='/'&&tabUrl[i+2]=='/'){
+			var indexsite=i+3;
+			break;
+		}
+	}
+	var site = tabUrl.substring(indexsite, index);
+	console.log(site);
+	console.log("Name : "+name);
 
-	// var screenWidth = screen.availWidth;
-	// var screenHeight = screen.availHeight;
-	// var width = 440;
-	// var height = 247;
+	
 
-	// chrome.windows.create({
-	// 	url:"stream.html",
-	// 	type:"panel",
-	// 	width:width,
-	// 	height:height,
 
-	// 	alwaysOnTop: true,
-	// 	frame: {
-	// 		type: 'none'
-	// 	},
-	// 	innerBounds: {
-	// 		width: width,
-	// 		height: height,
-	// 		left: screenWidth-(width + 20),
-	// 		top: screenHeight-(height + 20),
-	// 		minWidth: 340,
-	// 		minHeight: 190
-	// 	}
-	// },function(window){});
+	//SI CACHE COCHE
+	var tabInput=document.getElementsByTagName('input');
+	var countInputChecked=0;
+	for (var i = 0; i < tabInput.length; i++) {
+		if(tabInput[i].checked){
+			countInputChecked++;
+		}
+	}
+	console.log("countInputChecked : "+countInputChecked);
+
+	if (countInputChecked>=1) {
+		if (countInputChecked==1) {
+			//SI UNE SEULE player.twitch
+			var nomChaine="";
+			i=0;
+			while(nomChaine==""){
+				if(tabInput[i].checked){
+					nomChaine=tabInput[i].value;
+				}
+				i++;
+			}
+
+			chrome.runtime.sendMessage(extensionID,"http://player.twitch.tv?channel="+nomChaine);
+
+		}else{
+			//Sinon multitwitch
+			if (multitwitch=="false") {
+				//lauch sur miltitwitch
+				var chaine = "http://www.multitwitch.tv/";
+			} else {
+				var chaine = "https://multistre.am/";
+			}
+			
+			for (var i = 0; i < tabInput.length; i++) {
+				if (tabInput[i].checked) {
+					//si check on ajoute
+					chaine+=tabInput[i].value+"/";
+				}
+			}
+			chrome.runtime.sendMessage(extensionID,chaine);
+		}
+
+
+	}else if(site=="https://www.twitch.tv" && name!=""){
+		//else SI TWITCH
+		chrome.runtime.sendMessage(extensionID,"http://player.twitch.tv?channel="+nomChaine);
+	}else{
+		//ELSE ALERT
+		alert(chrome.i18n.getMessage("alertMultiTwitchApp"));
+	}
+}
+
+function extensionIsNotInstalled(){
+	console.log("extensionIsNotInstalled");
+	if(confirm(chrome.i18n.getMessage("AppNotInstalled"))){
+		chrome.tabs.create({url:"https://chrome.google.com/webstore/detail/multi-twitch-app/obpmmenioddcpffdelecfoogjomfhekm"});
+	}else{
+		//none
+	}
 }

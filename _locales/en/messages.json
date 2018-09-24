@@ -98,5 +98,11 @@
 	},
 	"notATwitchChannel":{
 		"message":"This isn't a Twitch channel"
+	},
+	"alertMultiTwitchApp":{
+		"message":"No channel selected and you're not on twitch"
+	},
+	"AppNotInstalled":{
+		"message":"You need to install the Multi Twitch App to be able to use this option. Do you want to go to the Web Store page ?"
 	}
 }
