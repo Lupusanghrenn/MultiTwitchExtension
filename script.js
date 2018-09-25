@@ -115,7 +115,7 @@ function lauchMultiAsync(tab){
 		}
 	}
 	var site = tab[0]["url"].substring(0,i);
-	console.log(site);
+	console.log("Site : "+site);
 
 	console.log(site=="https://multistre.am");
 	if (tab[0]["url"]=="chrome://newtab/" || tab[0]["url"]=="https://www.google.com/") {
@@ -128,6 +128,31 @@ function lauchMultiAsync(tab){
 		console.log("Dans le else");
 		chrome.tabs.create({ url: chaine });
 	}	
+}
+
+function lauchAsync(tab){
+	console.log(tab);
+	var compteurslash=0;
+	chaine=localStorage["id"];
+
+	for (var i = 0; i < tab[0]["url"].length; i++) {
+		if(tab[0]["url"][i]=='/'){
+			compteurslash++;
+		}
+		if (compteurslash==3) {
+			break;
+		}
+	}
+	var site = tab[0]["url"].substring(0,i);
+	console.log("Site : "+site);
+
+	if (tab[0]["url"]=="chrome://newtab/" || tab[0]["url"]=="https://www.google.com/") {
+		//tabs dans le meme onglet
+		chrome.tabs.update({ url: chaine });
+	}else{
+		console.log("Dans le else");
+		chrome.tabs.create({ url: chaine });
+	}
 }
 
 
@@ -169,6 +194,23 @@ function afficherStream(){
 	myajax(channelString,returnHttpRequest);
 }
 
+function listenerClick(event){
+	idFound=false;
+	index=0;
+	while(index<event.path.length && !idFound){
+		if(event.path[index].id.substr(0,5)=="https"){
+			idFound=true;
+		}else{
+			index++;
+		}
+	}
+	console.log(event.path[index].id);
+	localStorage['id']=event.path[index].id;
+
+	//chrome.tabs.create({url:this.id});
+	chrome.tabs.query({ currentWindow: true, active: true },lauchAsync);
+}
+
 function displayStreamAsync(request){
 
 	if (request._total==0) {
@@ -191,7 +233,7 @@ function displayStreamAsync(request){
 		divImage.setAttribute("class","col-xs-3");
 		divImage.style.paddingLeft="0px";
 		divImage.id=url;
-		divImage.addEventListener("click", function(){console.log("divImage");chrome.tabs.create({url:this.id})},false);
+		divImage.addEventListener("click", listenerClick,false);
 		var image = document.createElement('img');
 		image.src=request["streams"][i]["channel"]['logo'];
 		image.setAttribute("class","img-responsive");
@@ -206,7 +248,7 @@ function displayStreamAsync(request){
 		var divxs7=document.createElement('div');
 		divxs7.setAttribute("class","col-xs-8");
 		divxs7.id=url;
-		divxs7.addEventListener("click", function(){console.log("divxs7");chrome.tabs.create({url:this.id})},false);
+		divxs7.addEventListener("click", listenerClick,false);
 		var row1=document.createElement('div');
 		row1.setAttribute("class","row");
 		var div1=document.createElement('div');
