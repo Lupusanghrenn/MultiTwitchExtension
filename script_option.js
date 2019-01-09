@@ -105,6 +105,7 @@ function init(){
 	document.getElementById("GetFollowTitle").innerHTML=chrome.i18n.getMessage("GetFollowTitle");
 	document.getElementById("toChannelName").placeholder=chrome.i18n.getMessage("placeholderUrlFollow");
 	document.getElementById("buttonChannelName").innerHTML=chrome.i18n.getMessage("GetFollow");
+	document.getElementById("lupusNote").innerHTML=chrome.i18n.getMessage("lupusNote");
 
 	//enregistrer();
 	displayChannel();
