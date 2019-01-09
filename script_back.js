@@ -54,7 +54,7 @@ function init2() {
 
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/streams?channel="+nomChaine;
+    var url="https://api.twitch.tv/helix/streams?channel="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -66,7 +66,7 @@ function myajax(nomChaine,  callBack) {
 
 function myajaxNotif(userid,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/users/"+userid+"/notifications/custom?notification_type=streamup&api_version=5";
+    var url="https://api.twitch.tv/helix/users/"+userid+"/notifications/custom?notification_type=streamup&api_version=5";
     //var url="https://api.twitch.tv/kraken/users/"+userid;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
