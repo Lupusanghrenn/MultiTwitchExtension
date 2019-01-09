@@ -70,8 +70,8 @@ function init(){
 	divTexteOnline=document.getElementById("online");
 	divTexteOnline.innerHTML=chrome.i18n.getMessage("online");
 
-	boutonWatch = document.getElementById('watchCurrent');
-	boutonWatch.addEventListener('click',getTabs2);
+	/*boutonWatch = document.getElementById('watchCurrent');
+	boutonWatch.addEventListener('click',getTabs2);*/
 }
 
 //myajax("https://api.twitch.tv/kraken/streams/ogaminglol",retour,urls);
@@ -158,7 +158,7 @@ function lauchAsync(tab){
 
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/streams?channel="+nomChaine;
+    var url="https://api.twitch.tv/helix/streams?channel="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -170,7 +170,7 @@ function myajax(nomChaine,  callBack) {
 
 function myajax2(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/channels/"+nomChaine;
+    var url="https://api.twitch.tv/helix/channels/"+nomChaine;
     httpRequest.open("GET", url, false);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
