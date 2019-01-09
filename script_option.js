@@ -240,7 +240,7 @@ function testRetour(httpRequest,nomChaine){
 
 function myajax(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/helix/channels/"+nomChaine;
+    var url="https://api.twitch.tv/kraken/channels/"+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -253,7 +253,7 @@ function myajax(nomChaine, callBack) {
 
 function myajaxName(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/helix/users?id="+nomChaine;
+    var url="https://api.twitch.tv/kraken/users?id="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -265,7 +265,7 @@ function myajaxName(nomChaine, callBack) {
 
 function myajaxId(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/helix/users/"+nomChaine;
+    var url="https://api.twitch.tv/kraken/users/"+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -289,7 +289,7 @@ function myajaxId(nomChaine, callBack) {
 
 function myajaxFollow(userid, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url = "https://api.twitch.tv/helix/users/follows?from_id="+userid;
+    var url = "https://api.twitch.tv/kraken/users/follows?from_id="+userid;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");

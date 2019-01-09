@@ -158,7 +158,7 @@ function lauchAsync(tab){
 
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/helix/streams?channel="+nomChaine;
+    var url="https://api.twitch.tv/kraken/streams?channel="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -170,7 +170,7 @@ function myajax(nomChaine,  callBack) {
 
 function myajax2(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/helix/channels/"+nomChaine;
+    var url="https://api.twitch.tv/kraken/channels/"+nomChaine;
     httpRequest.open("GET", url, false);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
