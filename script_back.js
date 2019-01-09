@@ -31,8 +31,10 @@ var firstLaucnh=true;
 
 urlsOnline=[];
 urlsOffline=[];
+var allChannelId = [];
 flag=0;
-init();
+//init();
+initWebHooks();
 
 function init() {
 	nbStream=urls.length;
@@ -195,4 +197,56 @@ function replyBtnClick(notificationId) {
 	console.log(notificationId);
 	chrome.tabs.create({url:'https://www.twitch.tv/'+notificationId});
 	chrome.notifications.clear(notificationId);
+}
+
+//LES WEBHOOKS
+function initWebHooks() {
+	var allchan = JSON.parse(localStorage["streams"]);
+	var stringChaine = "";
+	for (var i = 0; i < allchan.length-1; i++) {
+		stringChaine+=allchan[i]+"&login=";
+	}
+	stringChaine+=allchan[allchan.length-1];
+	console.log(stringChaine);
+	myajaxUsers(stringChaine);
+}
+
+function myajaxUsers(stringChaine) {
+	var httpRequest = new XMLHttpRequest();
+    var url="https://api.twitch.tv/helix/users?login="+stringChaine;
+    httpRequest.open("GET", url, true);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/vnd.twitchtv.v5+json");
+    httpRequest.addEventListener("load", function () {
+        webhooks(httpRequest);
+    });
+    httpRequest.send();
+}
+
+function myajaxPayload(id){
+	var httpRequest = new XMLHttpRequest();
+    var url="https://api.twitch.tv/helix/webhooks/hub?user_id="+id;
+    httpRequest.open("POST", url, true);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/vnd.twitchtv.v5+json");
+    httpRequest.addEventListener("load", function () {
+        payloadWebhooks(httpRequest);
+    });
+    httpRequest.send();
+}
+
+function webhooks(httpRequest){
+	var test = JSON.parse(httpRequest.responseText);
+	console.log(test);
+	for (var i = 0; i < test.data.length; i++) {
+		allChannelId.push(test.data[i].id);
+
+		//init de webhooks
+		myajaxPayload(test.data[i].id);
+	}
+	console.log(allChannelId);
+}
+
+function payloadWebhooks(httpRequest) {
+	console.log(httpRequest.response);
 }
