@@ -272,6 +272,7 @@ function displayStreamAsyncUser(request,tabJeu){
 
 function displayStreamAsyncGames(request,tabJeu, tabUsers){
 	//console.log(request);
+	cleanAffichage();
 
 	for (i = 0; i < request.data.length; i++) {
 		//selection depuis tabUsers
@@ -422,7 +423,7 @@ function cleanAffichage(){
 
 function returnHttpRequest(httpRequest){
 	request=JSON.parse(httpRequest.responseText);
-	cleanAffichage();
+	
 	urlsOffline=[];
 	for (var i = 0; i < urls.length; i++) {
 		var isOnline=false;

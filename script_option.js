@@ -209,6 +209,7 @@ function save(){
 }
 
 function testRetour(httpRequest,nomChaine){
+	console.log(httpRequest);
 	reponse=JSON.parse(httpRequest.response);
 	if (reponse['error']!=null) {
 		//il y a une error
@@ -245,6 +246,7 @@ function myajax(nomChaine, callBack) {
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
+    	console.log(httpRequest);
         callBack(httpRequest,false);
     });
     httpRequest.send();
@@ -272,8 +274,8 @@ function myajaxId(nomChaine, callBack) {
     httpRequest.addEventListener("load", function () {
         //callBack(httpRequest,false);
         var req = JSON.parse(httpRequest.responseText);
-        console.log(req['error']);
-        if (req.error!=null) {
+        console.log(req);
+        if (req._id==undefined) {
         	feedback3.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeedbackUserUnknow")));
         	//feedback3.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Erreur!</strong> Utilisateur inconnu</div>';
 			feedback3.addEventListener("click",close3);
@@ -289,15 +291,35 @@ function myajaxId(nomChaine, callBack) {
 
 function myajaxFollow(userid, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url = "https://api.twitch.tv/kraken/users/follows?from_id="+userid;
+    var url = "https://api.twitch.tv/helix/users/follows?from_id="+userid+"&first=100";
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
-        callBack(JSON.parse(httpRequest.responseText).data);
+    	console.log(httpRequest.response);
+        myajaxFollowedUsers(JSON.parse(httpRequest.response),callBack);
     });
     httpRequest.send();
 }	
+
+function myajaxFollowedUsers(tabUsers,callBack){
+	var httpRequest = new XMLHttpRequest();
+	console.log(tabUsers);
+	var users ="";
+	for (var i = 0; i < tabUsers.data.length-1; i++) {
+		users+=tabUsers.data[i].to_id+"&id=";
+	}
+	users+=tabUsers.data[tabUsers.data.length-1].to_id;
+    var url = "https://api.twitch.tv/helix/users?id="+users;
+    httpRequest.open("GET", url, true);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.addEventListener("load", function () {
+    	console.log(httpRequest.response);
+        callBack(JSON.parse(httpRequest.response));
+    });
+    httpRequest.send();
+}
 
 
 function enter(event){
@@ -344,14 +366,16 @@ function updateTab(tab) {
 	//feedback3.appendChild(createFeedback("alert-info","<strong>Success!</strong> Récupération réalisé avec succès !"));
 	//feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Récupération réalisé avec succès !</div>';
 	//feedback3.addEventListener("click",close3);
-	total=tab.length;
-	for (var i = 0; i <tab.length; i++) {
-		myajaxName(tab[i].to_id,checkandaddTab);
+	total=tab.data.length;
+	for (var i = 0; i <tab.data.length; i++) {
+		//myajaxName(tab[i].to_id,checkandaddTab);
+		checkandaddTab(tab.data[i]);
 	}
 }
 
 function checkandaddTab(name){
-	var username=name.data[0].login;
+	console.log(name);
+	var username=name.login;
 	console.log(username);
 	total--;
 	console.log(total);
