@@ -59,6 +59,7 @@ function myajax(nomChaine,  callBack) {
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
+    	console.log(httpRequest.response);
         callBack(httpRequest);
     });
     httpRequest.send();
@@ -72,6 +73,7 @@ function myajaxNotif(userid,  callBack) {
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
+    	console.log(httpRequest.response);
         callBack(httpRequest);
     });
     httpRequest.send();

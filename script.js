@@ -158,7 +158,7 @@ function lauchAsync(tab){
 
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/streams?channel="+nomChaine;
+    var url="https://api.twitch.tv/helix/streams?user_login="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -188,13 +188,14 @@ function retour(httpRequest,nomChaine){
 function afficherStream(){	
 	var channelString="";
 	for (var i = 0; i < urls.length; i++) {
-		channelString+=urls[i]+",";
+		channelString+=urls[i]+"&user_login=";
 	}
-	channelString =channelString.substr(0,channelString.length-1);
+	channelString =channelString.substr(0,channelString.length-12);
 	myajax(channelString,returnHttpRequest);
 }
 
 function listenerClick(event){
+	console.log(event);
 	idFound=false;
 	index=0;
 	while(index<event.path.length && !idFound){
@@ -213,20 +214,80 @@ function listenerClick(event){
 
 function displayStreamAsync(request){
 
-	if (request._total==0) {
+	if (request.data.length==0) {
 		var div = document.createElement("div");
 		div.setAttribute("class","col-xs-12 text-center");
 		div.style.margin="3px 0";
-		div.innerHTML=chrome.i18n.getMessage("nChannelOnline");
+		div.innerHTML=chrome.i18n.getMessage("noChannelOnline");
 		row.appendChild(div);
+	}else{
+		//il faut stocker tout les jeux actuellement en ligne
+		console.log("Nombre de streeam en live : "+request.data.length);
+		var tabJeu = [];
+		var jeux ="";
+		for (var i = 0; i < request.data.length-1; i++) {
+			jeux+=request.data[i].game_id+"&id=";
+		}
+		jeux+=request.data[request.data.length-1].game_id;
+		var httpRequest = new XMLHttpRequest();
+	    var url="https://api.twitch.tv/helix/games?id="+jeux;
+	    httpRequest.open("GET", url, true);
+	    httpRequest.setRequestHeader('Client-ID',myid);
+	    httpRequest.setRequestHeader("Content-Type", "application/json");
+	    httpRequest.addEventListener("load", function () {
+	    	var jeuR = JSON.parse(httpRequest.response);
+	    	for (var i = 0; i < jeuR.data.length; i++) {
+	    		tabJeu.push(jeuR.data[i]);
+	    	}
+	        displayStreamAsyncUser(request,tabJeu);
+	    });
+	    httpRequest.send();
 	}
+}
+
+function displayStreamAsyncUser(request,tabJeu){
+	//il faut stocker tout les jeux actuellement en ligne
+	var tabUsers = [];
+	var users ="";
+	for (var i = 0; i < request.data.length-1; i++) {
+		users+=request.data[i].user_id+"&id=";
+	}
+	users+=request.data[request.data.length-1].user_id;
+	console.log(users);
+	var httpRequest = new XMLHttpRequest();
+	var url="https://api.twitch.tv/helix/users?id="+users;
+	httpRequest.open("GET", url, true);
+	httpRequest.setRequestHeader('Client-ID',myid);
+	httpRequest.setRequestHeader("Content-Type", "application/json");
+	httpRequest.addEventListener("load", function () {
+		var userR = JSON.parse(httpRequest.response);
+		for (var i = 0; i < userR.data.length; i++) {
+			tabUsers.push(userR.data[i]);
+		}
+		console.log(tabUsers);
+	    displayStreamAsyncGames(request,tabJeu,tabUsers);
+	});
+	httpRequest.send();
+	}
+
+function displayStreamAsyncGames(request,tabJeu, tabUsers){
 	//console.log(request);
 
-	for (i = 0; i < request._total; i++) {
+	for (i = 0; i < request.data.length; i++) {
+		//selection depuis tabUsers
+		console.log(request.data[i]);
+		var thisUser = [];
+		for (var j = 0; j < tabUsers.length; j++) {
+			if(tabUsers[j].id==request.data[i]['user_id']){
+				thisUser=tabUsers[j];
+				j=10000;
+			}
+		}
+
 		var div = document.createElement("div");
 		div.setAttribute("class","col-xs-12");
 		div.style.margin="3px 0";
-		var url=request["streams"][i]["channel"]["url"];
+		var url="https://www.twitch.tv/"+thisUser["login"];
 
 		//col-xs-3
 		var divImage = document.createElement("div");
@@ -235,7 +296,7 @@ function displayStreamAsync(request){
 		divImage.id=url;
 		divImage.addEventListener("click", listenerClick,false);
 		var image = document.createElement('img');
-		image.src=request["streams"][i]["channel"]['logo'];
+		image.src=thisUser.profile_image_url;
 		image.setAttribute("class","img-responsive");
 		image.style.width="50px";
 		image.style.height="50px";
@@ -255,7 +316,16 @@ function displayStreamAsync(request){
 		div1.id=url;
 		div1.setAttribute("class","col-xs-9 ellipsis");
 		div1.style.paddingLeft="0px";
-		div1.innerHTML=request["streams"][i]["channel"]['display_name']+" - <i class='tw-live-indicator'>"+request['streams'][i]['game'];
+
+		//suite
+		var nomjeu ="";
+		for (var j = 0; j < tabJeu.length; j++) {
+			if(tabJeu[j]['id']==request.data[i]['game_id']){
+				nomjeu=tabJeu[j]['name'];
+				j=10000;
+			}
+		}
+		div1.innerHTML=request.data[i]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
 		
 		//nombre de viewer
 		var divViewer= document.createElement("div");
@@ -263,14 +333,14 @@ function displayStreamAsync(request){
 		var spanViewer=document.createElement("span");
 		spanViewer.setAttribute("class","pull-right");
 		spanViewer.style.color="rgb(137, 131, 149)";
-		spanViewer.innerHTML=request["streams"][i]["viewers"];
+		spanViewer.innerHTML=request.data[i]["viewer_count"];
 		divViewer.appendChild(spanViewer);
 		var divPoint=document.createElement("div");
-		if (request["streams"][i]["stream_type"]=="rerun") {
+		/*if (request["streams"][i]["stream_type"]=="rerun") {
 			divPoint.setAttribute("class","pointTwitch pointTwitch--grey pull-right");
-		}else{
+		}else{*/
 			divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
-		}
+		//}
 		divViewer.appendChild(divPoint);
 
 
@@ -282,7 +352,7 @@ function displayStreamAsync(request){
 		row1.setAttribute("class","row");
 		var div1=document.createElement('div');
 		div1.setAttribute("class","col-xs-12 ellipsis");
-		div1.innerHTML=request["streams"][i]["channel"]['status'];
+		div1.innerHTML=request.data[i]['title'];
 		//ajout
 		row1.appendChild(div1);
 		divxs7.appendChild(row1);
@@ -293,8 +363,8 @@ function displayStreamAsync(request){
 		divxs1.setAttribute("class","col-xs-1");
 		var input = document.createElement("input");
 		input.type="checkbox";
-		input.name=request["streams"][i]["channel"]["name"];
-		input.value=request["streams"][i]["channel"]["name"];
+		input.name=request.data[i]["name"];
+		input.value=request.data[i]["name"];
 		//ajout
 		divxs1.appendChild(input);
 		div.appendChild(divxs1);
