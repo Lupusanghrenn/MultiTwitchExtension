@@ -222,9 +222,9 @@ function testRetour(httpRequest,nomChaine){
 	}else{
 		//on add le channel au données de l'user
 		//et on refresh la page
-		console.log(reponse['name']);
+		console.log(reponse.data[0]['login']);
 		var t = JSON.parse(localStorage['streams']);
-		t.push(reponse['name']);
+		t.push(reponse.data[0]['login']);
 		console.log(t);
 		t= JSON.stringify(t);
 		localStorage['streams']=t;
@@ -241,26 +241,13 @@ function testRetour(httpRequest,nomChaine){
 
 function myajax(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/channels/"+nomChaine;
+    var url="https://api.twitch.tv/helix/users?login="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
     	console.log(httpRequest);
         callBack(httpRequest,false);
-    });
-    httpRequest.send();
-}
-
-
-function myajaxName(nomChaine, callBack) {
-    var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/users?id="+nomChaine;
-    httpRequest.open("GET", url, true);
-    httpRequest.setRequestHeader('Client-ID',myid);
-    httpRequest.setRequestHeader("Content-Type", "application/json");
-    httpRequest.addEventListener("load", function () {
-        callBack(JSON.parse(httpRequest.responseText));
     });
     httpRequest.send();
 }
