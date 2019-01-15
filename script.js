@@ -87,18 +87,20 @@ function lauchMulti() {
 	var chainebis="/";
 	for (var i = 0; i < tab.length; i++) {
 		if (tab[i].checked) {
+			console.log(tab[i]);
 			//si check on ajoute
 			chaine+=tab[i].value+"/";
 			chainebis+=tab[i].value+"/";
 		}
 	}
 
+	console.log(chaine);
 	//maintenant on redirige vers le multitwitch
 	localStorage["chaine"]=JSON.stringify(chaine);
 	localStorage["chainebis"]=JSON.stringify(chainebis);
 
 	chrome.tabs.query({ currentWindow: true, active: true },lauchMultiAsync);
-	// chrome.tabs.create({ url: chaine });
+	chrome.tabs.create({ url: chaine });
 }
 
 function lauchMultiAsync(tab){
@@ -253,7 +255,6 @@ function displayStreamAsyncUser(request,tabJeu){
 		users+=request.data[i].user_id+"&id=";
 	}
 	users+=request.data[request.data.length-1].user_id;
-	console.log(users);
 	var httpRequest = new XMLHttpRequest();
 	var url="https://api.twitch.tv/helix/users?id="+users;
 	httpRequest.open("GET", url, true);
@@ -264,7 +265,6 @@ function displayStreamAsyncUser(request,tabJeu){
 		for (var i = 0; i < userR.data.length; i++) {
 			tabUsers.push(userR.data[i]);
 		}
-		console.log(tabUsers);
 	    displayStreamAsyncGames(request,tabJeu,tabUsers);
 	});
 	httpRequest.send();
@@ -276,7 +276,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 
 	for (i = 0; i < request.data.length; i++) {
 		//selection depuis tabUsers
-		console.log(request.data[i]);
 		var thisUser = [];
 		for (var j = 0; j < tabUsers.length; j++) {
 			if(tabUsers[j].id==request.data[i]['user_id']){
@@ -364,8 +363,8 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		divxs1.setAttribute("class","col-xs-1");
 		var input = document.createElement("input");
 		input.type="checkbox";
-		input.name=request.data[i]["name"];
-		input.value=request.data[i]["name"];
+		input.name=thisUser["login"];
+		input.value=thisUser["login"];
 		//ajout
 		divxs1.appendChild(input);
 		div.appendChild(divxs1);
