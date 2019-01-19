@@ -38,7 +38,7 @@ function init() {
 	nbStream=urls.length;
 	chaine = "";
 	for (var i = 0; i < urls.length; i++) {
-		chaine+=urls[i]+",";
+		chaine+=urls[i]+"&user_login=";
 	}
 	myajax(chaine,iniUrls);
 	chrome.notifications.onClicked.addListener(replyBtnClick);
@@ -48,26 +48,51 @@ function init2() {
 	nbStream=urls.length;
 	chaine = "";
 	for (var i = 0; i < urls.length; i++) {
-		chaine+=urls[i]+",";
+		chaine+=urls[i]+"&user_login=";
 	}
 }
 
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/helix/streams?channel="+nomChaine;
+    var url="https://api.twitch.tv/helix/streams?user_login="+nomChaine;
+    url = url.substring(0,url.length-12);
+    console.log(url);
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
-    	console.log(httpRequest.response);
-        callBack(httpRequest);
+    	httpRequest=JSON.parse(httpRequest.response);
+        myajaxGames(httpRequest,callBack);
+    });
+    httpRequest.send();
+}
+
+function myajaxGames(request,  callBack) {
+    var httpRequest = new XMLHttpRequest();
+    var nomGames="";
+    for (var i = 0; i < request.data.length; i++) {
+    	nomGames+=request.data[i].game_id+"&id=";
+    }
+    var url="https://api.twitch.tv/helix/games?id="+nomGames;
+    url = url.substring(0,url.length-4);
+    console.log(url);
+    httpRequest.open("GET", url, true);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.addEventListener("load", function () {
+    	var tabJeu = [];
+    	var jeuR = JSON.parse(httpRequest.response);
+    	for (var i = 0; i < jeuR.data.length; i++) {
+    		tabJeu.push(jeuR.data[i]);
+    	}
+        callBack(request,tabJeu);
     });
     httpRequest.send();
 }
 
 function myajaxNotif(userid,  callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/helix/users/"+userid+"/notifications/custom?notification_type=streamup&api_version=5";
+    var url="https://api.twitch.tv/kraken/users/"+userid+"/notifications/custom?notification_type=streamup&api_version=5";
     //var url="https://api.twitch.tv/kraken/users/"+userid;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
@@ -79,19 +104,29 @@ function myajaxNotif(userid,  callBack) {
     httpRequest.send();
 }
 
-function iniUrls(httpRequest) {
-	var tabrequest=JSON.parse(httpRequest.response);
+function iniUrls(httpRequest,tabJeu) {
+	var tabrequest=httpRequest;
+	console.log(tabrequest);
 	urlsOnline=[];
 	urlsOffline=[];
-	for (var i = 0; i < tabrequest._total; i++) {
-		urlsOnline.push(tabrequest['streams'][i]['channel']['name']);
+	for (var i = 0; i < tabrequest.data.length; i++) {
+		console.log(tabrequest.data[i].user_name);
+		urlsOnline.push(tabrequest.data[i].user_name);
 
 		//test selon le onLauch
 		if (notifOnLaunch && firstLaucnh) {
+			var nomjeu ="";
+			for (var j = 0; j < tabJeu.length; j++) {
+				if(tabJeu[j]['id']==request.data[i]['game_id']){
+					nomjeu=tabJeu[j]['name'];
+					j=10000;
+				}
+			}
 			
-			var name =tabrequest['streams'][i]['channel']['display_name'];
-			var urlName= tabrequest['streams'][i]['channel']['name'];
-			var titre =tabrequest['streams'][i]['channel']['status'];
+			//var name =tabrequest['streams'][i]['channel']['display_name'];
+			var name = tabrequest[i].user_name;
+			var urlName= tabrequest[i].user_name;
+			var titre = tabrequest[i].title;
 			var icon = tabrequest['streams'][i]['channel']['logo'];
 			var jeu = tabrequest['streams'][i]['channel']['game'];
 			var userid=tabrequest['streams'][i]['channel']['_id'];
