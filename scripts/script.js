@@ -89,7 +89,6 @@ function lauchMulti() {
 	localStorage["chainebis"]=JSON.stringify(chainebis);
 
 	chrome.tabs.query({ currentWindow: true, active: true },lauchMultiAsync);
-	chrome.tabs.create({ url: chaine });
 }
 
 function lauchMultiAsync(tab){
