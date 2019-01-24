@@ -1,6 +1,6 @@
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
 if (localStorage["timeInterval"]==undefined) {
-	timeInterval=10000;
+	timeInterval=30000;
 	localStorage["timeInterval"]=timeInterval;
 }else{
 	timeInterval=parseInt(localStorage["timeInterval"]);
@@ -201,20 +201,20 @@ function displayStream(request,tabJeu,tabUsers) {
 	console.log("displayStream");
 	var tabrequest=request.data;
 	for (var i = 0; i < tabrequest.length; i++) {
-		if(urlsOnline.indexOf(request['streams'][i]['channel']['name'])==-1){
+		var thisUser = [];
+		for (var j = 0; j < tabUsers.length; j++) {
+			if(tabUsers[j].id==tabrequest[i]['user_id']){
+				thisUser=tabUsers[j];
+				j=tabUsers.length;
+			}
+		}
+
+		if(urlsOnline.indexOf(thisUser.login)==-1){
 
 			var nomjeu ="";
 			for (var j = 0; j < tabJeu.length; j++) {
 				if(tabJeu[j]['id']==tabrequest[i]['game_id']){
 					nomjeu=tabJeu[j]['name'];
-					j=10000;
-				}
-			}
-
-			var thisUser = [];
-			for (var j = 0; j < tabUsers.length; j++) {
-				if(tabUsers[j].id==tabrequest[i]['user_id']){
-					thisUser=tabUsers[j];
 					j=10000;
 				}
 			}
