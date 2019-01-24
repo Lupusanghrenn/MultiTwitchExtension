@@ -190,7 +190,7 @@ function checkStream(request,tabJeu,tabUsers) {
 		displayStream(request,tabJeu,tabUsers);
 	}else if (request.data.length<urlsOnline.length){
 		//quelqu un vient de shutdown son live
-		iniUrls(httpRequest);
+		iniUrls(request,tabJeu,tabUsers);
 	}
 	console.log("checkStream");
 	
