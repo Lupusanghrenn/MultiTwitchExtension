@@ -56,7 +56,6 @@ function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/helix/streams?user_login="+nomChaine;
     url = url.substring(0,url.length-12);
-    console.log(url);
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -75,7 +74,6 @@ function myajaxGames(request,  callBack) {
     }
     var url="https://api.twitch.tv/helix/games?id="+nomGames;
     url = url.substring(0,url.length-4);
-    console.log(url);
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -85,12 +83,35 @@ function myajaxGames(request,  callBack) {
     	for (var i = 0; i < jeuR.data.length; i++) {
     		tabJeu.push(jeuR.data[i]);
     	}
-        callBack(request,tabJeu);
+        myajaxUsers(request,tabJeu,callBack);
+    });
+    httpRequest.send();
+}
+
+function myajaxUsers(request,tabJeu,callBack) {
+	var httpRequest = new XMLHttpRequest();
+    var idUser="";
+    for (var i = 0; i < request.data.length; i++) {
+    	idUser+=request.data[i].user_id+"&id=";
+    }
+    var url="https://api.twitch.tv/helix/users?id="+idUser;
+    url = url.substring(0,url.length-4);
+    httpRequest.open("GET", url, true);
+    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.addEventListener("load", function () {
+    	var tabUsers = [];
+    	var UserR = JSON.parse(httpRequest.response);
+    	for (var i = 0; i < UserR.data.length; i++) {
+    		tabUsers.push(UserR.data[i]);
+    	}
+        callBack(request,tabJeu,tabUsers);
     });
     httpRequest.send();
 }
 
 function myajaxNotif(userid,  callBack) {
+	//tej cette merde
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/kraken/users/"+userid+"/notifications/custom?notification_type=streamup&api_version=5";
     //var url="https://api.twitch.tv/kraken/users/"+userid;
@@ -104,32 +125,43 @@ function myajaxNotif(userid,  callBack) {
     httpRequest.send();
 }
 
-function iniUrls(httpRequest,tabJeu) {
-	var tabrequest=httpRequest;
-	console.log(tabrequest);
+function iniUrls(httpRequest,tabJeu,tabUsers) {
+	var tabrequest=httpRequest.data;
 	urlsOnline=[];
 	urlsOffline=[];
-	for (var i = 0; i < tabrequest.data.length; i++) {
-		console.log(tabrequest.data[i].user_name);
-		urlsOnline.push(tabrequest.data[i].user_name);
+	for (var i = 0; i < tabrequest.length; i++) {
+
+		var thisUser = [];
+		for (var j = 0; j < tabUsers.length; j++) {
+			if(tabUsers[j].id==tabrequest[i]['user_id']){
+				thisUser=tabUsers[j];
+				j=10000;
+			}
+		}
+
+		console.log(thisUser.login);
+		urlsOnline.push(thisUser.login);
 
 		//test selon le onLauch
 		if (notifOnLaunch && firstLaucnh) {
 			var nomjeu ="";
 			for (var j = 0; j < tabJeu.length; j++) {
-				if(tabJeu[j]['id']==request.data[i]['game_id']){
+				if(tabJeu[j]['id']==tabrequest[i]['game_id']){
 					nomjeu=tabJeu[j]['name'];
 					j=10000;
 				}
 			}
+
+			
 			
 			//var name =tabrequest['streams'][i]['channel']['display_name'];
 			var name = tabrequest[i].user_name;
-			var urlName= tabrequest[i].user_name;
+			var urlName= thisUser.login;
 			var titre = tabrequest[i].title;
-			var icon = tabrequest['streams'][i]['channel']['logo'];
-			var jeu = tabrequest['streams'][i]['channel']['game'];
-			var userid=tabrequest['streams'][i]['channel']['_id'];
+			var icon = thisUser.profile_image_url;
+			var jeu = nomjeu;
+			//var userid=tabrequest['streams'][i]['channel']['_id'];
+
 
 			if(titre.length>39){
 				titre=titre.substring(0,36)+'...';
@@ -145,7 +177,6 @@ function iniUrls(httpRequest,tabJeu) {
 			  contextMessage:jeu,
 			  iconUrl: icon,
 			});//name = id
-			console.log(notif);
 		}
 	}
 	firstLaucnh=false;
@@ -165,38 +196,55 @@ function iniUrls(httpRequest,tabJeu) {
 function checkStreamAjax(argument) {
 	///on vérifie si on a pas rajouté des chaines
 	var t = JSON.parse(localStorage['streams']);
-	if (nbStream!=t._total) {
+	if (nbStream!=t.length) {
 		init2();
 	}
 	myajax(chaine,checkStream);
 }
 
-function checkStream(httpRequest) {
-	var request = JSON.parse(httpRequest.response);
+function checkStream(request,tabJeu,tabUsers) {
 	//console.log(request);
-	if (request._total>urlsOnline.length) {
-		//quelqu un vient de lancer soon live
+	if (request.data.length>urlsOnline.length) {
+		//quelqu un vient de lancer son live
 		console.log("dans le if");
-		displayStream(request);
-	}else if (request._total<urlsOnline.length){
-		//quelqu un vient de shutdown sont live
+		displayStream(request,tabJeu,tabUsers);
+	}else if (request.data.length<urlsOnline.length){
+		//quelqu un vient de shutdown son live
 		iniUrls(httpRequest);
 	}
 	console.log("checkStream");
 	
 }
 
-function displayStream(request) {
+function displayStream(request,tabJeu,tabUsers) {
 	//on crée la notification
 	console.log("displayStream");
-	for (var i = 0; i < request._total; i++) {
+	var tabrequest=request.data;
+	for (var i = 0; i < tabrequest.length; i++) {
 		if(urlsOnline.indexOf(request['streams'][i]['channel']['name'])==-1){
-			var name =request['streams'][i]['channel']['display_name'];
-			var urlName= request['streams'][i]['channel']['name'];
-			var titre =request['streams'][i]['channel']['status'];
-			var icon = request['streams'][i]['channel']['logo'];
-			var jeu = request['streams'][i]['channel']['game'];
-			var userid=request['streams'][i]['channel']['_id'];
+
+			var nomjeu ="";
+			for (var j = 0; j < tabJeu.length; j++) {
+				if(tabJeu[j]['id']==tabrequest[i]['game_id']){
+					nomjeu=tabJeu[j]['name'];
+					j=10000;
+				}
+			}
+
+			var thisUser = [];
+			for (var j = 0; j < tabUsers.length; j++) {
+				if(tabUsers[j].id==tabrequest[i]['user_id']){
+					thisUser=tabUsers[j];
+					j=10000;
+				}
+			}
+
+			var name = tabrequest[i].user_name;
+			var urlName= thisUser.login;
+			var titre = tabrequest[i].title;
+			var icon = thisUser.profile_image_url;
+			var jeu = nomjeu;
+			var userid=thisUser.id;
 			if(titre.length>39){
 				titre=titre.substring(0,36)+'...';
 			}
@@ -216,8 +264,15 @@ function displayStream(request) {
 	}
 
 	//on reconstruit urlOnline et urlOffline
-	for (var i = 0; i < request._total; i++) {
-		urlsOnline.push(request['streams'][i]['channel']['name']);
+	for (var i = 0; i < tabrequest.length; i++) {
+		var thisUser = [];
+		for (var j = 0; j < tabUsers.length; j++) {
+			if(tabUsers[j].id==tabrequest[i]['user_id']){
+				thisUser=tabUsers[j];
+				j=10000;
+			}
+		}
+		urlsOnline.push(thisUser.login);
 	}
 
 	for (var i = 0; i < urls.length; i++) {
