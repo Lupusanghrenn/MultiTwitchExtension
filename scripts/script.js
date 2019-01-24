@@ -32,24 +32,18 @@ if (localStorage["multitwitch"]==undefined) {
 showOffline=localStorage["showOffline"]=="true";
 optimisation=localStorage["optimisation"]=="true";
 
-
-
-//texte=document.getElementById('titre');
-//texte.addEventListener('click',mesStreams(urls));
-
 arrayStream=[];
 
 document.getElementsByTagName('body');
 window.onload=init();
-//mesStreams(urls);
 
 function init(){
 	bouton=document.getElementById('refresh');
 	bouton.innerHTML=chrome.i18n.getMessage("refresh");
 	bouton.addEventListener('click',afficherStream);
-	//cleanAffichage();
 	if (urls.length!=0) {afficherStream();}
 	else {
+		cleanAffichage();
 		var div = document.createElement("div");
 		div.class="col-md-12";
 		div.innerHTML="<p class='text-justify'>"+chrome.i18n.getMessage("noSavedChannel")+"</p>"
@@ -69,12 +63,7 @@ function init(){
 
 	divTexteOnline=document.getElementById("online");
 	divTexteOnline.innerHTML=chrome.i18n.getMessage("online");
-
-	/*boutonWatch = document.getElementById('watchCurrent');
-	boutonWatch.addEventListener('click',getTabs2);*/
 }
-
-//myajax("https://api.twitch.tv/kraken/streams/ogaminglol",retour,urls);
 
 function lauchMulti() {
 	var tab=document.getElementsByTagName('input');
@@ -184,7 +173,6 @@ function myajax2(nomChaine, callBack) {
 
 function retour(httpRequest,nomChaine){
 	arrayStream.push([nomChaine,JSON.parse(httpRequest.responseText)]);
-	//arrayStream[nomChaine]=(JSON.parse(httpRequest.responseText));
 }
 
 function afficherStream(){	
@@ -210,7 +198,6 @@ function listenerClick(event){
 	console.log(event.path[index].id);
 	localStorage['id']=event.path[index].id;
 
-	//chrome.tabs.create({url:this.id});
 	chrome.tabs.query({ currentWindow: true, active: true },lauchAsync);
 }
 
@@ -271,7 +258,6 @@ function displayStreamAsyncUser(request,tabJeu){
 	}
 
 function displayStreamAsyncGames(request,tabJeu, tabUsers){
-	//console.log(request);
 	cleanAffichage();
 
 	for (i = 0; i < request.data.length; i++) {
@@ -336,11 +322,7 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		spanViewer.innerHTML=request.data[i]["viewer_count"];
 		divViewer.appendChild(spanViewer);
 		var divPoint=document.createElement("div");
-		/*if (request["streams"][i]["stream_type"]=="rerun") {
-			divPoint.setAttribute("class","pointTwitch pointTwitch--grey pull-right");
-		}else{*/
-			divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
-		//}
+		divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
 		divViewer.appendChild(divPoint);
 
 
@@ -369,7 +351,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		divxs1.appendChild(input);
 		div.appendChild(divxs1);
 
-		//div.innerHTML="<div class='row'><div class='col-xs-1'><img src='"+request["streams"][i]["channel"]['logo']+"' heigth='50' width='50'></div><div class='text-justify col-xs-9 col-xs-offset-1'><a href='"+request["streams"][i]["channel"]["url"]+"' id='online' target='_BLANK'>"+request["streams"][i]["channel"]['display_name']+"</a> - <small>"+request["streams"][i]["game"]+"</small><br><span class='ellipsis'>"+request["streams"][i]["channel"]['status']+"</span></div></div>";
 		row.appendChild(div);
 	}
 	var br=document.createElement('br');
@@ -384,12 +365,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		p.innerHTML="OFFLINE"
 		row.appendChild(p);
 
-		/*var channelString="";
-		for (var i = 0; i < urlsOffline.length; i++) {
-			channelString+=urlsOffline[i]+",";
-		}
-		channelString=channelString.substr(0,channelString.length-1);*/
-		//var optimisation="true";
 		if (optimisation) {
 			for (var i = 0; i < urlsOffline.length; i++) {
 				var div = document.createElement("div");
@@ -411,7 +386,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 
 function cleanAffichage(){
 	row.innerHTML='';
-	//document.getElementById("loading").style.display="none";
 	var online = document.createElement("p");
 	online.setAttribute("class","text-center");
 	online.style.backgroundColor="white";
@@ -510,8 +484,6 @@ function goToOption(){
 }
 
 function WatchCurrent(tab) {
-	
-	//TEST DE L EXTENSION
 	//send message et attente de la réponse
 	chrome.runtime.sendMessage(extensionID,"install",function(response){
 		console.log(response);
@@ -526,8 +498,6 @@ function WatchCurrent(tab) {
 }
 
 function extensionIsInstalled(tab){
-	//VAR autre
-
 	//on récupère maintenant le 'site' pour voir si c est twitch
 	tabUrl = tab[0]['url'];
 	var slash =false;
@@ -619,7 +589,5 @@ function extensionIsNotInstalled(){
 	console.log("extensionIsNotInstalled");
 	if(confirm(chrome.i18n.getMessage("AppNotInstalled"))){
 		chrome.tabs.create({url:"https://chrome.google.com/webstore/detail/multi-twitch-app/obpmmenioddcpffdelecfoogjomfhekm"});
-	}else{
-		//none
 	}
 }

@@ -3,28 +3,28 @@
 	"name": "__MSG_appName__",
 	"short_name":"Multi Twitch",
   "background": {
-    "scripts": [ "script_back.js" ]
+    "scripts": [ "scripts/script_back.js" ]
   },
   "browser_action": {
-    "default_icon": "icone64.png",
-    "default_popup": "index.html",
+    "default_icon": "images/icone64.png",
+    "default_popup": "pages/index.html",
     "default_title": "Multi twitch"
   },
   "description": "__MSG_appDescription__",
   "icons": {
-    "128": "icone128.png",
-    "64": "icone64.png",
-    "32": "icone32.png",
-    "16": "icone16.png"
+    "128": "images/icone128.png",
+    "64": "images/icone64.png",
+    "32": "images/icone32.png",
+    "16": "images/icone16.png"
   },
-  "options_page": "page_option.html",
+  "options_page": "pages/page_option.html",
   "permissions": [
-    "https://api.twitch.tv/kraken/streams/",
+    "https://api.twitch.tv/helix/streams/",
     "https://static-cdn.jtvnw.net/jtv_user_pictures/",
     "notifications",
     "tabs"
   ],
-  "default_locale":"fr",
-  "version": "1.9.9",
+  "default_locale":"en",
+  "version": "2.0.0",
   "author":"Lupusanghren @Lupusanghrenn"
 }

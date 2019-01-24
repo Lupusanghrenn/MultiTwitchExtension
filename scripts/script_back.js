@@ -110,21 +110,6 @@ function myajaxUsers(request,tabJeu,callBack) {
     httpRequest.send();
 }
 
-function myajaxNotif(userid,  callBack) {
-	//tej cette merde
-    var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/users/"+userid+"/notifications/custom?notification_type=streamup&api_version=5";
-    //var url="https://api.twitch.tv/kraken/users/"+userid;
-    httpRequest.open("GET", url, true);
-    httpRequest.setRequestHeader('Client-ID',myid);
-    httpRequest.setRequestHeader("Content-Type", "application/json");
-    httpRequest.addEventListener("load", function () {
-    	console.log(httpRequest.response);
-        callBack(httpRequest);
-    });
-    httpRequest.send();
-}
-
 function iniUrls(httpRequest,tabJeu,tabUsers) {
 	var tabrequest=httpRequest.data;
 	urlsOnline=[];
@@ -152,15 +137,11 @@ function iniUrls(httpRequest,tabJeu,tabUsers) {
 				}
 			}
 
-			
-			
-			//var name =tabrequest['streams'][i]['channel']['display_name'];
 			var name = tabrequest[i].user_name;
 			var urlName= thisUser.login;
 			var titre = tabrequest[i].title;
 			var icon = thisUser.profile_image_url;
 			var jeu = nomjeu;
-			//var userid=tabrequest['streams'][i]['channel']['_id'];
 
 
 			if(titre.length>39){
@@ -203,7 +184,6 @@ function checkStreamAjax(argument) {
 }
 
 function checkStream(request,tabJeu,tabUsers) {
-	//console.log(request);
 	if (request.data.length>urlsOnline.length) {
 		//quelqu un vient de lancer son live
 		console.log("dans le if");
@@ -258,7 +238,7 @@ function displayStream(request,tabJeu,tabUsers) {
 			  message: titre,
 			  contextMessage:jeu,
 			  iconUrl: icon,
-			});//name = id
+			});
 			console.log(notif);
 		}		
 	}

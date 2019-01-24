@@ -10,31 +10,16 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage['timeInterval']=timeInterval;
 	notifOnLaunch=checkboxOnLaunch.checked;
 	showOffline=localStorage["showOffline"]=="true";
-	//enregistrerOpti();
-	if (!showOffline) {
-		//si showoffline = false, on cache le checkbox
-		//divOptimisation.style.display="none";
-	}else{
-		//divOptimisation.style.display="inherit";
-	}
 	feedback2.innerHTML="";
 	feedback2.appendChild(createFeedback("alert-success",chrome.i18n.getMessage("FeebackOptionSucess")));
-	//feedback2.innerHTML='<div class="alert alert-success alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="success" aria-label="close">&times;</a><strong>Success!</strong> Options modifiés avec succès !</div>';
 	feedback2.addEventListener("click",close2);
 	setTimeout(close2,5000);
 }
-
-// function enregistrerOpti()//enregistrer les options, fonction appelée par le click sur le bouton
-// {
-// 	localStorage["optimisation"]=checkboxOptimisation.checked;
-// 	optimisation=localStorage["optimisation"]=="true";
-// }
 
 function init(){
 	console.log("init");
 	//initialisation des variables globales
 	showOffline=localStorage["showOffline"]=="true";
-	//optimisation=localStorage["optimisation"]=="true";
 	multitwitch=localStorage["multitwitch"]=="true";
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 	timeInterval=parseInt(localStorage["timeInterval"]);
@@ -49,17 +34,9 @@ function init(){
 
 	checkboxMulti=document.getElementById("multitwitch");
 	checkboxMulti.checked=multitwitch;
-	//checkboxMulti.addEventListener("change",enregistrer);
 
 	checkboxShowOffline=document.getElementById("showOffline");
 	checkboxShowOffline.checked=showOffline;
-	//checkboxShowOffline.addEventListener("change",enregistrer);
-	//checkboxShowOffline.addEventListener("change",cacheOpti);
-
-	// checkboxOptimisation=document.getElementById("optimisationC");
-	// checkboxOptimisation.checked=optimisation;
-	// divOptimisation=document.getElementById("optimisation");
-	//checkboxOptimisation.addEventListener("change",enregistrerOpti);
 
 	checkboxOnLaunch=document.getElementById("notifOnLaunch");
 	checkboxOnLaunch.checked=notifOnLaunch;
@@ -76,7 +53,6 @@ function init(){
 
 	bouton=document.getElementById("save");
 	bouton.addEventListener('click',enregistrer);
-	//bouton.addEventListener('click',enregistrerOpti);
 	channels=document.getElementById('channels');
 	savediv=document.getElementById('savediv');
 	savediv.addEventListener('click',save);
@@ -85,11 +61,6 @@ function init(){
 	feedback = document.getElementById("feedback");
 	feedback2 = document.getElementById("feedback2");
 	feedback3 = document.getElementById('feedback3');
-
-	// if (!showOffline) {
-	// 	//si showoffline = false, on cache le checkbox
-	// 	//divOptimisation.style.display="none";
-	// }
 
 	//MESSAGES . JSON
 	document.getElementById("extensionOption").innerHTML=chrome.i18n.getMessage("extensionOption");
@@ -115,13 +86,9 @@ function displayChannel(){
 	clearChannel();
 	tab=JSON.parse(localStorage['streams']);
 	for (var i = 0; i < tab.length; i++) {
-		// if(!optimisation){
-		// 	myajax(tab[i],displayName);
-		// }else{
 		var request=[];
 		request["display_name"]=tab[i];
 		displayName(request, true);
-		//}
 	}
 }
 
@@ -173,7 +140,6 @@ function deleteChannel(event){
 
 	feedback.innerHTML="";
 	feedback.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeebackDeletedChannel")));
-	//feedback.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Chaîne supprimé avec succès !</div>';
 	feedback.addEventListener("click",close);
 	setTimeout(close,5000);
 	displayChannel();
@@ -189,7 +155,6 @@ function save(){
 			//alert("Deja dans vos chaines");
 			feedback.innerHTML="";
 			feedback.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeebackAlreadySave")));
-			//feedback.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Vous avez déjà enregistré cette chaine</div>';
 			feedback.addEventListener("click",close);
 			setTimeout(close,5000);
 		}else{
@@ -201,7 +166,6 @@ function save(){
 		//chaine non rempli --A REFAIRE
 		feedback.innerHTML="";
 		feedback.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeebackChannelEmpty")));
-		//feedback.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Nom de la chaine vide</div>';
 		feedback.addEventListener("click",close);
 		setTimeout(close,5000);
 	}
@@ -216,7 +180,6 @@ function testRetour(httpRequest,nomChaine){
 		//alert("Cet utilisateur n'existe pas");
 		feedback.innerHTML="";
 		feedback.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeedbackUserUnknow")));
-		//feedback.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Utilisateur inconnu</div>';
 		feedback.addEventListener("click",close);
 		setTimeout(close,5000);
 	}else{
@@ -231,7 +194,6 @@ function testRetour(httpRequest,nomChaine){
 
 		feedback.innerHTML="";
 		feedback.appendChild(createFeedback("alert-success",chrome.i18n.getMessage("FeebackAddChannelSuccess")));
-		//feedback.innerHTML='<div class="alert alert-success alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="success" aria-label="close">&times;</a><strong>Success!</strong> Chaîne ajouté avec succès !</div>';
 		feedback.addEventListener("click",close);
 		setTimeout(close,5000);
 
@@ -264,8 +226,7 @@ function myajaxId(nomChaine, callBack) {
         console.log(req);
         if (req._id==undefined) {
         	feedback3.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeedbackUserUnknow")));
-        	//feedback3.innerHTML='<div class="alert alert-danger alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Erreur!</strong> Utilisateur inconnu</div>';
-			feedback3.addEventListener("click",close3);
+        	feedback3.addEventListener("click",close3);
 			setTimeout(close3,5000);
         } else {
         	var idchaine=req._id;
@@ -340,7 +301,6 @@ function getFollow() {
 	console.log(username);
 	feedback3.innerHTML="";
 	feedback3.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeedbackGettingInProgress")));
-	//feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a>Récupération en cours !</div>';
 	feedback3.addEventListener("click",close3);
 	setTimeout(close3,5000);
 	myajaxId(username,updateTab);
@@ -350,12 +310,8 @@ function updateTab(tab) {
 	//feedback3.innerHTML="";
 	close3();
 	console.log(tab);
-	//feedback3.appendChild(createFeedback("alert-info","<strong>Success!</strong> Récupération réalisé avec succès !"));
-	//feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Récupération réalisé avec succès !</div>';
-	//feedback3.addEventListener("click",close3);
 	total=tab.data.length;
 	for (var i = 0; i <tab.data.length; i++) {
-		//myajaxName(tab[i].to_id,checkandaddTab);
 		checkandaddTab(tab.data[i]);
 	}
 }
@@ -375,7 +331,6 @@ function checkandaddTab(name){
 		localStorage["streams"]=JSON.stringify(tab);
 		feedback3.innerHTML="";
 		feedback3.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeebackGettingSuccesfull")));
-		//feedback3.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Récupération réalisé avec succès !</div>';
 		feedback3.addEventListener("click",close3);
 		setTimeout(close3,5000);
 		displayChannel();
@@ -407,10 +362,8 @@ function sortChannel(){
 	localStorage['streams']=JSON.stringify(tabl);
 	feedback.innerHTML="";
 	feedback.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeedbackSortSucess")));
-	//feedback.innerHTML='<div class="alert alert-info alert-dismissable" style="margin-left: -10px;margin-right: 30px;">  <a href="#" class="close" data-dismiss="info" aria-label="close">&times;</a><strong>Success!</strong> Chaînes triées avec succès !</div>';
 	feedback.addEventListener("click",close);
 	setTimeout(close,5000);
-	//setTimeout
 	displayChannel();
 }
 
@@ -431,6 +384,4 @@ function createFeedback(alertType,texte){
 
 window.onload=init();
 
-//var body=document.getElementsByTagName('body')[0];
 document.body.addEventListener('onkeydown',enter);
-//document.body.onkeydown=enter;
