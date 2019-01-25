@@ -17,7 +17,7 @@
 			width: 95%;
 		}
 		.checkbox input[type=checkbox]{
-			margin-left: 0px;
+			margin-left: 3px;
 		}
 	</style>
 </head>
@@ -35,15 +35,24 @@
 		<div class="checkbox">
 		  <input type="checkbox" id="showOffline" name="showOffline" value=""><label id="checkOffline">Cocher cette case si vous souhaitez l'affichage des channels offline</label>
 		</div>
-		<!-- <div class="checkbox" id="optimisation">
-		  <label><input type="checkbox" id="optimisationC" name="optimisation" value="">Cocher cette case si vous souhaitez l'affichage optimiser des channels offline (mais moins jolie) <br>Cochez cette case si vous avez une mauvaise connexion</label>
-		</div> -->
-		<div class="checkbox">
-		  <input type="checkbox" id="multitwitch" name="multitwitch" value=""><label id="checkMultistream">Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch</label>
-		</div>
 		<div class="checkbox">
 		  <input type="checkbox" id="notifOnLaunch" name="notifOnLaunch" value=""><label id="CheckOnLaunch">Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome</label>
 		</div>
+		<!-- <div class="checkbox" id="optimisation">
+		  <label><input type="checkbox" id="optimisationC" name="optimisation" value="">Cocher cette case si vous souhaitez l'affichage optimiser des channels offline (mais moins jolie) <br>Cochez cette case si vous avez une mauvaise connexion</label>
+		</div> -->
+		<!-- <div class="checkbox">
+		  <input type="checkbox" id="multitwitch" name="multitwitch" value=""><label id="checkMultistream">Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch</label>
+		</div> -->
+
+		<div class="form-group col-lg-12" style="padding-left: 0px;width: 97%">
+	      <label for="selectMulti" id="multitwitchLabel">Sélectionnez votre site préféré de multistream</label>
+	      <select class="form-control" id="selectMulti">
+	        <option value="0">multitwitch.tv</option>
+	        <option value="1" selected>multistre.am</option>
+	      </select>
+	    </div>
+		
 		<div class="btn btn-default" id="save">
 			Enregistrer
 		</div>
@@ -90,7 +99,7 @@
 	</div>
 
 	<div class="row">
-		<div class="alert alert-success alert-dismissable" style="margin-left: -1%; margin-right: 4%;"><strong>Alert !</strong><span id=lupusNote></span><br><a href="https://twitter.com/Lupusanghrenn">Twitter</a><br><a href="https://chrome.google.com/webstore/detail/multi-twitch-extension/jpgnbiffpoelgpegopldffmpbmfdojga">Chrome Web Store</a><a class="close" data-dismiss="info" aria-label="close">×</a></div>
+		<div class="alert alert-success alert-dismissable" style="margin-left: -1%; margin-right: 5.8%;"><strong>Alert !</strong><span id=lupusNote></span><br><a href="https://twitter.com/Lupusanghrenn">Twitter</a><br><a href="https://chrome.google.com/webstore/detail/multi-twitch-extension/jpgnbiffpoelgpegopldffmpbmfdojga">Chrome Web Store</a><a style="top: -100px;" class="close" data-dismiss="info" aria-label="close">×</a></div>
 	</div>
 	
 </div>

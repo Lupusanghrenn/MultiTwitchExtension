@@ -23,8 +23,9 @@ if (localStorage["streams"]==undefined) {
 	urls=JSON.parse(localStorage['streams']);
 }
 
-if (localStorage["multitwitch"]==undefined) {
-	multitwitch=true;
+if (localStorage["multitwitch"]==undefined || localStorage["multitwitch"]=="true" || localStorage["multitwitch"]=="false") {
+	multitwitch="1";
+	localStorage["multitwitch"]=1;
 } else {
 	multitwitch=localStorage["multitwitch"];
 }
@@ -67,28 +68,37 @@ function init(){
 
 function lauchMulti() {
 	var tab=document.getElementsByTagName('input');
-	if (multitwitch=="false") {
-		//lauch sur miltitwitch
-		var chaine = "http://www.multitwitch.tv/";
-	} else {
-		var chaine = "https://multistre.am/";
-	}
+
+	var tabSite = ["http://www.multitwitch.tv/","https://multistre.am/"];
+	var chaine= tabSite[multitwitch];
+	console.log(chaine);
 	var chainebis="/";
+	var count =0;
 	for (var i = 0; i < tab.length; i++) {
 		if (tab[i].checked) {
 			console.log(tab[i]);
 			//si check on ajoute
 			chaine+=tab[i].value+"/";
 			chainebis+=tab[i].value+"/";
+			count++;
 		}
 	}
 
-	console.log(chaine);
-	//maintenant on redirige vers le multitwitch
-	localStorage["chaine"]=JSON.stringify(chaine);
-	localStorage["chainebis"]=JSON.stringify(chainebis);
+	if (count==0) {
+		//aucun channel sélectioné
+		alert(chrome.i18n.getMessage("NoChannelSelected"));
+	} else if(count==1){
+		//si une seule chaine (redirection vers le site de twitch)
+		localStorage['id']=JSON.stringify("https://www.twitch.tv"+chainebis);
+		chrome.tabs.create({url:"https://www.twitch.tv"+chainebis});
+	}else {
+		console.log(chaine);
+		//maintenant on redirige vers le multitwitch
+		localStorage["chaine"]=JSON.stringify(chaine);
+		localStorage["chainebis"]=JSON.stringify(chainebis);
 
-	chrome.tabs.query({ currentWindow: true, active: true },lauchMultiAsync);
+		chrome.tabs.query({ currentWindow: true, active: true },lauchMultiAsync);
+	}
 }
 
 function lauchMultiAsync(tab){
@@ -479,7 +489,7 @@ function saveTab(event) {
 
 function goToOption(){
 	console.log("goToOption");
-	chrome.tabs.create({url:"page_option.html"});
+	chrome.tabs.create({url:"pages/page_option.html"});
 }
 
 function WatchCurrent(tab) {

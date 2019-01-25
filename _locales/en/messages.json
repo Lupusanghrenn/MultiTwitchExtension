@@ -28,7 +28,7 @@
 		"message": "Check this if you want to see the offline channels"
 	},
 	"checkMultistream":{
-		"message":"Check this if you want to use KBMOD Multistream au lieu de Multitwitch"
+		"message":"Select your favorite multistream website"
 	},
 	"CheckOnLaunch":{
 		"message":"Check this if you want to be notify about the streamers you are online when you launch Chrome"
@@ -107,5 +107,8 @@
 	},
 	"lupusNote":{
 		"message":" Hi, this is Lupusanghren ! I'm the developer of this extension. I think I finished developing and now I'm asking you to help me improve the extension a little bit more. <br> To do so, tweet me @Lupusanghrenn or throught the Chrome Web Store (where you download the extension). I'm also looking for an artist to help me improve the design !"
+	},
+	"NoChannelSelected":{
+		"message": "No channel selected ! (Select channels using the checkboxs)"
 	}
 }

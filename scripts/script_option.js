@@ -1,7 +1,7 @@
 function enregistrer()//enregistrer les options, fonction appelée par le click sur le bouton
 {
 	localStorage["showOffline"]=checkboxShowOffline.checked;
-	localStorage["multitwitch"]=JSON.stringify(checkboxMulti.checked);
+	localStorage["multitwitch"]=checkboxMulti.value;
 	localStorage['notifOnLaunch']=checkboxOnLaunch.checked;
 	timeInterval=parseInt(inputTimeInterval.value)*1000;
 	if (timeInterval<10000) {
@@ -20,7 +20,7 @@ function init(){
 	console.log("init");
 	//initialisation des variables globales
 	showOffline=localStorage["showOffline"]=="true";
-	multitwitch=localStorage["multitwitch"]=="true";
+	multitwitch=JSON.parse(localStorage["multitwitch"]);
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 	timeInterval=parseInt(localStorage["timeInterval"]);
 	if (timeInterval==undefined) {
@@ -32,8 +32,12 @@ function init(){
 		localStorage['multitwitch']=true;
 	}
 
-	checkboxMulti=document.getElementById("multitwitch");
-	checkboxMulti.checked=multitwitch;
+	//document.getElementById("multitwitch");
+	//checkboxMulti.checked=multitwitch;
+	checkboxMulti=document.getElementById("selectMulti");
+	checkboxMulti.selectedIndex=multitwitch;
+	console.log(checkboxMulti);
+
 
 	checkboxShowOffline=document.getElementById("showOffline");
 	checkboxShowOffline.checked=showOffline;
@@ -67,7 +71,7 @@ function init(){
 	document.getElementById("GeneralParameters").innerHTML=chrome.i18n.getMessage("GeneralParameters");
 	document.getElementById("timeRequest").innerHTML=chrome.i18n.getMessage("timeRequest");
 	document.getElementById("checkOffline").innerHTML=chrome.i18n.getMessage("checkOffline");
-	document.getElementById("checkMultistream").innerHTML=chrome.i18n.getMessage("checkMultistream");
+	document.getElementById("multitwitchLabel").innerHTML=chrome.i18n.getMessage("checkMultistream");
 	document.getElementById("CheckOnLaunch").innerHTML=chrome.i18n.getMessage("CheckOnLaunch");
 	document.getElementById("save").innerHTML=chrome.i18n.getMessage("save");
 	document.getElementById("ChannelParameters").innerHTML=chrome.i18n.getMessage("ChannelParameters");
@@ -273,7 +277,9 @@ function myajaxFollowedUsers(tabUsers,callBack){
 function enter(event){
 	if (event.keyCode==13) {
 		//on appuie sur enter
+		console.log(event);
 		save();
+		enregistrer();
 	}
 }
 
