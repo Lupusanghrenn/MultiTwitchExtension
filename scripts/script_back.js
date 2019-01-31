@@ -137,7 +137,7 @@ function iniUrls(httpRequest,tabJeu,tabUsers) {
 				}
 			}
 
-			var name = tabrequest[i].user_name;
+			var name = thisUser.display_name;
 			var urlName= thisUser.login;
 			var titre = tabrequest[i].title;
 			var icon = thisUser.profile_image_url;
@@ -219,7 +219,7 @@ function displayStream(request,tabJeu,tabUsers) {
 				}
 			}
 
-			var name = tabrequest[i].user_name;
+			var name = thisUser.display_name;
 			var urlName= thisUser.login;
 			var titre = tabrequest[i].title;
 			var icon = thisUser.profile_image_url;
