@@ -44,14 +44,6 @@ function init() {
 	chrome.notifications.onClicked.addListener(replyBtnClick);
 }
 
-function init2() {
-	nbStream=urls.length;
-	chaine = "";
-	for (var i = 0; i < urls.length; i++) {
-		chaine+=urls[i]+"&user_login=";
-	}
-}
-
 function myajax(nomChaine,  callBack) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/helix/streams?user_login="+nomChaine;
@@ -178,7 +170,12 @@ function checkStreamAjax(argument) {
 	///on vérifie si on a pas rajouté des chaines
 	var t = JSON.parse(localStorage['streams']);
 	if (nbStream!=t.length) {
-		init2();
+		nbStream=urls.length;
+		chaine = "";
+		for (var i = 0; i < urls.length && i < 100; i++) {
+			//TODO
+			chaine+=urls[i]+"&user_login=";
+		}
 	}
 	myajax(chaine,checkStream);
 }
