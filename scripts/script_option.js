@@ -32,6 +32,7 @@ function init(){
 		localStorage['multitwitch']=true;
 	}
 
+
 	//document.getElementById("multitwitch");
 	//checkboxMulti.checked=multitwitch;
 	checkboxMulti=document.getElementById("selectMulti");
@@ -227,32 +228,46 @@ function myajaxId(nomChaine, callBack) {
     httpRequest.addEventListener("load", function () {
         //callBack(httpRequest,false);
         var req = JSON.parse(httpRequest.responseText);
-        console.log(req);
         if (req._id==undefined) {
         	feedback3.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeedbackUserUnknow")));
         	feedback3.addEventListener("click",close3);
 			setTimeout(close3,5000);
         } else {
         	var idchaine=req._id;
-	        console.log(idchaine);
 	        myajaxFollow(idchaine,callBack);
         }
     });
     httpRequest.send();
 }
 
-function myajaxFollow(userid, callBack) {
+function myajaxFollow(userid, callBack,nbIte=1,cursor="",formerTab=[]) {
     var httpRequest = new XMLHttpRequest();
-    var url = "https://api.twitch.tv/helix/users/follows?from_id="+userid+"&first=100";
+    var url = "https://api.twitch.tv/helix/users/follows?from_id="+userid+"&first=100&after="+cursor;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
-    	console.log(httpRequest.response);
-        myajaxFollowedUsers(JSON.parse(httpRequest.response),callBack);
+    	var newTab = JSON.parse(httpRequest.response);
+    	if(formerTab.length!=0){
+    		Array.prototype.push.apply(formerTab.data,newTab.data);
+    		checkNbFollowers(userid,formerTab,callBack,nbIte);
+    	}else{
+    		checkNbFollowers(userid,newTab,callBack,nbIte);
+    	}	
+        
     });
     httpRequest.send();
-}	
+}
+
+function checkNbFollowers(userid,tabUsers,callBack,nbIte) {
+	console.log(tabUsers);
+	console.log(nbIte);
+	if(tabUsers.total>nbIte*100){
+		//on a plus de 100 follows --> renvoie de requete
+		myajaxFollow(userid,callBack,nbIte+1,tabUsers.pagination.cursor,tabUsers);
+	}
+	myajaxFollowedUsers(tabUsers,callBack);
+}
 
 function myajaxFollowedUsers(tabUsers,callBack){
 	var httpRequest = new XMLHttpRequest();
