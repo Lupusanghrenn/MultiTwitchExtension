@@ -35,6 +35,9 @@ optimisation=localStorage["optimisation"]=="true";
 
 arrayStream=[];
 
+request=[];
+waitForOtherRequest=false;
+
 document.getElementsByTagName('body');
 window.onload=init();
 
@@ -156,10 +159,10 @@ function lauchAsync(tab){
 }
 
 
-function myajax(nomChaine,  callBack) {
+function myajax(nomChaine,  callBack,async=true) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/helix/streams?user_login="+nomChaine;
-    httpRequest.open("GET", url, true);
+    httpRequest.open("GET", url, async);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
@@ -186,12 +189,22 @@ function retour(httpRequest,nomChaine){
 
 function afficherStream(){	
 	var channelString="";
+	var nbIte=1;
 	for (var i = 0; i < urls.length; i++) {
 		channelString+=urls[i]+"&user_login=";
+		if(i%100==0){
+			channelString =channelString.substr(0,channelString.length-12);
+			myajax(channelString,returnHttpRequest,false);	
+			channelString="";
+			nbIte++;
+		}
 	}
+	console.log(request);
+	waitForOtherRequest=false;
 	channelString =channelString.substr(0,channelString.length-12);
-	myajax(channelString,returnHttpRequest);
+	myajax(channelString,returnHttpRequest,true);
 }
+
 
 function listenerClick(event){
 	console.log(event);
@@ -220,7 +233,7 @@ function displayStreamAsync(request){
 		row.appendChild(div);
 	}else{
 		//il faut stocker tout les jeux actuellement en ligne
-		console.log("Nombre de streeam en live : "+request.data.length);
+		console.log("Nombre de stream en live : "+request.data.length);
 		var tabJeu = [];
 		var jeux ="";
 		for (var i = 0; i < request.data.length-1; i++) {
@@ -404,20 +417,30 @@ function cleanAffichage(){
 }
 
 function returnHttpRequest(httpRequest){
-	request=JSON.parse(httpRequest.responseText);
+	if(request.length!=0){
+		//request deja defini on ajoute
+		var newTab = JSON.parse(httpRequest.responseText);
+		Array.prototype.push.apply(request.data,newTab.data);
+		request.data.sort(compare);
+	}else{
+		request=JSON.parse(httpRequest.responseText);	
+	}	
+	console.log(request);
+	if(!waitForOtherRequest){
 	
-	urlsOffline=[];
-	for (var i = 0; i < urls.length; i++) {
-		var isOnline=false;
-		for (var j = 0; j < request._total&!isOnline; j++) {
-			if(request["streams"][j]["channel"]["name"]==urls[i]){
-				//on retire la chaine
-				isOnline=true;
+		urlsOffline=[];
+		for (var i = 0; i < urls.length; i++) {
+			var isOnline=false;
+			for (var j = 0; j < request._total&!isOnline; j++) {
+				if(request["streams"][j]["channel"]["name"]==urls[i]){
+					//on retire la chaine
+					isOnline=true;
+				}
 			}
+			if (!isOnline) {urlsOffline.push(urls[i]);}
 		}
-		if (!isOnline) {urlsOffline.push(urls[i]);}
+		displayStreamAsync(request);
 	}
-	displayStreamAsync(request);
 	//on enelve les chaines en live
 	
 }
@@ -598,5 +621,15 @@ function extensionIsNotInstalled(){
 	console.log("extensionIsNotInstalled");
 	if(confirm(chrome.i18n.getMessage("AppNotInstalled"))){
 		chrome.tabs.create({url:"https://chrome.google.com/webstore/detail/multi-twitch-app/obpmmenioddcpffdelecfoogjomfhekm"});
+	}
+}
+
+function compare(a , b) {
+	if(a.viewer_count > b.viewer_count){
+		return -1;
+	}else if (a.viewer_count == b.viewer_count) {
+		return 0;
+	}else{
+		return 1;
 	}
 }
