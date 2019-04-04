@@ -225,7 +225,7 @@ function listenerClick(event){
 
 function displayStreamAsync(request){
 
-	if (request.data.length==0) {
+	if (request.data.length==0 && waitForOtherRequest) {
 		var div = document.createElement("div");
 		div.setAttribute("class","col-xs-12 text-center");
 		div.style.margin="3px 0";
