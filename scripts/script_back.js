@@ -32,6 +32,8 @@ var firstLaucnh=true;
 urlsOnline=[];
 urlsOffline=[];
 flag=0;
+waitForOtherRequest=false;
+requestGlobal=[];
 init();
 
 function init() {
@@ -39,26 +41,35 @@ function init() {
 	chaine = "";
 	for (var i = 0; i < urls.length; i++) {
 		chaine+=urls[i]+"&user_login=";
+		if(i%100==0){
+			waitForOtherRequest=true;
+			myajax(chaine,iniUrls,false);
+			chaine="";			
+		}
 	}
-	myajax(chaine,iniUrls);
+	waitForOtherRequest=false;
+	myajax(chaine,iniUrls,true);
 	chrome.notifications.onClicked.addListener(replyBtnClick);
 }
 
-function myajax(nomChaine,  callBack) {
+function myajax(nomChaine,  callBack,async=true) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/helix/streams?user_login="+nomChaine;
     url = url.substring(0,url.length-12);
-    httpRequest.open("GET", url, true);
+    httpRequest.open("GET", url, async);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
     	httpRequest=JSON.parse(httpRequest.response);
-        myajaxGames(httpRequest,callBack);
+    	if (httpRequest.data.length!=0) {
+    		myajaxGames(httpRequest,callBack);
+    	}
     });
     httpRequest.send();
 }
 
 function myajaxGames(request,  callBack) {
+	console.log(request);
     var httpRequest = new XMLHttpRequest();
     var nomGames="";
     for (var i = 0; i < request.data.length; i++) {
@@ -103,67 +114,76 @@ function myajaxUsers(request,tabJeu,callBack) {
 }
 
 function iniUrls(httpRequest,tabJeu,tabUsers) {
-	var tabrequest=httpRequest.data;
-	urlsOnline=[];
-	urlsOffline=[];
-	for (var i = 0; i < tabrequest.length; i++) {
-
-		var thisUser = [];
-		for (var j = 0; j < tabUsers.length; j++) {
-			if(tabUsers[j].id==tabrequest[i]['user_id']){
-				thisUser=tabUsers[j];
-				j=10000;
-			}
+	if (waitForOtherRequest) {
+		//merge des request
+		if(httpRequest.length!=0 && requestGlobal.length!=0){
+			Array.prototype.push.apply(requestGlobal.data,httpRequest.data);
+		}else{
+			requestGlobal=httpRequest;
 		}
+	}else{
+		var tabrequest=httpRequest.data;
+		urlsOnline=[];
+		urlsOffline=[];
+		for (var i = 0; i < tabrequest.length; i++) {
 
-		console.log(thisUser.login);
-		urlsOnline.push(thisUser.login);
-
-		//test selon le onLauch
-		if (notifOnLaunch && firstLaucnh) {
-			var nomjeu ="";
-			for (var j = 0; j < tabJeu.length; j++) {
-				if(tabJeu[j]['id']==tabrequest[i]['game_id']){
-					nomjeu=tabJeu[j]['name'];
+			var thisUser = [];
+			for (var j = 0; j < tabUsers.length; j++) {
+				if(tabUsers[j].id==tabrequest[i]['user_id']){
+					thisUser=tabUsers[j];
 					j=10000;
 				}
 			}
 
-			var name = thisUser.display_name;
-			var urlName= thisUser.login;
-			var titre = tabrequest[i].title;
-			var icon = thisUser.profile_image_url;
-			var jeu = nomjeu;
+			console.log(thisUser.login);
+			urlsOnline.push(thisUser.login);
+
+			//test selon le onLauch
+			if (notifOnLaunch && firstLaucnh) {
+				var nomjeu ="";
+				for (var j = 0; j < tabJeu.length; j++) {
+					if(tabJeu[j]['id']==tabrequest[i]['game_id']){
+						nomjeu=tabJeu[j]['name'];
+						j=10000;
+					}
+				}
+
+				var name = thisUser.display_name;
+				var urlName= thisUser.login;
+				var titre = tabrequest[i].title;
+				var icon = thisUser.profile_image_url;
+				var jeu = nomjeu;
 
 
-			if(titre.length>39){
-				titre=titre.substring(0,36)+'...';
+				if(titre.length>39){
+					titre=titre.substring(0,36)+'...';
+				}
+				if (jeu.length>43) {
+					jeu=jeu.substring(0,43);
+				}
+
+				var notif = chrome.notifications.create(urlName,{
+				  type: "basic",
+				  title: name+" just went live",
+				  message: titre,
+				  contextMessage:jeu,
+				  iconUrl: icon,
+				});//name = id
 			}
-			if (jeu.length>43) {
-				jeu=jeu.substring(0,43);
+		}
+		firstLaucnh=false;
+
+		for (var i = 0; i < urls.length; i++) {
+			if (urlsOnline.indexOf(urls[i])==-1) {
+				urlsOffline.push(urls[i]);
 			}
-
-			var notif = chrome.notifications.create(urlName,{
-			  type: "basic",
-			  title: name+" just went live",
-			  message: titre,
-			  contextMessage:jeu,
-			  iconUrl: icon,
-			});//name = id
 		}
-	}
-	firstLaucnh=false;
-
-	for (var i = 0; i < urls.length; i++) {
-		if (urlsOnline.indexOf(urls[i])==-1) {
-			urlsOffline.push(urls[i]);
+		if (flag==0) {
+			setInterval(checkStreamAjax ,timeInterval);
+			console.log("interval set");
 		}
+		flag=1;
 	}
-	if (flag==0) {
-		setInterval(checkStreamAjax ,timeInterval);
-		console.log("interval set");
-	}
-	flag=1;
 }
 
 function checkStreamAjax(argument) {
@@ -172,24 +192,36 @@ function checkStreamAjax(argument) {
 	if (nbStream!=t.length) {
 		nbStream=urls.length;
 		chaine = "";
-		for (var i = 0; i < urls.length && i < 100; i++) {
+		for (var i = 0; i < urls.length; i++) {
 			//TODO
 			chaine+=urls[i]+"&user_login=";
+			if(i%100==0){
+				waitForOtherRequest=true;
+				myajax(chaine,checkStream,false);
+				chaine="";
+			}
 		}
 	}
-	myajax(chaine,checkStream);
+	waitForOtherRequest=false;
+	myajax(chaine,checkStream,false);
 }
 
 function checkStream(request,tabJeu,tabUsers) {
-	if (request.data.length>urlsOnline.length) {
-		//quelqu un vient de lancer son live
-		console.log("dans le if");
-		displayStream(request,tabJeu,tabUsers);
-	}else if (request.data.length<urlsOnline.length){
-		//quelqu un vient de shutdown son live
-		iniUrls(request,tabJeu,tabUsers);
+	if (waitForOtherRequest) {
+		//merge des request
+		Array.prototype.push.apply(requestGlobal.data,request.data);
+	}else{
+		if (request.data.length!=urlsOnline.length) {
+			//quelqu un vient de lancer son live
+			console.log("dans le if");
+			displayStream(request,tabJeu,tabUsers);
+		}else if (request.data.length<urlsOnline.length){
+			//quelqu un vient de shutdown son live
+			iniUrls(request,tabJeu,tabUsers);
+		}
+		console.log("checkStream");
 	}
-	console.log("checkStream");
+	
 	
 }
 
