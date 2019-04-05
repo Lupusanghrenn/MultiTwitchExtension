@@ -186,7 +186,7 @@ function iniUrls(httpRequest,tabJeu,tabUsers) {
 	}
 }
 
-function checkStreamAjax(argument) {
+function checkStreamAjax() {
 	///on vérifie si on a pas rajouté des chaines
 	var t = JSON.parse(localStorage['streams']);
 	if (nbStream!=t.length) {
@@ -211,7 +211,7 @@ function checkStream(request,tabJeu,tabUsers) {
 		//merge des request
 		Array.prototype.push.apply(requestGlobal.data,request.data);
 	}else{
-		if (request.data.length!=urlsOnline.length) {
+		if (requestGlobal.data.length>urlsOnline.length) {
 			//quelqu un vient de lancer son live
 			console.log("dans le if");
 			displayStream(request,tabJeu,tabUsers);
@@ -219,10 +219,8 @@ function checkStream(request,tabJeu,tabUsers) {
 			//quelqu un vient de shutdown son live
 			iniUrls(request,tabJeu,tabUsers);
 		}
-		console.log("checkStream");
 	}
-	
-	
+	console.log("checkStream");	
 }
 
 function displayStream(request,tabJeu,tabUsers) {
