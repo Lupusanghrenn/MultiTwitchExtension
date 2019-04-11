@@ -34,6 +34,8 @@ urlsOffline=[];
 flag=0;
 waitForOtherRequest=false;
 requestGlobal=[];
+tabUsersGlobal=[];
+tabJeuGlobal=[];
 init();
 
 function init() {
@@ -41,14 +43,14 @@ function init() {
 	chaine = "";
 	for (var i = 0; i < urls.length; i++) {
 		chaine+=urls[i]+"&user_login=";
-		if(i%100==0){
+		if((i+1)%100==0 && i>1){
 			waitForOtherRequest=true;
 			myajax(chaine,iniUrls,false);
 			chaine="";			
 		}
 	}
 	waitForOtherRequest=false;
-	myajax(chaine,iniUrls,true);
+	myajax(chaine,iniUrls,false);
 	chrome.notifications.onClicked.addListener(replyBtnClick);
 }
 
@@ -61,15 +63,18 @@ function myajax(nomChaine,  callBack,async=true) {
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
     	httpRequest=JSON.parse(httpRequest.response);
+    	console.log(async);
+    	console.log(httpRequest);
     	if (httpRequest.data.length!=0) {
-    		myajaxGames(httpRequest,callBack);
+    		myajaxGames(httpRequest,callBack,async);
+    	}else{
+    		callBack(httpRequest,[],[]);
     	}
     });
     httpRequest.send();
 }
 
-function myajaxGames(request,  callBack) {
-	console.log(request);
+function myajaxGames(request,  callBack,async=true) {
     var httpRequest = new XMLHttpRequest();
     var nomGames="";
     for (var i = 0; i < request.data.length; i++) {
@@ -77,7 +82,7 @@ function myajaxGames(request,  callBack) {
     }
     var url="https://api.twitch.tv/helix/games?id="+nomGames;
     url = url.substring(0,url.length-4);
-    httpRequest.open("GET", url, true);
+    httpRequest.open("GET", url, async);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
@@ -86,12 +91,12 @@ function myajaxGames(request,  callBack) {
     	for (var i = 0; i < jeuR.data.length; i++) {
     		tabJeu.push(jeuR.data[i]);
     	}
-        myajaxUsers(request,tabJeu,callBack);
+        myajaxUsers(request,tabJeu,callBack,async);
     });
     httpRequest.send();
 }
 
-function myajaxUsers(request,tabJeu,callBack) {
+function myajaxUsers(request,tabJeu,callBack,async=true) {
 	var httpRequest = new XMLHttpRequest();
     var idUser="";
     for (var i = 0; i < request.data.length; i++) {
@@ -99,7 +104,7 @@ function myajaxUsers(request,tabJeu,callBack) {
     }
     var url="https://api.twitch.tv/helix/users?id="+idUser;
     url = url.substring(0,url.length-4);
-    httpRequest.open("GET", url, true);
+    httpRequest.open("GET", url, async);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
@@ -114,23 +119,31 @@ function myajaxUsers(request,tabJeu,callBack) {
 }
 
 function iniUrls(httpRequest,tabJeu,tabUsers) {
-	if (waitForOtherRequest) {
-		//merge des request
-		if(httpRequest.length!=0 && requestGlobal.length!=0){
-			Array.prototype.push.apply(requestGlobal.data,httpRequest.data);
-		}else{
-			requestGlobal=httpRequest;
-		}
+	console.log("iniUrls : "+waitForOtherRequest);
+	//merge des request
+	if(tabJeuGlobal.length!=0 && requestGlobal.length!=0){
+		Array.prototype.push.apply(requestGlobal.data,httpRequest.data);
+		if (tabJeu.length!=0) {
+			Array.prototype.push.apply(tabJeuGlobal.data,tabJeu);
+			Array.prototype.push.apply(tabUsersGlobal.data,tabUsers);
+		}		
+		
 	}else{
-		var tabrequest=httpRequest.data;
+		requestGlobal=httpRequest;
+		tabJeuGlobal=tabJeu;
+		tabUsersGlobal=tabUsers;
+	}
+	if(!waitForOtherRequest){
+		var tabrequest=requestGlobal.data;
+		console.log(tabrequest);
 		urlsOnline=[];
 		urlsOffline=[];
 		for (var i = 0; i < tabrequest.length; i++) {
 
 			var thisUser = [];
-			for (var j = 0; j < tabUsers.length; j++) {
-				if(tabUsers[j].id==tabrequest[i]['user_id']){
-					thisUser=tabUsers[j];
+			for (var j = 0; j < tabUsersGlobal.length; j++) {
+				if(tabUsersGlobal[j].id==tabrequest[i]['user_id']){
+					thisUser=tabUsersGlobal[j];
 					j=10000;
 				}
 			}
@@ -141,9 +154,9 @@ function iniUrls(httpRequest,tabJeu,tabUsers) {
 			//test selon le onLauch
 			if (notifOnLaunch && firstLaucnh) {
 				var nomjeu ="";
-				for (var j = 0; j < tabJeu.length; j++) {
-					if(tabJeu[j]['id']==tabrequest[i]['game_id']){
-						nomjeu=tabJeu[j]['name'];
+				for (var j = 0; j < tabJeuGlobal.length; j++) {
+					if(tabJeuGlobal[j]['id']==tabrequest[i]['game_id']){
+						nomjeu=tabJeuGlobal[j]['name'];
 						j=10000;
 					}
 				}
@@ -180,7 +193,7 @@ function iniUrls(httpRequest,tabJeu,tabUsers) {
 		}
 		if (flag==0) {
 			setInterval(checkStreamAjax ,timeInterval);
-			console.log("interval set");
+			console.log("interval set : "+ timeInterval);
 		}
 		flag=1;
 	}
@@ -188,17 +201,21 @@ function iniUrls(httpRequest,tabJeu,tabUsers) {
 
 function checkStreamAjax() {
 	///on vérifie si on a pas rajouté des chaines
+	requestGlobal=[];
+	console.log("checkStreamAjax");
 	var t = JSON.parse(localStorage['streams']);
-	if (nbStream!=t.length) {
+	if (nbStream==t.length) {
 		nbStream=urls.length;
 		chaine = "";
 		for (var i = 0; i < urls.length; i++) {
 			//TODO
 			chaine+=urls[i]+"&user_login=";
-			if(i%100==0){
+			if((i+1)%100==0 && i>1){
+				console.log("allo");
 				waitForOtherRequest=true;
 				myajax(chaine,checkStream,false);
 				chaine="";
+				console.log("allo Fin");
 			}
 		}
 	}
@@ -207,17 +224,23 @@ function checkStreamAjax() {
 }
 
 function checkStream(request,tabJeu,tabUsers) {
+	console.log("checkStream : "+waitForOtherRequest);
 	if (waitForOtherRequest) {
 		//merge des request
-		Array.prototype.push.apply(requestGlobal.data,request.data);
+		if(requestGlobal.length ==0){
+			requestGlobal=request;
+		}else{
+			Array.prototype.push.apply(requestGlobal.data,request.data);
+		}
 	}else{
+		console.log(requestGlobal);
 		if (requestGlobal.data.length>urlsOnline.length) {
 			//quelqu un vient de lancer son live
 			console.log("dans le if");
-			displayStream(request,tabJeu,tabUsers);
-		}else if (request.data.length<urlsOnline.length){
+			displayStream(requestGlobal,tabJeuGlobal,tabUsersGlobal);
+		}else if (requestGlobal.data.length<urlsOnline.length){
 			//quelqu un vient de shutdown son live
-			iniUrls(request,tabJeu,tabUsers);
+			iniUrls(requestGlobal,tabJeuGlobal,tabUsersGlobal);
 		}
 	}
 	console.log("checkStream");	
@@ -271,6 +294,8 @@ function displayStream(request,tabJeu,tabUsers) {
 	}
 
 	//on reconstruit urlOnline et urlOffline
+	urlsOnline=[];
+	urlsOffline=[];
 	for (var i = 0; i < tabrequest.length; i++) {
 		var thisUser = [];
 		for (var j = 0; j < tabUsers.length; j++) {
