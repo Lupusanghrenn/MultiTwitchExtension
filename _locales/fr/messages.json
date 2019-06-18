@@ -110,5 +110,8 @@
 	},
 	"NoChannelSelected":{
 		"message": "Aucune chaînes selectionné ! (Sélectionnez les chaînes en cochant les checkboxs)"
+	},
+	"sortByGames":{
+		"message": "Trier les chaînes par jeux"
 	}
 }

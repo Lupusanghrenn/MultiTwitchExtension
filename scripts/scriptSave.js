@@ -192,7 +192,7 @@ function afficherStream(){
 	var nbIte=1;
 	for (var i = 0; i < urls.length; i++) {
 		channelString+=urls[i]+"&user_login=";
-		if(i%99==0 && i>0){
+		if(i%100==0){
 			channelString =channelString.substr(0,channelString.length-12);
 			myajax(channelString,returnHttpRequest,false);	
 			channelString="";
@@ -296,25 +296,17 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 
 	var requestTmp=[];
 
-	var sortByGames=localStorage["sortByGames"]=="true";
-
-	if(sortByGames){
-		//TODO sort games by alph
-		tabJeu.sort(compareJeu);
-		//TODO les tri des jeux
-		for(var i=0;i<tabJeu.length;i++){
-			console.log(tabJeu[i].name);
-			for (var j = 0; j < request.data.length; j++) {
-				if (tabJeu[i].id==request.data[j].game_id){
-					requestTmp.push(request.data[j]);
-				}
+	//TODO les tri des jeux
+	/*for(var i=0;i<tabJeu.length;i++){
+		console.log(tabJeu[i].name);
+		for (var j = 0; j < request.data.length; j++) {
+			if (tabJeu[i].id==request.data[j].game_id){
+				requestTmp.push(request.data[j]);
 			}
-			
 		}
-		request.data=requestTmp;
+		
 	}
-
-	
+	request.data=requestTmp;*/
 
 	for (i = 0; i < request.data.length; i++) {
 		//selection depuis tabUsers
@@ -324,23 +316,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				thisUser=tabUsers[j];
 				j=10000;
 			}
-		}
-
-		if (sortByGames && (i==0 || request.data[i].game_id!=request.data[i-1].game_id)) {
-			var divGame = document.createElement("div");
-			divGame.setAttribute("class","col-xs-12");
-			divGame.style.paddingLeft = "3px";
-			divGame.style.borderBottom="1px solid #ff0000";
-			var nomJeu = "Test";
-
-			//recherche du nom du jeu
-			var j=0;
-			while(j<tabJeu.length && request.data[i].game_id!=tabJeu[j].id){
-				j++;
-			}
-			nomJeu=tabJeu[j].name;
-			divGame.innerHTML=nomJeu;
-			row.appendChild(divGame);
 		}
 
 		var div = document.createElement("div");
@@ -679,16 +654,6 @@ function compare(a , b) {
 	if(a.viewer_count > b.viewer_count){
 		return -1;
 	}else if (a.viewer_count == b.viewer_count) {
-		return 0;
-	}else{
-		return 1;
-	}
-}
-
-function compareJeu(a , b) {
-	if(a.name < b.name){
-		return -1;
-	}else if (a.name == b.name) {
 		return 0;
 	}else{
 		return 1;

@@ -110,5 +110,8 @@
 	},
 	"NoChannelSelected":{
 		"message": "No channel selected ! (Select channels using the checkboxs)"
+	},
+	"sortByGames":{
+		"message": "Sort chanels by games"
 	}
 }

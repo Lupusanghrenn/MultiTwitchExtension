@@ -3,6 +3,7 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage["showOffline"]=checkboxShowOffline.checked;
 	localStorage["multitwitch"]=checkboxMulti.value;
 	localStorage['notifOnLaunch']=checkboxOnLaunch.checked;
+	localStorage["sortByGames"]=checkboxSortByGames.checked;
 	timeInterval=parseInt(inputTimeInterval.value)*1000;
 	if (timeInterval<10000) {
 		timeInterval=10000;
@@ -22,6 +23,7 @@ function init(){
 	showOffline=localStorage["showOffline"]=="true";
 	multitwitch=JSON.parse(localStorage["multitwitch"]);
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
+	sortByGames=localStorage["sortByGames"]=="true";
 	timeInterval=parseInt(localStorage["timeInterval"]);
 	if (timeInterval==undefined) {
 		timeInterval=30000;
@@ -39,12 +41,14 @@ function init(){
 	checkboxMulti.selectedIndex=multitwitch;
 	console.log(checkboxMulti);
 
-
 	checkboxShowOffline=document.getElementById("showOffline");
 	checkboxShowOffline.checked=showOffline;
 
 	checkboxOnLaunch=document.getElementById("notifOnLaunch");
 	checkboxOnLaunch.checked=notifOnLaunch;
+
+	checkboxSortByGames=document.getElementById("sortByGames");
+	checkboxSortByGames.checked=sortByGames;
 
 	buttonInputChannelFollow=document.getElementById("buttonChannelName");
 	buttonInputChannelFollow.addEventListener("click",getFollow);
@@ -82,6 +86,23 @@ function init(){
 	document.getElementById("toChannelName").placeholder=chrome.i18n.getMessage("placeholderUrlFollow");
 	document.getElementById("buttonChannelName").innerHTML=chrome.i18n.getMessage("GetFollow");
 	document.getElementById("lupusNote").innerHTML=chrome.i18n.getMessage("lupusNote");
+	document.getElementById('checkSort').innerHTML=chrome.i18n.getMessage("sortByGames");
+
+	//Ajout d amelioration de l UI
+	document.getElementById('CheckOnLaunch').addEventListener("click",function (event) {
+		console.log(document.getElementById('notifOnLaunch'));
+		document.getElementById('notifOnLaunch').checked=!document.getElementById('notifOnLaunch').checked;
+	});
+
+	document.getElementById('checkOffline').addEventListener("click",function (event) {
+		console.log(document.getElementById('showOffline'));
+		document.getElementById('showOffline').checked=!document.getElementById('showOffline').checked;
+	});
+
+	document.getElementById('checkSort').addEventListener("click",function (event) {
+		console.log(document.getElementById('sortByGames'));
+		document.getElementById('sortByGames').checked=!document.getElementById('sortByGames').checked;
+	});
 
 	//enregistrer();
 	displayChannel();

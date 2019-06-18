@@ -121,11 +121,12 @@ function myajaxUsers(request,tabJeu,callBack,async=true) {
 function iniUrls(httpRequest,tabJeu,tabUsers) {
 	console.log("iniUrls : "+waitForOtherRequest);
 	//merge des request
-	if(tabJeuGlobal.length!=0 && requestGlobal.length!=0){
+	if(tabJeuGlobal.length!=0 && requestGlobal.length!=0 && httpRequest.data!=null){
 		Array.prototype.push.apply(requestGlobal.data,httpRequest.data);
-		if (tabJeu.length!=0) {
-			Array.prototype.push.apply(tabJeuGlobal.data,tabJeu);
-			Array.prototype.push.apply(tabUsersGlobal.data,tabUsers);
+		console.log("reauestGlobal");
+		if (tabJeu!=null) {
+			Array.prototype.push.apply(tabJeuGlobal,tabJeu);
+			Array.prototype.push.apply(tabUsersGlobal,tabUsers);
 		}		
 		
 	}else{
@@ -148,7 +149,7 @@ function iniUrls(httpRequest,tabJeu,tabUsers) {
 				}
 			}
 
-			console.log(thisUser.login);
+			//console.log(thisUser.login);
 			urlsOnline.push(thisUser.login);
 
 			//test selon le onLauch

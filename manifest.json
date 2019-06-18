@@ -3,7 +3,7 @@
 	"name": "__MSG_appName__",
 	"short_name":"Multi Twitch",
   "background": {
-    "scripts": [ "scripts/script_back.js" ]
+    "scripts": [ "./scripts/script_back.js" ]
   },
   "browser_action": {
     "default_icon": "images/icone64.png",
