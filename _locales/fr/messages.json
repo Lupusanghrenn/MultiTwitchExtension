@@ -113,5 +113,11 @@
 	},
 	"sortByGames":{
 		"message": "Trier les chaînes par jeux"
+	},
+	"chanelFaved":{
+		"message":"Chaîne correctement mise en favori"
+	},
+	"noFav":{
+		"message":"Pas de chaines favorites"
 	}
 }

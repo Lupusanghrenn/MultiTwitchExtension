@@ -113,5 +113,11 @@
 	},
 	"sortByGames":{
 		"message": "Sort chanels by games"
+	},
+	"chanelFaved":{
+		"message":"Channel successfully added as a favorite"
+	},
+	"noFav":{
+		"message":"No favorites channel added"
 	}
 }

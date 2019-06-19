@@ -314,6 +314,139 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		request.data=requestTmp;
 	}
 
+	//todo favori
+	favoritesChannel=JSON.parse(localStorage["favorites"]);
+	console.log(favoritesChannel);
+	if (favoritesChannel!=undefined && favoritesChannel[0]!=undefined) {
+
+		var firstFav=true;
+		//div favorites
+		var divFav = document.createElement("div");
+		divFav.setAttribute("class","col-xs-12");
+		divFav.style.paddingLeft = "3px";
+		divFav.style.borderBottom="1px solid #e0e30a";
+		divFav.style.color="#e0e30a";
+		divFav.innerHTML="Favorites";
+
+		for (var i = 0; i < favoritesChannel.length; i++) {
+			var name =favoritesChannel[i];
+
+			var thisUser = [];
+			for (var j = 0; j < tabUsers.length; j++) {
+				if(tabUsers[j].login==name){
+					thisUser=tabUsers[j];
+					console.log(thisUser);
+					j=10000;
+				}
+			}
+			if(thisUser.id!=undefined){
+				if(firstFav){firstFav=false;row.appendChild(divFav);}
+				var k=0;
+				while(k<request.data.length && request.data[k].user_name!=thisUser.display_name){
+					k++;
+				}
+
+				console.log(request.data[k]);
+				console.log(thisUser);
+
+				var div = document.createElement("div");
+				div.setAttribute("class","col-xs-12");
+				div.style.margin="3px 0";
+				var url="https://www.twitch.tv/"+thisUser["login"];
+
+				//col-xs-3
+				var divImage = document.createElement("div");
+				divImage.setAttribute("class","col-xs-3");
+				divImage.style.paddingLeft="0px";
+				divImage.id=url;
+				divImage.addEventListener("click", listenerClick,false);
+				var image = document.createElement('img');
+				image.src=thisUser.profile_image_url;
+				image.setAttribute("class","img-responsive");
+				image.style.width="50px";
+				image.style.height="50px";
+
+				//ajout col-xs-3
+				divImage.appendChild(image);
+				div.appendChild(divImage);
+
+				//col-xs-7
+				var divxs7=document.createElement('div');
+				divxs7.setAttribute("class","col-xs-8");
+				divxs7.id=url;
+				divxs7.addEventListener("click", listenerClick,false);
+				var row1=document.createElement('div');
+				row1.setAttribute("class","row");
+				var div1=document.createElement('div');
+				div1.id=url;
+				div1.setAttribute("class","col-xs-9 ellipsis");
+				div1.style.paddingLeft="0px";
+
+				//suite
+				var nomjeu ="";
+				for (var j = 0; j < tabJeu.length; j++) {
+					if(tabJeu[j]['id']==request.data[k]['game_id']){
+						nomjeu=tabJeu[j]['name'];
+						j=10000;
+					}
+				}
+				div1.innerHTML=request.data[k]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
+				
+				//nombre de viewer
+				var divViewer= document.createElement("div");
+				divViewer.setAttribute("class","col-xs-3 pull-right divViewer");
+				var spanViewer=document.createElement("span");
+				spanViewer.setAttribute("class","pull-right");
+				spanViewer.style.color="rgb(137, 131, 149)";
+				spanViewer.innerHTML=request.data[k]["viewer_count"];
+				divViewer.appendChild(spanViewer);
+				var divPoint=document.createElement("div");
+				divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
+				divViewer.appendChild(divPoint);
+
+
+				row1.appendChild(div1);
+				row1.appendChild(divViewer);
+				divxs7.appendChild(row1);
+
+				var row1=document.createElement('div');
+				row1.setAttribute("class","row");
+				var div1=document.createElement('div');
+				div1.setAttribute("class","col-xs-12 ellipsis");
+				div1.innerHTML=request.data[k]['title'];
+				//ajout
+				row1.appendChild(div1);
+				divxs7.appendChild(row1);
+				div.appendChild(divxs7);
+
+				//col-xs-1 checkbox
+				var divxs1=document.createElement('div');
+				divxs1.setAttribute("class","col-xs-1");
+				var input = document.createElement("input");
+				input.type="checkbox";
+				input.name=thisUser["login"];
+				input.value=thisUser["login"];
+				//ajout
+				divxs1.appendChild(input);
+				div.appendChild(divxs1);
+
+				row.appendChild(div);
+
+				//request.data.splice(k,1);
+			}
+
+		}
+
+		//divEndFav
+		if(!firstFav){
+			var divEndFav = document.createElement("div");
+			divEndFav.setAttribute("class","col-xs-12");
+			divEndFav.style.paddingLeft = "3px";
+			divEndFav.style.borderBottom="1px solid #e0e30a";
+			row.appendChild(divEndFav);
+		}
+
+	}
 	
 
 	for (i = 0; i < request.data.length; i++) {
@@ -326,134 +459,139 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 			}
 		}
 
-		if (sortByGames && (i==0 || request.data[i].game_id!=request.data[i-1].game_id)) {
-			var divGame = document.createElement("div");
-			divGame.setAttribute("class","col-xs-12");
-			divGame.style.paddingLeft = "3px";
-			divGame.style.borderBottom="1px solid #ff0000";
-			var nomJeu = "Test";
+		//don t display favorites again
+		if((favoritesChannel!=undefined || favoritesChannel.length>0) && !favoritesChannel.includes(thisUser.login)){
+			if (sortByGames && (i==0 || request.data[i].game_id!=request.data[i-1].game_id)) {
+				var divGame = document.createElement("div");
+				divGame.setAttribute("class","col-xs-12");
+				divGame.style.paddingLeft = "3px";
+				divGame.style.borderBottom="1px solid #ff0000";
+				var nomJeu = "Test";
 
-			//recherche du nom du jeu
-			var j=0;
-			while(j<tabJeu.length && request.data[i].game_id!=tabJeu[j].id){
-				j++;
+				//recherche du nom du jeu
+				var j=0;
+				while(j<tabJeu.length && request.data[i].game_id!=tabJeu[j].id){
+					j++;
+				}
+				nomJeu=tabJeu[j].name;
+				divGame.innerHTML=nomJeu;
+				row.appendChild(divGame);
 			}
-			nomJeu=tabJeu[j].name;
-			divGame.innerHTML=nomJeu;
-			row.appendChild(divGame);
+
+			var div = document.createElement("div");
+			div.setAttribute("class","col-xs-12");
+			div.style.margin="3px 0";
+			var url="https://www.twitch.tv/"+thisUser["login"];
+
+			//col-xs-3
+			var divImage = document.createElement("div");
+			divImage.setAttribute("class","col-xs-3");
+			divImage.style.paddingLeft="0px";
+			divImage.id=url;
+			divImage.addEventListener("click", listenerClick,false);
+			var image = document.createElement('img');
+			image.src=thisUser.profile_image_url;
+			image.setAttribute("class","img-responsive");
+			image.style.width="50px";
+			image.style.height="50px";
+
+			//ajout col-xs-3
+			divImage.appendChild(image);
+			div.appendChild(divImage);
+
+			//col-xs-7
+			var divxs7=document.createElement('div');
+			divxs7.setAttribute("class","col-xs-8");
+			divxs7.id=url;
+			divxs7.addEventListener("click", listenerClick,false);
+			var row1=document.createElement('div');
+			row1.setAttribute("class","row");
+			var div1=document.createElement('div');
+			div1.id=url;
+			div1.setAttribute("class","col-xs-9 ellipsis");
+			div1.style.paddingLeft="0px";
+
+			//suite
+			var nomjeu ="";
+			for (var j = 0; j < tabJeu.length; j++) {
+				if(tabJeu[j]['id']==request.data[i]['game_id']){
+					nomjeu=tabJeu[j]['name'];
+					j=10000;
+				}
+			}
+			div1.innerHTML=request.data[i]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
+			
+			//nombre de viewer
+			var divViewer= document.createElement("div");
+			divViewer.setAttribute("class","col-xs-3 pull-right divViewer");
+			var spanViewer=document.createElement("span");
+			spanViewer.setAttribute("class","pull-right");
+			spanViewer.style.color="rgb(137, 131, 149)";
+			spanViewer.innerHTML=request.data[i]["viewer_count"];
+			divViewer.appendChild(spanViewer);
+			var divPoint=document.createElement("div");
+			divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
+			divViewer.appendChild(divPoint);
+
+
+			row1.appendChild(div1);
+			row1.appendChild(divViewer);
+			divxs7.appendChild(row1);
+
+			var row1=document.createElement('div');
+			row1.setAttribute("class","row");
+			var div1=document.createElement('div');
+			div1.setAttribute("class","col-xs-12 ellipsis");
+			div1.innerHTML=request.data[i]['title'];
+			//ajout
+			row1.appendChild(div1);
+			divxs7.appendChild(row1);
+			div.appendChild(divxs7);
+
+			//col-xs-1 checkbox
+			var divxs1=document.createElement('div');
+			divxs1.setAttribute("class","col-xs-1");
+			var input = document.createElement("input");
+			input.type="checkbox";
+			input.name=thisUser["login"];
+			input.value=thisUser["login"];
+			//ajout
+			divxs1.appendChild(input);
+			div.appendChild(divxs1);
+
+			row.appendChild(div);
+		}
+		var br=document.createElement('br');
+		div.appendChild(br);
+		
+
+		if(showOffline){
+			
+			//offline
+			var p = document.createElement("p");
+			p.setAttribute("class","col-xs-12 text-center back-white");
+			p.innerHTML="OFFLINE"
+			row.appendChild(p);
+
+			if (optimisation) {
+				for (var i = 0; i < urlsOffline.length; i++) {
+					var div = document.createElement("div");
+					div.class="col-md-12";
+					div.innerHTML="<p class='text-center'>"+urlsOffline[i]+"- Offline</p>";
+					row.appendChild(div);
+				}
+			} else {
+				for (var i = 0; i < urlsOffline.length; i++) {
+					myajax2(urlsOffline[i],returnOffline);
+					var div = document.createElement("div");
+					div.class="col-md-12";
+					div.innerHTML="<p class='text-center'>"+requestOffline['display_name']+"- Offline</p>";
+					row.appendChild(div);
+				}
+			}		
 		}
 
-		var div = document.createElement("div");
-		div.setAttribute("class","col-xs-12");
-		div.style.margin="3px 0";
-		var url="https://www.twitch.tv/"+thisUser["login"];
-
-		//col-xs-3
-		var divImage = document.createElement("div");
-		divImage.setAttribute("class","col-xs-3");
-		divImage.style.paddingLeft="0px";
-		divImage.id=url;
-		divImage.addEventListener("click", listenerClick,false);
-		var image = document.createElement('img');
-		image.src=thisUser.profile_image_url;
-		image.setAttribute("class","img-responsive");
-		image.style.width="50px";
-		image.style.height="50px";
-
-		//ajout col-xs-3
-		divImage.appendChild(image);
-		div.appendChild(divImage);
-
-		//col-xs-7
-		var divxs7=document.createElement('div');
-		divxs7.setAttribute("class","col-xs-8");
-		divxs7.id=url;
-		divxs7.addEventListener("click", listenerClick,false);
-		var row1=document.createElement('div');
-		row1.setAttribute("class","row");
-		var div1=document.createElement('div');
-		div1.id=url;
-		div1.setAttribute("class","col-xs-9 ellipsis");
-		div1.style.paddingLeft="0px";
-
-		//suite
-		var nomjeu ="";
-		for (var j = 0; j < tabJeu.length; j++) {
-			if(tabJeu[j]['id']==request.data[i]['game_id']){
-				nomjeu=tabJeu[j]['name'];
-				j=10000;
-			}
-		}
-		div1.innerHTML=request.data[i]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
 		
-		//nombre de viewer
-		var divViewer= document.createElement("div");
-		divViewer.setAttribute("class","col-xs-3 pull-right divViewer");
-		var spanViewer=document.createElement("span");
-		spanViewer.setAttribute("class","pull-right");
-		spanViewer.style.color="rgb(137, 131, 149)";
-		spanViewer.innerHTML=request.data[i]["viewer_count"];
-		divViewer.appendChild(spanViewer);
-		var divPoint=document.createElement("div");
-		divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
-		divViewer.appendChild(divPoint);
-
-
-		row1.appendChild(div1);
-		row1.appendChild(divViewer);
-		divxs7.appendChild(row1);
-
-		var row1=document.createElement('div');
-		row1.setAttribute("class","row");
-		var div1=document.createElement('div');
-		div1.setAttribute("class","col-xs-12 ellipsis");
-		div1.innerHTML=request.data[i]['title'];
-		//ajout
-		row1.appendChild(div1);
-		divxs7.appendChild(row1);
-		div.appendChild(divxs7);
-
-		//col-xs-1 checkbox
-		var divxs1=document.createElement('div');
-		divxs1.setAttribute("class","col-xs-1");
-		var input = document.createElement("input");
-		input.type="checkbox";
-		input.name=thisUser["login"];
-		input.value=thisUser["login"];
-		//ajout
-		divxs1.appendChild(input);
-		div.appendChild(divxs1);
-
-		row.appendChild(div);
-	}
-	var br=document.createElement('br');
-	div.appendChild(br);
-	
-
-	if(showOffline){
-		
-		//offline
-		var p = document.createElement("p");
-		p.setAttribute("class","col-xs-12 text-center back-white");
-		p.innerHTML="OFFLINE"
-		row.appendChild(p);
-
-		if (optimisation) {
-			for (var i = 0; i < urlsOffline.length; i++) {
-				var div = document.createElement("div");
-				div.class="col-md-12";
-				div.innerHTML="<p class='text-center'>"+urlsOffline[i]+"- Offline</p>";
-				row.appendChild(div);
-			}
-		} else {
-			for (var i = 0; i < urlsOffline.length; i++) {
-				myajax2(urlsOffline[i],returnOffline);
-				var div = document.createElement("div");
-				div.class="col-md-12";
-				div.innerHTML="<p class='text-center'>"+requestOffline['display_name']+"- Offline</p>";
-				row.appendChild(div);
-			}
-		}		
 	}
 }
 

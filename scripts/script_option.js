@@ -33,6 +33,12 @@ function init(){
 		multitwitch=true;
 		localStorage['multitwitch']=true;
 	}
+	if (localStorage["favorites"]==undefined) {
+		favoritesChannels=[];
+		localStorage["favorites"]=JSON.stringify(favoritesChannels);
+	}else{
+		favoritesChannels=JSON.parse(localStorage["favorites"]);
+	}
 
 
 	//document.getElementById("multitwitch");
@@ -63,6 +69,7 @@ function init(){
 	bouton=document.getElementById("save");
 	bouton.addEventListener('click',enregistrer);
 	channels=document.getElementById('channels');
+	favorites=document.getElementById('channelsFavorite');
 	savediv=document.getElementById('savediv');
 	savediv.addEventListener('click',save);
 	myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
@@ -70,6 +77,8 @@ function init(){
 	feedback = document.getElementById("feedback");
 	feedback2 = document.getElementById("feedback2");
 	feedback3 = document.getElementById('feedback3');
+	feedback4 = document.getElementById('feedback4');
+
 
 	//MESSAGES . JSON
 	document.getElementById("extensionOption").innerHTML=chrome.i18n.getMessage("extensionOption");
@@ -115,6 +124,9 @@ function displayChannel(){
 		var request=[];
 		request["display_name"]=tab[i];
 		displayName(request, true);
+		if(favoritesChannels.includes(tab[i])){
+			displayFav(request,true);
+		}
 	}
 }
 
@@ -139,8 +151,52 @@ function displayName(httpRequest, opti){
 	div3.setAttribute('class','input-group-addon');
 	div3.innerHTML="<i class='fa fa-times' aria-hidden='true'></i>";
 	div3.addEventListener('click',deleteChannel);
+	var divFav=document.createElement('div');
+	divFav.setAttribute('class','input-group-addon');
+	divFav.innerHTML="<i class='fa fa-star' aria-hidden='true'></i>";
+	if (favoritesChannels.includes(reponse['display_name'])) {divFav.style.color="#09c106";}
+	divFav.style.borderRight="0px";
+	divFav.addEventListener('click',favChannel);
 	var input=document.createElement('input');
 	input.type='text';
+	input.style.marginBottom="-0.4px";
+	input.setAttribute('class','form-control text-center');
+	input.setAttribute('id','channel');
+	input.setAttribute("disabled","disabled");
+	input.value=reponse['display_name'];
+
+	div.appendChild(label);
+	div2.appendChild(div3);
+	div2.appendChild(divFav);
+	div2.appendChild(input);
+	div.appendChild(div2);
+	channels.appendChild(div);
+}
+
+function displayFav(httpRequest, opti){
+	if (opti) {
+		var reponse=httpRequest;
+	} else {
+		var reponse=JSON.parse(httpRequest.response);
+	}
+	
+	var div=document.createElement('div');
+	div.setAttribute('class',"form-group col-xs-4");
+
+	var label=document.createElement('label')
+	label.setAttribute('class','sr-only');
+	label.setAttribute('for','channel');
+	label.innerHTML='Channel';
+
+	var div2=document.createElement('div');
+	div2.setAttribute('class','input-group');
+	var div3=document.createElement('div');
+	div3.setAttribute('class','input-group-addon');
+	div3.innerHTML="<i class='fa fa-times' aria-hidden='true'></i>";
+	div3.addEventListener('click',deleteFav);
+	var input=document.createElement('input');
+	input.type='text';
+	input.style.marginBottom="-0.4px";
 	input.setAttribute('class','form-control text-center');
 	input.setAttribute('id','channel');
 	input.setAttribute("disabled","disabled");
@@ -150,11 +206,63 @@ function displayName(httpRequest, opti){
 	div2.appendChild(div3);
 	div2.appendChild(input);
 	div.appendChild(div2);
-	channels.appendChild(div);
+	favorites.appendChild(div);
+
+	//TODO favorites #09c106
 }
 
 function clearChannel(){
 	channels.innerHTML='';
+	if (favoritesChannels.length>0) {
+		favorites.innerHTML='';
+	}else{
+		favorites.innerHTML="<h4>"+chrome.i18n.getMessage("noFav")+"</h4>";
+	}	
+}
+
+function favChannel(event) {
+	console.log("fav");
+	var index=1;
+	if(event.target.localName=="i"){
+		index++;
+		console.log(event.target.localName);
+	}
+	var name = event.path[index].childNodes[2].value;
+	console.log(name);
+
+	if (!favoritesChannels.includes(name)) {
+		favoritesChannels.push(name);
+		favoritesChannels.sort();
+
+		localStorage["favorites"]=JSON.stringify(favoritesChannels);
+
+		feedback4.innerHTML="";
+		feedback4.appendChild(createFeedback("alert-success",chrome.i18n.getMessage("chanelFaved")));
+		feedback4.addEventListener("click",close4);
+		setTimeout(close4,5000);
+
+		displayChannel();
+	}else{
+		feedback.innerHTML="";
+		feedback.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeebackAlreadySave")));
+		feedback.addEventListener("click",close);
+		setTimeout(close,5000);
+	}	
+}
+
+function deleteFav(event){
+	console.log(event);
+	var div=event.path[2];
+	var name=div.getElementsByTagName('input')[0].value;
+	var index=favoritesChannels.indexOf(name);
+	var tab2=favoritesChannels.splice(index,1);
+	localStorage['favorites']=JSON.stringify(favoritesChannels);
+
+	feedback4.innerHTML="";
+	feedback4.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeebackDeletedChannel")));
+	feedback4.addEventListener("click",close4);
+	setTimeout(close4,5000);
+	displayChannel();
 }
 
 function deleteChannel(event){
@@ -163,6 +271,9 @@ function deleteChannel(event){
 	var index=tab.indexOf(name);
 	var tab2=tab.splice(index,1);
 	localStorage['streams']=JSON.stringify(tab);
+	var index=favoritesChannels.indexOf(name);
+	var tab3=favoritesChannels.splice(index,1);
+	localStorage['favorites']=JSON.stringify(favoritesChannels);
 
 	feedback.innerHTML="";
 	feedback.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeebackDeletedChannel")));
@@ -335,6 +446,12 @@ function close3(){
 	feedback3.innerHTML="";
 	feedback3.removeEventListener("click",close3);
 	clearTimeout(close3);
+}
+
+function close4(){
+	feedback4.innerHTML="";
+	feedback4.removeEventListener("click",close4);
+	clearTimeout(close4);
 }
 
 function getFollow() {
