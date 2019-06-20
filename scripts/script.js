@@ -36,15 +36,22 @@ optimisation=localStorage["optimisation"]=="true";
 arrayStream=[];
 
 request=[];
+channelSquad=[];
+squadTag="2a14b52e-d459-4c92-be11-5d86b898f6b6";
+autoSquad=localStorage["autoSquad"]=="true";
+if (autoSquad==undefined) {
+	autoSquad=true;
+	localStorage['autoSquad']=true;
+}
 waitForOtherRequest=false;
 
 document.getElementsByTagName('body');
 window.onload=init();
 
 function init(){
-	bouton=document.getElementById('refresh');
-	bouton.innerHTML=chrome.i18n.getMessage("refresh");
-	bouton.addEventListener('click',afficherStream);
+	// bouton=document.getElementById('refresh');
+	// bouton.innerHTML=chrome.i18n.getMessage("refresh");
+	// bouton.addEventListener('click',afficherStream);
 	if (urls.length!=0) {afficherStream();}
 	else {
 		cleanAffichage();
@@ -207,7 +214,6 @@ function afficherStream(){
 
 
 function listenerClick(event){
-	console.log(event);
 	idFound=false;
 	index=0;
 	while(index<event.path.length && !idFound){
@@ -217,8 +223,15 @@ function listenerClick(event){
 			index++;
 		}
 	}
-	console.log(event.path[index].id);
-	localStorage['id']=event.path[index].id;
+	console.log(channelSquad);
+	var tab = event.path[index].id.split("/");
+	var login=tab[tab.length-1];
+
+	if (autoSquad && channelSquad.includes(login)) {
+		localStorage['id']=event.path[index].id+"/squad";
+	}else{
+		localStorage['id']=event.path[index].id;
+	}
 
 	chrome.tabs.query({ currentWindow: true, active: true },lauchAsync);
 }
@@ -335,7 +348,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 			for (var j = 0; j < tabUsers.length; j++) {
 				if(tabUsers[j].login==name){
 					thisUser=tabUsers[j];
-					console.log(thisUser);
 					j=10000;
 				}
 			}
@@ -345,9 +357,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				while(k<request.data.length && request.data[k].user_name!=thisUser.display_name){
 					k++;
 				}
-
-				console.log(request.data[k]);
-				console.log(thisUser);
 
 				var div = document.createElement("div");
 				div.setAttribute("class","col-xs-12");
@@ -458,6 +467,11 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				j=10000;
 			}
 		}
+
+		//gestion du squad stream
+		if(request.data[i].tag_ids.includes(squadTag) && !channelSquad.includes(thisUser.login)){
+			channelSquad.push(thisUser.login);
+		}		
 
 		//don t display favorites again
 		if((favoritesChannel!=undefined || favoritesChannel.length>0) && !favoritesChannel.includes(thisUser.login)){

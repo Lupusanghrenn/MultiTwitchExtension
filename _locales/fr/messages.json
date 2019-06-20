@@ -106,7 +106,7 @@
 		"message":"Vous devez installer l'application Multi Twitch App pour pouvoir utiliser cette option. Voulez-vous allez sur la page de Web Store ?"
 	},
 	"lupusNote":{
-		"message":" Bonjour, c'est Lupusanghren le dev de cette extension. Je pense avoir terminé avec cet extension et je me tourne vers vous pour m'aider à encore améliorer cet extension. <br>Pour ce faire, tweetez moi @Lupusanghrenn ou alors via le Chrome Web Store (la ou vous avez téléchargé l'extension). Je cherche également un(e) artiste pour m'aider a rendre l'extension plus design."
+		"message":" Bonjour, c'est Lupusanghren le dev de cette extension. Je pense avoir terminé avec cet extension et je me tourne vers vous pour m'aider à encore améliorer cet extension. <br>Pour ce faire, tweetez moi @Lupusanghrenn ou alors via le Chrome Web Store (là ou vous avez téléchargé l'extension). Je cherche également un(e) artiste pour m'aider a amelioré le design de l'extension (rémunéré)."
 	},
 	"NoChannelSelected":{
 		"message": "Aucune chaînes selectionné ! (Sélectionnez les chaînes en cochant les checkboxs)"
@@ -119,5 +119,8 @@
 	},
 	"noFav":{
 		"message":"Pas de chaines favorites"
+	},
+	"autoSquad":{
+		"message":"Rejoindre automatiquement le mode escouade lorsque c'est possible"
 	}
 }

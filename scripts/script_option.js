@@ -4,6 +4,7 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage["multitwitch"]=checkboxMulti.value;
 	localStorage['notifOnLaunch']=checkboxOnLaunch.checked;
 	localStorage["sortByGames"]=checkboxSortByGames.checked;
+	localStorage["autoSquad"]=checkboxAutoSquad.checked;
 	timeInterval=parseInt(inputTimeInterval.value)*1000;
 	if (timeInterval<10000) {
 		timeInterval=10000;
@@ -24,6 +25,7 @@ function init(){
 	multitwitch=JSON.parse(localStorage["multitwitch"]);
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 	sortByGames=localStorage["sortByGames"]=="true";
+	autoSquad=localStorage["autoSquad"]=="true";
 	timeInterval=parseInt(localStorage["timeInterval"]);
 	if (timeInterval==undefined) {
 		timeInterval=30000;
@@ -55,6 +57,9 @@ function init(){
 
 	checkboxSortByGames=document.getElementById("sortByGames");
 	checkboxSortByGames.checked=sortByGames;
+
+	checkboxAutoSquad=document.getElementById("autoSquad");
+	checkboxAutoSquad.checked=autoSquad;
 
 	buttonInputChannelFollow=document.getElementById("buttonChannelName");
 	buttonInputChannelFollow.addEventListener("click",getFollow);
@@ -111,6 +116,11 @@ function init(){
 	document.getElementById('checkSort').addEventListener("click",function (event) {
 		console.log(document.getElementById('sortByGames'));
 		document.getElementById('sortByGames').checked=!document.getElementById('sortByGames').checked;
+	});
+
+	document.getElementById('checkAutoSquad').addEventListener("click",function (event) {
+		console.log(document.getElementById('autoSquad'));
+		document.getElementById('autoSquad').checked=!document.getElementById('autoSquad').checked;
 	});
 
 	//enregistrer();
