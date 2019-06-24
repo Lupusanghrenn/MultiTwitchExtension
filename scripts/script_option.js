@@ -31,7 +31,7 @@ function init(){
 		timeInterval=30000;
 		localStorage["timeInterval"]=timeInterval;
 	}
-	if (multitwitch==undefined) {
+	if (multitwitch==undefined || localStorage["multitwitch"]=="undefined" || localStorage["multitwitch"]==undefined) {
 		multitwitch=true;
 		localStorage['multitwitch']=true;
 	}
@@ -407,27 +407,32 @@ function checkNbFollowers(userid,tabUsers,callBack,nbIte) {
 	if(tabUsers.total>nbIte*100){
 		//on a plus de 100 follows --> renvoie de requete
 		myajaxFollow(userid,callBack,nbIte+1,tabUsers.pagination.cursor,tabUsers);
+	}else{
+		myajaxFollowedUsers(tabUsers,callBack);
 	}
-	myajaxFollowedUsers(tabUsers,callBack);
+	
 }
 
 function myajaxFollowedUsers(tabUsers,callBack){
 	var httpRequest = new XMLHttpRequest();
 	console.log(tabUsers);
-	var users ="";
-	for (var i = 0; i < tabUsers.data.length-1; i++) {
-		users+=tabUsers.data[i].to_id+"&id=";
+	for(var nbIte=0;nbIte*100<tabUsers.data.length;nbIte++){
+		var users ="";
+		for (var i = nbIte*100; i < tabUsers.data.length-1 && i<(nbIte+1)*100; i++) {
+			users+=tabUsers.data[i].to_id+"&id=";
+		}
+		users+=tabUsers.data[tabUsers.data.length-1].to_id;
+	    var url = "https://api.twitch.tv/helix/users?id="+users;
+	    httpRequest.open("GET", url, true);
+	    httpRequest.setRequestHeader('Client-ID',myid);
+	    httpRequest.setRequestHeader("Content-Type", "application/json");
+	    httpRequest.addEventListener("load", function () {
+	    	console.log(httpRequest.response);
+	        callBack(JSON.parse(httpRequest.response));
+	    });
+	    httpRequest.send();
 	}
-	users+=tabUsers.data[tabUsers.data.length-1].to_id;
-    var url = "https://api.twitch.tv/helix/users?id="+users;
-    httpRequest.open("GET", url, true);
-    httpRequest.setRequestHeader('Client-ID',myid);
-    httpRequest.setRequestHeader("Content-Type", "application/json");
-    httpRequest.addEventListener("load", function () {
-    	console.log(httpRequest.response);
-        callBack(JSON.parse(httpRequest.response));
-    });
-    httpRequest.send();
+	
 }
 
 
