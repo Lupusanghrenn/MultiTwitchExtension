@@ -122,5 +122,8 @@
 	},
 	"autoSquad":{
 		"message":"Auto join squad mode when available"
+	},
+	"showOverflow":{
+		"message":"Show overflow when overing a channel"
 	}
 }

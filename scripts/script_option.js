@@ -5,6 +5,8 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage['notifOnLaunch']=checkboxOnLaunch.checked;
 	localStorage["sortByGames"]=checkboxSortByGames.checked;
 	localStorage["autoSquad"]=checkboxAutoSquad.checked;
+	localStorage["showOverflow"]=checkboxshowOverflow.checked;
+	
 	timeInterval=parseInt(inputTimeInterval.value)*1000;
 	if (timeInterval<10000) {
 		timeInterval=10000;
@@ -26,14 +28,17 @@ function init(){
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 	sortByGames=localStorage["sortByGames"]=="true";
 	autoSquad=localStorage["autoSquad"]=="true";
+	showOverflow=localStorage["showOverflow"]=="true";
 	timeInterval=parseInt(localStorage["timeInterval"]);
 	if (timeInterval==undefined) {
 		timeInterval=30000;
 		localStorage["timeInterval"]=timeInterval;
 	}
-	if (multitwitch==undefined || localStorage["multitwitch"]=="undefined" || localStorage["multitwitch"]==undefined) {
-		multitwitch=true;
-		localStorage['multitwitch']=true;
+	if (localStorage["multitwitch"]==undefined || localStorage["multitwitch"]=="true" || localStorage["multitwitch"]=="false") {
+		multitwitch="1";
+		localStorage["multitwitch"]=1;
+	} else {
+		multitwitch=localStorage["multitwitch"];
 	}
 	if (localStorage["favorites"]==undefined) {
 		favoritesChannels=[];
@@ -60,6 +65,9 @@ function init(){
 
 	checkboxAutoSquad=document.getElementById("autoSquad");
 	checkboxAutoSquad.checked=autoSquad;
+
+	checkboxshowOverflow=document.getElementById("showOverflow");
+	checkboxshowOverflow.checked=showOverflow;
 
 	buttonInputChannelFollow=document.getElementById("buttonChannelName");
 	buttonInputChannelFollow.addEventListener("click",getFollow);
@@ -101,6 +109,8 @@ function init(){
 	document.getElementById("buttonChannelName").innerHTML=chrome.i18n.getMessage("GetFollow");
 	document.getElementById("lupusNote").innerHTML=chrome.i18n.getMessage("lupusNote");
 	document.getElementById('checkSort').innerHTML=chrome.i18n.getMessage("sortByGames");
+	document.getElementById('checkAutoSquad').innerHTML=chrome.i18n.getMessage("autoSquad");
+	document.getElementById('checkOverflow').innerHTML=chrome.i18n.getMessage("showOverflow");
 
 	//Ajout d amelioration de l UI
 	document.getElementById('CheckOnLaunch').addEventListener("click",function (event) {
@@ -121,6 +131,11 @@ function init(){
 	document.getElementById('checkAutoSquad').addEventListener("click",function (event) {
 		console.log(document.getElementById('autoSquad'));
 		document.getElementById('autoSquad').checked=!document.getElementById('autoSquad').checked;
+	});
+
+	document.getElementById('checkOverflow').addEventListener("click",function (event) {
+		console.log(document.getElementById('showOverflow'));
+		document.getElementById('showOverflow').checked=!document.getElementById('showOverflow').checked;
 	});
 
 	//enregistrer();
@@ -278,6 +293,7 @@ function deleteFav(event){
 function deleteChannel(event){
 	var div=event.path[2];
 	var name=div.getElementsByTagName('input')[0].value;
+	console.log(name);
 	var index=tab.indexOf(name);
 	var tab2=tab.splice(index,1);
 	localStorage['streams']=JSON.stringify(tab);

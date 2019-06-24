@@ -30,6 +30,13 @@ if (localStorage["multitwitch"]==undefined || localStorage["multitwitch"]=="true
 	multitwitch=localStorage["multitwitch"];
 }
 
+if (localStorage["showOverflow"]==undefined) {
+	showOverflow=false;
+	localStorage["showOverflow"]=false;
+}else{
+	showOverflow=localStorage["showOverflow"]=="true";
+}
+
 showOffline=localStorage["showOffline"]=="true";
 optimisation=localStorage["optimisation"]=="true";
 
@@ -74,6 +81,18 @@ function init(){
 
 	divTexteOnline=document.getElementById("online");
 	divTexteOnline.innerHTML=chrome.i18n.getMessage("online");
+
+	//style
+	if(showOverflow){
+		var style = document.createElement('style');
+	  style.innerHTML = `.ellipsis:hover {
+			overflow: visible; 
+		    white-space: normal; 
+		    width: auto;
+		}
+	  `;
+	  document.head.appendChild(style);
+	}
 }
 
 function lauchMulti() {
@@ -399,6 +418,10 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 						j=10000;
 					}
 				}
+				if (!showOverflow) {
+					div1.title=request.data[k]['user_name']+" - "+nomjeu;
+				}
+				
 				div1.innerHTML=request.data[k]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
 				
 				//nombre de viewer
@@ -421,7 +444,10 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				var row1=document.createElement('div');
 				row1.setAttribute("class","row");
 				var div1=document.createElement('div');
-				div1.setAttribute("class","col-xs-12 ellipsis");
+				if (!showOverflow) {
+					div1.setAttribute("title",request.data[k]['title']);
+				}		
+				div1.setAttribute("class","col-xs-12 ellipsis");		
 				div1.innerHTML=request.data[k]['title'];
 				//ajout
 				row1.appendChild(div1);
@@ -533,6 +559,10 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 					j=10000;
 				}
 			}
+			if (!showOverflow) {
+				div1.title=request.data[i]['user_name']+" - "+nomjeu;
+			}
+			
 			div1.innerHTML=request.data[i]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
 			
 			//nombre de viewer
@@ -556,6 +586,9 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 			row1.setAttribute("class","row");
 			var div1=document.createElement('div');
 			div1.setAttribute("class","col-xs-12 ellipsis");
+			if (!showOverflow) {
+				div1.setAttribute("title",request.data[i]['title']);
+			}
 			div1.innerHTML=request.data[i]['title'];
 			//ajout
 			row1.appendChild(div1);

@@ -122,5 +122,8 @@
 	},
 	"autoSquad":{
 		"message":"Rejoindre automatiquement le mode escouade lorsque c'est possible"
+	},
+	"showOverflow":{
+		"message":"Montrez l'overflow lors du hover"
 	}
 }
