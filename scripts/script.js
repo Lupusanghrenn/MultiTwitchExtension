@@ -379,7 +379,9 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 
 				var div = document.createElement("div");
 				div.setAttribute("class","col-xs-12");
-				div.style.margin="3px 0";
+				div.style.padding="3px 0";
+				div.style.margin="0.1px 0";
+				div.style.borderTop="#474747 solid 0.2px";
 				var url="https://www.twitch.tv/"+thisUser["login"];
 
 				//col-xs-3
@@ -520,7 +522,10 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 
 			var div = document.createElement("div");
 			div.setAttribute("class","col-xs-12");
-			div.style.margin="3px 0";
+			div.style.padding="3px 0";
+			div.style.margin="0.1px 0";
+			div.style.borderTop="#474747 solid 0.2px";
+			//div.style.borderBottom="white solid 0.2px";
 			var url="https://www.twitch.tv/"+thisUser["login"];
 
 			//col-xs-3
