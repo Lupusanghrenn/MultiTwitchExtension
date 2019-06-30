@@ -25,13 +25,13 @@
 		"message":"Time between each request (min. 10s)"
 	},
 	"checkOffline":{
-		"message": "Check this if you want to see the offline channels"
+		"message": "Display offline channels"
 	},
 	"checkMultistream":{
 		"message":"Select your favorite multistream website"
 	},
 	"CheckOnLaunch":{
-		"message":"Check this if you want to be notify about the streamers you are online when you launch Chrome"
+		"message":"Notify online streamers when you're launching Chrome"
 	},
 	"save":{
 		"message":"Save"

@@ -392,13 +392,13 @@ function myajaxId(nomChaine, callBack) {
 			setTimeout(close3,5000);
         } else {
         	var idchaine=req._id;
-	        myajaxFollow(idchaine,callBack);
+	        myajaxFollow(idchaine,callBack,1,'',[]);
         }
     });
     httpRequest.send();
 }
 
-function myajaxFollow(userid, callBack,nbIte=1,cursor="",formerTab=[]) {
+function myajaxFollow(userid, callBack,nbIte,cursor,formerTab) {
     var httpRequest = new XMLHttpRequest();
     var url = "https://api.twitch.tv/helix/users/follows?from_id="+userid+"&first=100&after="+cursor;
     httpRequest.open("GET", url, true);
@@ -408,6 +408,7 @@ function myajaxFollow(userid, callBack,nbIte=1,cursor="",formerTab=[]) {
     	var newTab = JSON.parse(httpRequest.response);
     	if(formerTab.length!=0){
     		Array.prototype.push.apply(formerTab.data,newTab.data);
+    		formerTab.pagination=newTab.pagination;
     		checkNbFollowers(userid,formerTab,callBack,nbIte);
     	}else{
     		checkNbFollowers(userid,newTab,callBack,nbIte);
@@ -443,7 +444,7 @@ function myajaxFollowedUsers(tabUsers,callBack){
 	    httpRequest.setRequestHeader('Client-ID',myid);
 	    httpRequest.setRequestHeader("Content-Type", "application/json");
 	    httpRequest.addEventListener("load", function () {
-	    	console.log(httpRequest.response);
+	    	//console.log(httpRequest.response);
 	        callBack(JSON.parse(httpRequest.response));
 	    });
 	    httpRequest.send();
@@ -507,11 +508,11 @@ function updateTab(tab) {
 }
 
 function checkandaddTab(name){
-	console.log(name);
+	//console.log(name);
 	var username=name.login;
-	console.log(username);
+	//console.log(username);
 	total--;
-	console.log(total);
+	//console.log(total);
 	if (!tab.includes(username)) {
 		tab.push(username);
 	}

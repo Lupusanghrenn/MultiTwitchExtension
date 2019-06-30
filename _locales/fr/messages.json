@@ -25,13 +25,13 @@
 		"message":"Temps entre chaque requête (min. 10s)"
 	},
 	"checkOffline":{
-		"message": "Cocher cette case si vous souhaitez l'affichage des channels offline"
+		"message": "Afficher les channels offlines"
 	},
 	"checkMultistream":{
 		"message":"Sélectionnez votre site préféré de multistream"
 	},
 	"CheckOnLaunch":{
-		"message":"Cocher cette case si vous souhaitez être notifié des streamers en ligne lors du lancement de Chrome"
+		"message":"Notifications des streamers en ligne lors du lancement de Chrome"
 	},
 	"save":{
 		"message":"Enregistrer"
