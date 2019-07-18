@@ -7,7 +7,7 @@ var extensionID="jfaoecnmdknjhbjadnpifengnndehddh";//local
 
 //Initialisation des valeurs
 if (localStorage["showOffline"]==undefined) {
-	localStorage["showOffline"]="true";	
+	localStorage["showOffline"]="false";	
 }
 
 if (localStorage["optimisation"]==undefined) {
@@ -59,14 +59,7 @@ function init(){
 	// bouton=document.getElementById('refresh');
 	// bouton.innerHTML=chrome.i18n.getMessage("refresh");
 	// bouton.addEventListener('click',afficherStream);
-	if (urls.length!=0) {afficherStream();}
-	else {
-		cleanAffichage();
-		var div = document.createElement("div");
-		div.class="col-md-12";
-		div.innerHTML="<p class='text-justify'>"+chrome.i18n.getMessage("noSavedChannel")+"</p>"
-		row.appendChild(div);
-	}
+	
 	boutonMulti = document.getElementById('multi');
 	boutonMulti.innerHTML=chrome.i18n.getMessage("lauchMultiTwitch");
 	boutonMulti.addEventListener('click',lauchMulti);
@@ -82,6 +75,10 @@ function init(){
 	divTexteOnline=document.getElementById("online");
 	divTexteOnline.innerHTML=chrome.i18n.getMessage("online");
 
+	boutonAddFav = document.getElementById('favCurrent');
+	boutonAddFav.innerHTML=chrome.i18n.getMessage("favCurrentChannel");
+	boutonAddFav.addEventListener('click',getTabsFav);
+
 	//style
 	if(showOverflow){
 		var style = document.createElement('style');
@@ -92,6 +89,15 @@ function init(){
 		}
 	  `;
 	  document.head.appendChild(style);
+	}
+
+	if (urls.length!=0) {afficherStream();}
+	else {
+		cleanAffichage();
+		var div = document.createElement("div");
+		div.class="col-md-12";
+		div.innerHTML="<p class='text-justify'>"+chrome.i18n.getMessage("noSavedChannel")+"</p>"
+		row.appendChild(div);
 	}
 }
 
@@ -192,7 +198,16 @@ function myajax(nomChaine,  callBack,async=true) {
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
-        callBack(httpRequest,nomChaine);
+    	if (JSON.parse(httpRequest.responseText).data.length>0){
+    		callBack(httpRequest,nomChaine);
+    	}else{
+    		cleanAffichage();
+    		var p = document.createElement("p");
+    		p.setAttribute("class","col-xs-12 text-center");
+    		p.innerHTML=chrome.i18n.getMessage("noChannelOnline");
+    		row.appendChild(p);
+    	}
+        
     });
     httpRequest.send();
 }
@@ -653,6 +668,7 @@ function cleanAffichage(){
 	online.setAttribute("class","text-center");
 	online.style.backgroundColor="white";
 	online.style.color="black";
+	online.style.marginBottom="0px";
 	online.innerHTML=chrome.i18n.getMessage("online");;
 	row.appendChild(online);
 }
@@ -698,6 +714,10 @@ function getTabs2(){
 	chrome.tabs.query({ currentWindow: true, active: true },WatchCurrent);
 }
 
+function getTabsFav(){
+	chrome.tabs.query({ currentWindow: true, active: true },getCurrentFav);
+}
+
 function getCurrent(tab) {
 	tabUrl = tab[0]['url'];
 	var slash =false;
@@ -739,12 +759,77 @@ function getCurrent(tab) {
 
 }
 
+function getCurrentFav(tab) {
+	tabUrl = tab[0]['url'];
+	var slash =false;
+
+	//on récupère la fin du site (apres le dernier / )
+	for (var i = (tabUrl.length - 1); i >= 0 && !slash; i--) {
+		if(tabUrl[i]=="/"){
+			slash=true;
+			console.log(i);
+		}
+	}
+	index=i+1;
+	var name = tabUrl.substring(index+1, tabUrl.length);
+
+	//on récupère maintenant le 'site' pour voir si c est twitch
+	slash=false;
+	for (i = 0; i < tabUrl.length-2; i++) {
+		if(tabUrl[i]==':'&&tabUrl[i+1]=='/'&&tabUrl[i+2]=='/'){
+			var indexsite=i+3;
+			break;
+		}
+	}
+	var site = tabUrl.substring(indexsite, index);
+	console.log(site);
+
+	//test si site est twitch
+	if (site=='go.twitch.tv'||site=='www.twitch.tv') {
+		console.log('surtwitch');
+		if (!favoritesChannel.includes(name) && urls.includes(name)) {
+			console.log(name);
+			favoritesChannel.push(name);
+			cleanAffichage();
+			afficherStream();
+		}
+		if (!urls.includes(name)) {
+			console.log(name);
+			//on test enfin si la chaine existe
+			myajax2(name,saveTabFav);
+		}else{
+			alert(chrome.i18n.getMessage("alreadyAddedChannel"));
+		}
+	}else{
+		alert(chrome.i18n.getMessage("notATwitchChannel"));
+	}
+
+}
+
 function saveTab(event) {
 	var reponse = JSON.parse(event.responseText);
 	console.log(reponse);
 	if (reponse["error"]==null) {
+		cleanAffichage();
 		urls.push(reponse['name']);
 		localStorage['streams']=JSON.stringify(urls);
+		request=[];
+		afficherStream();
+	}else{
+		alert(chrome.i18n.getMessage("FeedbackUserUnknow"));
+	}
+}
+
+function saveTabFav(event) {
+	var reponse = JSON.parse(event.responseText);
+	console.log(reponse);
+	if (reponse["error"]==null) {
+		cleanAffichage();
+		urls.push(reponse['name']);
+		favoritesChannel.push(reponse['name']);
+		localStorage['favorites']=JSON.stringify(favoritesChannel);
+		localStorage['streams']=JSON.stringify(urls);
+		request=[];
 		afficherStream();
 	}else{
 		alert(chrome.i18n.getMessage("FeedbackUserUnknow"));

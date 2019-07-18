@@ -125,5 +125,8 @@
 	},
 	"showOverflow":{
 		"message":"Show overflow when overing a channel"
+	},
+	"favCurrentChannel":{
+		"message":"Add current channel as favorite"
 	}
 }

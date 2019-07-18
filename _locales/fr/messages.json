@@ -125,5 +125,8 @@
 	},
 	"showOverflow":{
 		"message":"Montrez l'overflow lors du hover"
+	},
+	"favCurrentChannel":{
+		"message":"Ajouter la chaine actuelle comme favori"
 	}
 }
