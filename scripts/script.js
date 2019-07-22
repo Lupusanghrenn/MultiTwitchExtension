@@ -790,10 +790,11 @@ function getCurrentFav(tab) {
 		if (!favoritesChannel.includes(name) && urls.includes(name)) {
 			console.log(name);
 			favoritesChannel.push(name);
+			localStorage.favorites=JSON.stringify(favoritesChannel);
+			request=[];
 			cleanAffichage();
 			afficherStream();
-		}
-		if (!urls.includes(name)) {
+		}else if (!urls.includes(name)) {
 			console.log(name);
 			//on test enfin si la chaine existe
 			myajax2(name,saveTabFav);
