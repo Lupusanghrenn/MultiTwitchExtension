@@ -1,6 +1,6 @@
 function enregistrer()//enregistrer les options, fonction appelée par le click sur le bouton
 {
-	localStorage["showOffline"]=checkboxShowOffline.checked;
+	//localStorage["showOffline"]=checkboxShowOffline.checked;
 	localStorage["multitwitch"]=checkboxMulti.value;
 	localStorage['notifOnLaunch']=checkboxOnLaunch.checked;
 	localStorage["sortByGames"]=checkboxSortByGames.checked;
@@ -13,7 +13,7 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	}
 	localStorage['timeInterval']=timeInterval;
 	notifOnLaunch=checkboxOnLaunch.checked;
-	showOffline=localStorage["showOffline"]=="true";
+	//showOffline=localStorage["showOffline"]=="true";
 	feedback2.innerHTML="";
 	feedback2.appendChild(createFeedback("alert-success",chrome.i18n.getMessage("FeebackOptionSucess")));
 	feedback2.addEventListener("click",close2);
@@ -23,7 +23,7 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 function init(){
 	console.log("init");
 	//initialisation des variables globales
-	showOffline=localStorage["showOffline"]=="true";
+	//showOffline=localStorage["showOffline"]=="true";
 	multitwitch=JSON.parse(localStorage["multitwitch"]);
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 	sortByGames=localStorage["sortByGames"]=="true";
@@ -54,8 +54,8 @@ function init(){
 	checkboxMulti.selectedIndex=multitwitch;
 	console.log(checkboxMulti);
 
-	checkboxShowOffline=document.getElementById("showOffline");
-	checkboxShowOffline.checked=showOffline;
+	//checkboxShowOffline=document.getElementById("showOffline");
+	//checkboxShowOffline.checked=showOffline;
 
 	checkboxOnLaunch=document.getElementById("notifOnLaunch");
 	checkboxOnLaunch.checked=notifOnLaunch;
@@ -97,7 +97,7 @@ function init(){
 	document.getElementById("extensionOption").innerHTML=chrome.i18n.getMessage("extensionOption");
 	document.getElementById("GeneralParameters").innerHTML=chrome.i18n.getMessage("GeneralParameters");
 	document.getElementById("timeRequest").innerHTML=chrome.i18n.getMessage("timeRequest");
-	document.getElementById("checkOffline").innerHTML=chrome.i18n.getMessage("checkOffline");
+	//document.getElementById("checkOffline").innerHTML=chrome.i18n.getMessage("checkOffline");
 	document.getElementById("multitwitchLabel").innerHTML=chrome.i18n.getMessage("checkMultistream");
 	document.getElementById("CheckOnLaunch").innerHTML=chrome.i18n.getMessage("CheckOnLaunch");
 	document.getElementById("save").innerHTML=chrome.i18n.getMessage("save");
@@ -118,10 +118,10 @@ function init(){
 		document.getElementById('notifOnLaunch').checked=!document.getElementById('notifOnLaunch').checked;
 	});
 
-	document.getElementById('checkOffline').addEventListener("click",function (event) {
+	/*document.getElementById('checkOffline').addEventListener("click",function (event) {
 		console.log(document.getElementById('showOffline'));
 		document.getElementById('showOffline').checked=!document.getElementById('showOffline').checked;
-	});
+	});*/
 
 	document.getElementById('checkSort').addEventListener("click",function (event) {
 		console.log(document.getElementById('sortByGames'));
@@ -379,19 +379,21 @@ function myajax(nomChaine, callBack) {
 
 function myajaxId(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/users/"+nomChaine;
+    var url="https://api.twitch.tv/helix/users?login="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
         //callBack(httpRequest,false);
         var req = JSON.parse(httpRequest.responseText);
-        if (req._id==undefined) {
+        console.log("requete myajaxId");
+        console.log(req);
+        if (req.data==undefined) {
         	feedback3.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeedbackUserUnknow")));
         	feedback3.addEventListener("click",close3);
 			setTimeout(close3,5000);
         } else {
-        	var idchaine=req._id;
+        	var idchaine=req.data[0].id;
 	        myajaxFollow(idchaine,callBack,1,'',[]);
         }
     });
@@ -406,6 +408,10 @@ function myajaxFollow(userid, callBack,nbIte,cursor,formerTab) {
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
     	var newTab = JSON.parse(httpRequest.response);
+    	console.log("former tab");
+    	console.log(formerTab);
+    	console.log("newtab");
+    	console.log(newTab);
     	if(formerTab.length!=0){
     		Array.prototype.push.apply(formerTab.data,newTab.data);
     		formerTab.pagination=newTab.pagination;
@@ -425,31 +431,19 @@ function checkNbFollowers(userid,tabUsers,callBack,nbIte) {
 		//on a plus de 100 follows --> renvoie de requete
 		myajaxFollow(userid,callBack,nbIte+1,tabUsers.pagination.cursor,tabUsers);
 	}else{
-		myajaxFollowedUsers(tabUsers,callBack);
+		//myajaxFollowedUsers(tabUsers,callBack);
+		console.log("tabUsers");
+		console.log(tabUsers);
+		addFollowedUsers(tabUsers);
 	}
 	
 }
 
-function myajaxFollowedUsers(tabUsers,callBack){
-	var httpRequest = new XMLHttpRequest();
-	console.log(tabUsers);
-	for(var nbIte=0;nbIte*100<tabUsers.data.length;nbIte++){
-		var users ="";
-		for (var i = nbIte*100; i < tabUsers.data.length-1 && i<(nbIte+1)*100; i++) {
-			users+=tabUsers.data[i].to_id+"&id=";
-		}
-		users+=tabUsers.data[tabUsers.data.length-1].to_id;
-	    var url = "https://api.twitch.tv/helix/users?id="+users;
-	    httpRequest.open("GET", url, true);
-	    httpRequest.setRequestHeader('Client-ID',myid);
-	    httpRequest.setRequestHeader("Content-Type", "application/json");
-	    httpRequest.addEventListener("load", function () {
-	    	//console.log(httpRequest.response);
-	        callBack(JSON.parse(httpRequest.response));
-	    });
-	    httpRequest.send();
+function addFollowedUsers(tabUsers) {
+	total=tabUsers.data.length;
+	for (var i = 0; i < tabUsers.data.length; i++) {
+		checkandaddTab(tabUsers.data[i].to_name);
 	}
-	
 }
 
 
@@ -494,7 +488,7 @@ function getFollow() {
 	feedback3.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeedbackGettingInProgress")));
 	feedback3.addEventListener("click",close3);
 	setTimeout(close3,5000);
-	myajaxId(username,updateTab);
+	myajaxId(username,null);
 }
 
 function updateTab(tab) {
@@ -509,7 +503,7 @@ function updateTab(tab) {
 
 function checkandaddTab(name){
 	//console.log(name);
-	var username=name.login;
+	var username=name;
 	//console.log(username);
 	total--;
 	//console.log(total);

@@ -55,10 +55,10 @@
 		"message":"Récupérez vos follows"
 	},
 	"placeholderUrlChannel":{
-		"message":"nom de la chaine (dans l'URL)"
+		"message":"Nom de la chaine"
 	},
 	"placeholderUrlFollow":{
-		"message":"Votre pseudo (comme dans l'URL)"
+		"message":"Votre pseudo"
 	},
 	"FeebackOptionSucess":{
 		"message":"<strong>Succès !</strong> Options modifiés avec succès !"
@@ -128,5 +128,8 @@
 	},
 	"favCurrentChannel":{
 		"message":"Ajouter la chaine actuelle comme favori"
+	},
+	"favorites":{
+		"message":" Favoris "
 	}
 }

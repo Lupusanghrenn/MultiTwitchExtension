@@ -55,10 +55,10 @@
 		"message":"Get your follows"
 	},
 	"placeholderUrlChannel":{
-		"message":"Name of the channel (in the URL)"
+		"message":"Name of the channel"
 	},
 	"placeholderUrlFollow":{
-		"message":"Your nickname (like in the URL)"
+		"message":"Your nickname"
 	},
 	"FeebackOptionSucess":{
 		"message":"Options successfully updated"
@@ -128,5 +128,8 @@
 	},
 	"favCurrentChannel":{
 		"message":"Add current channel as favorite"
+	},
+	"favorites":{
+		"message":"Favorites"
 	}
 }

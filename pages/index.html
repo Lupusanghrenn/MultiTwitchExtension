@@ -1,151 +1,142 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
-<head>
+<head> 
 	<title>Multi twitch</title>
 	<meta charset="utf-8">
+	<!--
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+-->
 	<link rel="javascript" type="text/javascript" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
-	<style>
-		body{
-			background-color:black;
-			color: white;
-			width: 400px;/*taille de la fenêtre*/
-		}
-		#online{
-			background-color: green;
-		}
-		a{
-			text-decoration: none;
-			color: white;
-		}
-		button{
-			background-color: white;
-			color:black;
-		}
-		small{
-			font-size: 75%;
-		}
-		.col-xs-12{
-			padding: 0px;
-		}
-		.col-xs-12:hover{
-			cursor: pointer;
-		}
-		.back-white{
-			background-color: white;
-			color: black;
-		}
-		.ellipsis{
-			/*width: 212px;*/
-			text-overflow: ellipsis;
-			overflow: hidden;
-			white-space: nowrap;
-			font-size: 12px;
-		}
-		/*.ellipsis:hover{
-			overflow: visible; 
-		    white-space: normal; 
-		    width: auto;
-		}*/
-
-		.col-xs-3{
-			width: 20%;
-		}
-
-		.tw-live-indicator{
-			width: .8rem;
-		    height: .8rem;
-		    color:red;
-		}
-
-		.btn{
-			border-radius: 0px;
-		}
-
-		.pointTwitch{
-		    height: 8px;
-		    width: 8px;
-		    border-radius: 50%;
-		    display: inline-block;
-		    margin-right: 3px;
-		    margin-top: 3px;
-		}
-
-		.pointTwitch--red{
-			background: red;
-		}
-
-		.pointTwitch--grey{
-			background: grey;
-		}
-
-		.divViewer{
-			font-size: 11px;
-			display: inline-block;
-			padding: 0px;
-		}
-
-		.col-xs-1{
-			width: 12%;
-		}
-
-		input[type=checkbox]{
-			margin-left: 4px;
-			margin-top: 16px;
-		}
-
-		.container-fluid{
-			width: 420px;
-		}
-
-	</style>
+	<link rel="stylesheet" type="text/css" href="../style/style.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">	
 </head>
 <body>
-<div class="container-fluid">
-	
-	<form>
-	<div class="row" id="afficher">
-		<p class="text-center" style="background-color: white;margin-bottom: 0px;" id="online">En ligne</p>
+<div class="contenu dark">
+
+
+	<div class="" id="afficher">
+		<div class="row w100">
+				<button id="multi" title="Lancer le multiTwitch"><i class="fas fa-users"></i></button>
+				<!-- <button class="btn btn-default" id="watchCurrent" style="width: 100%;">Multi Twitch App</button> -->
+				<button id="addCurrent" title="Ajouter la chaine actuelle"><i class="fas fa-plus"></i></button>
+				<button id="favCurrent" title="Ajouter la chaine en favorie"><i class="fas fa-star"></i></button>
+				<!-- <button class="btn btn-default" id="refresh" style="width: 100%;">Rafraichir</button> -->
+				<button id="options" title="Paramètre"><i class="fas fa-cog"></i></button>
+				<button id="options" title="Aller sur Twitch.tv"><i class="fab fa-twitch"></i></a></button>
+				<div class="contact row">
+					<div>
+						<span>
+							Développeur : Lupusanghren
+						</span>
+					</div>
+					
+					<div>
+						<a href="https://twitter.com/Lupusanghrenn" target="_blank"><i class="fab fa-twitter"></i></a>
+						<a href="https://github.com/Lupusanghrenn" target="_blank"><i class="fab fa-github"></i></a>
+					</div>
+					
+				</div>
+		</div>
+		
+		<!--
+		<p class="text-center" id="online">En ligne</p>
+		-->
+		<!--
 		<div id=loading>
 			<img src="../images/loading.gif" style="width: 100%">
 		</div>
+		-->
+	</div>
+
 		
-		<!-- <div class="col-xs-12" style="margin: 3px 0px;">
-			<div class="col-xs-3" id="https://www.twitch.tv/solary" style="padding-left: 0px;">
-				<img src="https://static-cdn.jtvnw.net/jtv_user_pictures/17212d0d-d70b-4b8c-8b80-f8146977a3a8-profile_image-300x300.jpg" class="img-responsive" style="width: 50px; height: 50px;">
+	<div class="channel">
+		<div class="game">	Dota 2</div>
+		<div class="online w100 row">
+			<div class="online-img" id="https://www.twitch.tv/dansgaming">
+				<img src="https://static-cdn.jtvnw.net/jtv_user_pictures/32b68813-ea70-43bf-a8e4-a55f3096f408-profile_image-300x300.png" class="img-responsive">
 			</div>
-			<div class="col-xs-8" id="https://www.twitch.tv/solary">
-				<div class="row">
-					<div id="https://www.twitch.tv/solary" class="col-xs-9 ellipsis" style="padding-left: 0px">
-						Solary - <i class="tw-live-indicator">League of Legends</i>
+			<div class="w85  row" id="https://www.twitch.tv/dansgaming">
+				<div class="w85 online-text">
+					<div id="https://www.twitch.tv/dansgaming" class="w100 title">
+						<span>DansGaming </span> 
+						<i class="tw-live-indicator">No Man's Sky</i>
 					</div>
-					<div class="col-xs-3 pull-right divViewer">
-						<span class="pull-right" style="color:rgb(137, 131, 149);">500</span>
-						<div class="pointTwitch pull-right"></div>
+					<div class="w100 more">
+						Space and Stuff - No Man's Sky (PC) Space and Stuff - No Man's Sky (PC) Space and Stuff - No Man's Sky (PC) Space and Stuff - No Man's Sky (PC) 
+					</div>
+					
+				</div>
+				<div class="w15">
+					<div class="divViewer row">
+						<span>13634</span>
+						<i class="fas fa-circle pointTwitch--red"></i>
+					</div>
+					<div class="check row">
+						<input type="checkbox" name="dansgaming" value="dansgaming">
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-xs-12 ellipsis">
-						NO BONOBO GETA ON - 100% winrate 8.12 LRB
-					</div>
-				</div>
 			</div>
-			<div class="col-xs-1">
-				<input type="checkbox" name="solary" value="solary">
-			</div>
-		</div> -->
-	</div>
-</form>
-	<div class="row">
-		<div class="col-xs-12">
-			<button class="btn btn-default" id="multi" style="width: 100%;">Lancer le multi twitch</button>
-			<!-- <button class="btn btn-default" id="watchCurrent" style="width: 100%;">Multi Twitch App</button> -->
-			<button class="btn btn-default" id="addCurrent" style="width: 100%;">Ajouter la chaine actuelle</button>
-			<button class="btn btn-default" id="favCurrent" style="width: 100%;">Fav current channel</button>
-			<!-- <button class="btn btn-default" id="refresh" style="width: 100%;">Rafraichir</button> -->
-			<button class="btn btn-default" id="options" style="width: 100%;">Options</button>
 		</div>
-	</div>
+		
+
+		<div class="online w100 row">
+			<div class="online-img" id="https://www.twitch.tv/dansgaming">
+				<img src="https://static-cdn.jtvnw.net/jtv_user_pictures/32b68813-ea70-43bf-a8e4-a55f3096f408-profile_image-300x300.png" class="img-responsive">
+			</div>
+			<div class="w85 row" id="https://www.twitch.tv/dansgaming">
+				<div class="w85 online-text">
+					<div id="https://www.twitch.tv/dansgaming" class="w100 title">
+						<span>DansGaming </span> 
+						<i class="tw-live-indicator">No Man's Sky</i>
+					</div>
+					<div class="w100 more">
+						Space and Stuff - No Man's Sky (PC) 
+					</div>
+					
+				</div>
+				<div class="w15">
+					<div class="divViewer row">
+						<span>13634</span>
+						<i class="fas fa-circle pointTwitch--red"></i>
+					</div>
+					<div class="check row">
+						<input type="checkbox" name="dansgaming" value="dansgaming">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="online w100 row">
+			<div class="online-img" id="https://www.twitch.tv/dansgaming">
+				<img src="https://static-cdn.jtvnw.net/jtv_user_pictures/32b68813-ea70-43bf-a8e4-a55f3096f408-profile_image-300x300.png" class="img-responsive">
+			</div>
+			<div class="w85  row" id="https://www.twitch.tv/dansgaming">
+				<div class="w85 online-text">
+					<div id="https://www.twitch.tv/dansgaming" class="w100 title">
+						<span>DansGaming </span> 
+						<i class="tw-live-indicator">No Man's Sky</i>
+					</div>
+					<div class="w100 more">
+						Space and Stuff -
+					</div>
+					
+				</div>
+				<div class="w15">
+					<div class="divViewer row">
+						<span>13634</span>
+						<i class="fas fa-circle pointTwitch--red"></i>
+					</div>
+					<div class="check row">
+						<input type="checkbox" name="dansgaming" value="dansgaming">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		</div>	
+			
+	
+	
 
 </div>
 

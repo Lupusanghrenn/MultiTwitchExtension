@@ -1,7 +1,7 @@
 //idapp = "jfaoecnmdknjhbjadnpifengnndehddh"
 
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
-row = document.getElementById("afficher");
+row = document.getElementsByClassName("channel")[0];
 //var extensionID="obpmmenioddcpffdelecfoogjomfhekm";//online
 var extensionID="jfaoecnmdknjhbjadnpifengnndehddh";//local
 
@@ -61,31 +61,27 @@ function init(){
 	// bouton.addEventListener('click',afficherStream);
 	
 	boutonMulti = document.getElementById('multi');
-	boutonMulti.innerHTML=chrome.i18n.getMessage("lauchMultiTwitch");
+	boutonMulti.title=chrome.i18n.getMessage("lauchMultiTwitch");
 	boutonMulti.addEventListener('click',lauchMulti);
 
 	boutonAdd = document.getElementById('addCurrent');
-	boutonAdd.innerHTML=chrome.i18n.getMessage("addCurrentChannel");
+	boutonAdd.title=chrome.i18n.getMessage("addCurrentChannel");
 	boutonAdd.addEventListener('click',getTabs);
 
 	boutonOption=document.getElementById("options");
-	boutonOption.innerHTML=chrome.i18n.getMessage("option");
+	boutonOption.title=chrome.i18n.getMessage("option");
 	boutonOption.addEventListener('click',goToOption);
 
-	divTexteOnline=document.getElementById("online");
-	divTexteOnline.innerHTML=chrome.i18n.getMessage("online");
-
 	boutonAddFav = document.getElementById('favCurrent');
-	boutonAddFav.innerHTML=chrome.i18n.getMessage("favCurrentChannel");
+	boutonAddFav.title=chrome.i18n.getMessage("favCurrentChannel");
 	boutonAddFav.addEventListener('click',getTabsFav);
 
 	//style
 	if(showOverflow){
 		var style = document.createElement('style');
-	  style.innerHTML = `.ellipsis:hover {
+	  style.innerHTML = `.online-text:hover {
 			overflow: visible; 
 		    white-space: normal; 
-		    width: auto;
 		}
 	  `;
 	  document.head.appendChild(style);
@@ -205,7 +201,7 @@ function myajax(nomChaine,  callBack,async=true) {
     		var p = document.createElement("p");
     		p.setAttribute("class","col-xs-12 text-center");
     		p.innerHTML=chrome.i18n.getMessage("noChannelOnline");
-    		row.appendChild(p);
+    		document.getElementsByClassName("channel")[0].appendChild(p);
     	}
         
     });
@@ -369,18 +365,18 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		var firstFav=true;
 		//div favorites
 		var divFav = document.createElement("div");
-		divFav.setAttribute("class","col-xs-12");
-		divFav.style.paddingLeft = "3px";
-		divFav.style.borderBottom="1px solid #e0e30a";
-		divFav.style.color="#e0e30a";
-		divFav.innerHTML="Favorites";
+		divFav.setAttribute("class","favori");
+		divFav.innerHTML="<div class='game favori'>    <i class='fas fa-star'></i> <i class='fas fa-star'></i>"+chrome.i18n.getMessage("favorites")+"<i class='fas fa-star'></i> <i class='fas fa-star'></i></div>";
+		console.log("favUsers");
+		console.log(tabUsers);
 
 		for (var i = 0; i < favoritesChannel.length; i++) {
 			var name =favoritesChannel[i];
 
 			var thisUser = [];
+			console.log(name);
 			for (var j = 0; j < tabUsers.length; j++) {
-				if(tabUsers[j].login==name){
+				if(tabUsers[j].login==name.toLowerCase() || thisUser.display_name==name){
 					thisUser=tabUsers[j];
 					j=10000;
 				}
@@ -393,23 +389,16 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				}
 
 				var div = document.createElement("div");
-				div.setAttribute("class","col-xs-12");
-				div.style.padding="3px 0";
-				div.style.margin="0.1px 0";
-				div.style.borderTop="#474747 solid 0.2px";
-				var url="https://www.twitch.tv/"+thisUser["login"];
+				div.setAttribute("class","online w100 row");
+				var url="https://www.twitch.tv/"+thisUser.login;
 
 				//col-xs-3
 				var divImage = document.createElement("div");
-				divImage.setAttribute("class","col-xs-3");
-				divImage.style.paddingLeft="0px";
+				divImage.setAttribute("class","online-img w15");
 				divImage.id=url;
 				divImage.addEventListener("click", listenerClick,false);
 				var image = document.createElement('img');
 				image.src=thisUser.profile_image_url;
-				image.setAttribute("class","img-responsive");
-				image.style.width="50px";
-				image.style.height="50px";
 
 				//ajout col-xs-3
 				divImage.appendChild(image);
@@ -417,15 +406,14 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 
 				//col-xs-7
 				var divxs7=document.createElement('div');
-				divxs7.setAttribute("class","col-xs-8");
+				divxs7.setAttribute("class","w85 row");
 				divxs7.id=url;
 				divxs7.addEventListener("click", listenerClick,false);
 				var row1=document.createElement('div');
-				row1.setAttribute("class","row");
+				row1.setAttribute("class","w85 online-text");
 				var div1=document.createElement('div');
 				div1.id=url;
-				div1.setAttribute("class","col-xs-9 ellipsis");
-				div1.style.paddingLeft="0px";
+				div1.setAttribute("class","w100 title");
 
 				//suite
 				var nomjeu ="";
@@ -435,56 +423,47 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 						j=10000;
 					}
 				}
+				var name = document.createElement("span");
+				name.innerHTML=request.data[k]['user_name'];
+				var jeu = document.createElement("i");
+				jeu.innerHTML=nomjeu;
+				jeu.setAttribute("class","tw-live-indicator");
+
 				if (!showOverflow) {
-					div1.title=request.data[k]['user_name']+" - "+nomjeu;
+					name.title=request.data[k]['user_name'];
+					jeu.title=nomjeu;
 				}
+				div1.appendChild(name);
+				div1.appendChild(jeu);
 				
-				div1.innerHTML=request.data[k]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
 				
-				//nombre de viewer
-				var divViewer= document.createElement("div");
-				divViewer.setAttribute("class","col-xs-3 pull-right divViewer");
-				var spanViewer=document.createElement("span");
-				spanViewer.setAttribute("class","pull-right");
-				spanViewer.style.color="rgb(137, 131, 149)";
-				spanViewer.innerHTML=request.data[k]["viewer_count"];
-				divViewer.appendChild(spanViewer);
-				var divPoint=document.createElement("div");
-				divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
-				divViewer.appendChild(divPoint);
+				var divw100more = document.createElement("div");
+				divw100more.setAttribute("class","w100 more");
+				divw100more.innerHTML=request.data[k]['title'];
+				divw100more.title=request.data[k]['title'];
 
-
-				row1.appendChild(div1);
-				row1.appendChild(divViewer);
-				divxs7.appendChild(row1);
-
-				var row1=document.createElement('div');
-				row1.setAttribute("class","row");
-				var div1=document.createElement('div');
-				if (!showOverflow) {
-					div1.setAttribute("title",request.data[k]['title']);
-				}		
-				div1.setAttribute("class","col-xs-12 ellipsis");		
-				div1.innerHTML=request.data[k]['title'];
-				//ajout
-				row1.appendChild(div1);
-				divxs7.appendChild(row1);
-				div.appendChild(divxs7);
-
-				//col-xs-1 checkbox
-				var divxs1=document.createElement('div');
-				divxs1.setAttribute("class","col-xs-1");
+				var divw15 = document.createElement("div");
+				divw15.setAttribute("class","w15");
+				var divViewer = document.createElement("div");
+				divViewer.setAttribute("class","divViewer row");
+				divViewer.innerHTML="<span>"+request.data[k]["viewer_count"]+"</span><i class='fas fa-circle pointTwitch--red'></i>";
+				var divCheck = document.createElement("div");
+				divCheck.setAttribute("class","check row");
 				var input = document.createElement("input");
 				input.type="checkbox";
 				input.name=thisUser["login"];
 				input.value=thisUser["login"];
-				//ajout
-				divxs1.appendChild(input);
-				div.appendChild(divxs1);
+
+				divCheck.appendChild(input);
+				divw15.appendChild(divViewer);
+				divw15.appendChild(divCheck);
+				row1.appendChild(div1);
+				row1.appendChild(divw100more);
+				divxs7.appendChild(row1);
+				div.appendChild(divxs7);
+				div.appendChild(divw15);
 
 				row.appendChild(div);
-
-				//request.data.splice(k,1);
 			}
 
 		}
@@ -492,9 +471,8 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		//divEndFav
 		if(!firstFav){
 			var divEndFav = document.createElement("div");
-			divEndFav.setAttribute("class","col-xs-12");
-			divEndFav.style.paddingLeft = "3px";
-			divEndFav.style.borderBottom="1px solid #e0e30a";
+			divEndFav.setAttribute("class","game");
+			divEndFav.innerHTML=chrome.i18n.getMessage("online");
 			row.appendChild(divEndFav);
 		}
 
@@ -517,12 +495,10 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		}		
 
 		//don t display favorites again
-		if((favoritesChannel!=undefined || favoritesChannel.length>0) && !favoritesChannel.includes(thisUser.login)){
+		if((favoritesChannel!=undefined || favoritesChannel.length>0) && (!favoritesChannel.includes(thisUser.login) && !favoritesChannel.includes(thisUser.display_name))){
 			if (sortByGames && (i==0 || request.data[i].game_id!=request.data[i-1].game_id)) {
 				var divGame = document.createElement("div");
-				divGame.setAttribute("class","col-xs-12");
-				divGame.style.paddingLeft = "3px";
-				divGame.style.borderBottom="1px solid #ff0000";
+				divGame.setAttribute("class","game");
 				var nomJeu = "Test";
 
 				//recherche du nom du jeu
@@ -535,25 +511,24 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				row.appendChild(divGame);
 			}
 
+			
+			if(firstFav){firstFav=false;row.appendChild(divFav);}
+			var k=0;
+			while(k<request.data.length && request.data[k].user_name!=thisUser.display_name){
+				k++;
+			}
+
 			var div = document.createElement("div");
-			div.setAttribute("class","col-xs-12");
-			div.style.padding="3px 0";
-			div.style.margin="0.1px 0";
-			div.style.borderTop="#474747 solid 0.2px";
-			//div.style.borderBottom="white solid 0.2px";
-			var url="https://www.twitch.tv/"+thisUser["login"];
+			div.setAttribute("class","online w100 row");
+			var url="https://www.twitch.tv/"+thisUser.login;
 
 			//col-xs-3
 			var divImage = document.createElement("div");
-			divImage.setAttribute("class","col-xs-3");
-			divImage.style.paddingLeft="0px";
+			divImage.setAttribute("class","online-img w15");
 			divImage.id=url;
 			divImage.addEventListener("click", listenerClick,false);
 			var image = document.createElement('img');
 			image.src=thisUser.profile_image_url;
-			image.setAttribute("class","img-responsive");
-			image.style.width="50px";
-			image.style.height="50px";
 
 			//ajout col-xs-3
 			divImage.appendChild(image);
@@ -561,116 +536,165 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 
 			//col-xs-7
 			var divxs7=document.createElement('div');
-			divxs7.setAttribute("class","col-xs-8");
+			divxs7.setAttribute("class","w85 row");
 			divxs7.id=url;
 			divxs7.addEventListener("click", listenerClick,false);
 			var row1=document.createElement('div');
-			row1.setAttribute("class","row");
+			row1.setAttribute("class","w85 online-text");
 			var div1=document.createElement('div');
 			div1.id=url;
-			div1.setAttribute("class","col-xs-9 ellipsis");
-			div1.style.paddingLeft="0px";
+			div1.setAttribute("class","w100 title");
 
 			//suite
 			var nomjeu ="";
 			for (var j = 0; j < tabJeu.length; j++) {
-				if(tabJeu[j]['id']==request.data[i]['game_id']){
+				if(tabJeu[j]['id']==request.data[k]['game_id']){
 					nomjeu=tabJeu[j]['name'];
 					j=10000;
 				}
 			}
+			var name = document.createElement("span");
+			name.innerHTML=request.data[k]['user_name'];
+			var jeu = document.createElement("i");
+			jeu.innerHTML=nomjeu;
+			jeu.setAttribute("class","tw-live-indicator");
+
 			if (!showOverflow) {
-				div1.title=request.data[i]['user_name']+" - "+nomjeu;
+				name.title=request.data[k]['user_name'];
+				jeu.title=nomjeu;
 			}
-			
-			div1.innerHTML=request.data[i]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
-			
-			//nombre de viewer
-			var divViewer= document.createElement("div");
-			divViewer.setAttribute("class","col-xs-3 pull-right divViewer");
-			var spanViewer=document.createElement("span");
-			spanViewer.setAttribute("class","pull-right");
-			spanViewer.style.color="rgb(137, 131, 149)";
-			spanViewer.innerHTML=request.data[i]["viewer_count"];
-			divViewer.appendChild(spanViewer);
-			var divPoint=document.createElement("div");
-			divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
-			divViewer.appendChild(divPoint);
+			div1.appendChild(name);
+			div1.appendChild(jeu);
 
 
-			row1.appendChild(div1);
-			row1.appendChild(divViewer);
-			divxs7.appendChild(row1);
+			var divw100more = document.createElement("div");
+			divw100more.setAttribute("class","w100 more");
+			divw100more.innerHTML=request.data[k]['title'];
+			divw100more.title=request.data[k]['title'];
 
-			var row1=document.createElement('div');
-			row1.setAttribute("class","row");
-			var div1=document.createElement('div');
-			div1.setAttribute("class","col-xs-12 ellipsis");
-			if (!showOverflow) {
-				div1.setAttribute("title",request.data[i]['title']);
-			}
-			div1.innerHTML=request.data[i]['title'];
-			//ajout
-			row1.appendChild(div1);
-			divxs7.appendChild(row1);
-			div.appendChild(divxs7);
-
-			//col-xs-1 checkbox
-			var divxs1=document.createElement('div');
-			divxs1.setAttribute("class","col-xs-1");
+			var divw15 = document.createElement("div");
+			divw15.setAttribute("class","w15");
+			var divViewer = document.createElement("div");
+			divViewer.setAttribute("class","divViewer row");
+			divViewer.innerHTML="<span>"+request.data[k]["viewer_count"]+"</span><i class='fas fa-circle pointTwitch--red'></i>";
+			var divCheck = document.createElement("div");
+			divCheck.setAttribute("class","check row");
 			var input = document.createElement("input");
 			input.type="checkbox";
 			input.name=thisUser["login"];
 			input.value=thisUser["login"];
-			//ajout
-			divxs1.appendChild(input);
-			div.appendChild(divxs1);
+
+			divCheck.appendChild(input);
+			divw15.appendChild(divViewer);
+			divw15.appendChild(divCheck);
+			row1.appendChild(div1);
+			row1.appendChild(divw100more);
+			divxs7.appendChild(row1);
+			div.appendChild(divxs7);
+			div.appendChild(divw15);
 
 			row.appendChild(div);
-		}
-		var br=document.createElement('br');
-		div.appendChild(br);
-		
 
-		if(showOffline){
+			// var div = document.createElement("div");
+			// div.setAttribute("class","col-xs-12");
+			// div.style.padding="3px 0";
+			// div.style.margin="0.1px 0";
+			// div.style.borderTop="#474747 solid 0.2px";
+			// //div.style.borderBottom="white solid 0.2px";
+			// var url="https://www.twitch.tv/"+thisUser["login"];
+
+			// //col-xs-3
+			// var divImage = document.createElement("div");
+			// divImage.setAttribute("class","col-xs-3");
+			// divImage.style.paddingLeft="0px";
+			// divImage.id=url;
+			// divImage.addEventListener("click", listenerClick,false);
+			// var image = document.createElement('img');
+			// image.src=thisUser.profile_image_url;
+			// image.setAttribute("class","img-responsive");
+			// image.style.width="50px";
+			// image.style.height="50px";
+
+			// //ajout col-xs-3
+			// divImage.appendChild(image);
+			// div.appendChild(divImage);
+
+			// //col-xs-7
+			// var divxs7=document.createElement('div');
+			// divxs7.setAttribute("class","col-xs-8");
+			// divxs7.id=url;
+			// divxs7.addEventListener("click", listenerClick,false);
+			// var row1=document.createElement('div');
+			// row1.setAttribute("class","row");
+			// var div1=document.createElement('div');
+			// div1.id=url;
+			// div1.setAttribute("class","col-xs-9 ellipsis");
+			// div1.style.paddingLeft="0px";
+
+			// //suite
+			// var nomjeu ="";
+			// for (var j = 0; j < tabJeu.length; j++) {
+			// 	if(tabJeu[j]['id']==request.data[i]['game_id']){
+			// 		nomjeu=tabJeu[j]['name'];
+			// 		j=10000;
+			// 	}
+			// }
+			// if (!showOverflow) {
+			// 	div1.title=request.data[i]['user_name']+" - "+nomjeu;
+			// }
 			
-			//offline
-			var p = document.createElement("p");
-			p.setAttribute("class","col-xs-12 text-center back-white");
-			p.innerHTML="OFFLINE"
-			row.appendChild(p);
+			// div1.innerHTML=request.data[i]['user_name']+" - <i class='tw-live-indicator'>"+nomjeu;
+			
+			// //nombre de viewer
+			// var divViewer= document.createElement("div");
+			// divViewer.setAttribute("class","col-xs-3 pull-right divViewer");
+			// var spanViewer=document.createElement("span");
+			// spanViewer.setAttribute("class","pull-right");
+			// spanViewer.style.color="rgb(137, 131, 149)";
+			// spanViewer.innerHTML=request.data[i]["viewer_count"];
+			// divViewer.appendChild(spanViewer);
+			// var divPoint=document.createElement("div");
+			// divPoint.setAttribute("class","pointTwitch pointTwitch--red pull-right");
+			// divViewer.appendChild(divPoint);
 
-			if (optimisation) {
-				for (var i = 0; i < urlsOffline.length; i++) {
-					var div = document.createElement("div");
-					div.class="col-md-12";
-					div.innerHTML="<p class='text-center'>"+urlsOffline[i]+"- Offline</p>";
-					row.appendChild(div);
-				}
-			} else {
-				for (var i = 0; i < urlsOffline.length; i++) {
-					myajax2(urlsOffline[i],returnOffline);
-					var div = document.createElement("div");
-					div.class="col-md-12";
-					div.innerHTML="<p class='text-center'>"+requestOffline['display_name']+"- Offline</p>";
-					row.appendChild(div);
-				}
-			}		
+
+			// row1.appendChild(div1);
+			// row1.appendChild(divViewer);
+			// divxs7.appendChild(row1);
+
+			// var row1=document.createElement('div');
+			// row1.setAttribute("class","row");
+			// var div1=document.createElement('div');
+			// div1.setAttribute("class","col-xs-12 ellipsis");
+			// if (!showOverflow) {
+			// 	div1.setAttribute("title",request.data[i]['title']);
+			// }
+			// div1.innerHTML=request.data[i]['title'];
+			// //ajout
+			// row1.appendChild(div1);
+			// divxs7.appendChild(row1);
+			// div.appendChild(divxs7);
+
+			// //col-xs-1 checkbox
+			// var divxs1=document.createElement('div');
+			// divxs1.setAttribute("class","col-xs-1");
+			// var input = document.createElement("input");
+			// input.type="checkbox";
+			// input.name=thisUser["login"];
+			// input.value=thisUser["login"];
+			// //ajout
+			// divxs1.appendChild(input);
+			// div.appendChild(divxs1);
+
+			// row.appendChild(div);
 		}
-
-		
+		// var br=document.createElement('br');
+		// div.appendChild(br);		
 	}
 }
 
 function cleanAffichage(){
-	row.innerHTML='';
-	var online = document.createElement("p");
-	online.setAttribute("class","text-center");
-	online.style.backgroundColor="white";
-	online.style.color="black";
-	online.style.marginBottom="0px";
-	online.innerHTML=chrome.i18n.getMessage("online");;
-	row.appendChild(online);
+	document.getElementsByClassName("channel")[0].innerHTML='';
 }
 
 function returnHttpRequest(httpRequest){
@@ -787,6 +811,7 @@ function getCurrentFav(tab) {
 	//test si site est twitch
 	if (site=='go.twitch.tv'||site=='www.twitch.tv') {
 		console.log('surtwitch');
+		//TODO recup le display name via une requete pour la suite du code
 		if (!favoritesChannel.includes(name) && urls.includes(name)) {
 			console.log(name);
 			favoritesChannel.push(name);
