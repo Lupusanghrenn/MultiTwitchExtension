@@ -76,6 +76,10 @@ function init(){
 	boutonAddFav.title=chrome.i18n.getMessage("favCurrentChannel");
 	boutonAddFav.addEventListener('click',getTabsFav);
 
+	boutonTwitch = document.getElementById('twitch');
+	boutonTwitch.title=chrome.i18n.getMessage("twitch");
+	boutonTwitch.addEventListener('click',goToTwitch);
+
 	//style
 	if(showOverflow){
 		var style = document.createElement('style');
@@ -511,12 +515,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				row.appendChild(divGame);
 			}
 
-			
-			var k=0;
-			while(k<request.data.length && request.data[k].user_name!=thisUser.display_name){
-				k++;
-			}
-
 			var div = document.createElement("div");
 			div.setAttribute("class","online w100 row");
 			var url="https://www.twitch.tv/"+thisUser.login;
@@ -547,19 +545,19 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 			//suite
 			var nomjeu ="";
 			for (var j = 0; j < tabJeu.length; j++) {
-				if(tabJeu[j]['id']==request.data[k]['game_id']){
+				if(tabJeu[j]['id']==request.data[i]['game_id']){
 					nomjeu=tabJeu[j]['name'];
 					j=10000;
 				}
 			}
 			var name = document.createElement("span");
-			name.innerHTML=request.data[k]['user_name'];
+			name.innerHTML=request.data[i]['user_name'];
 			var jeu = document.createElement("i");
 			jeu.innerHTML=nomjeu;
 			jeu.setAttribute("class","tw-live-indicator");
 
 			if (!showOverflow) {
-				name.title=request.data[k]['user_name'];
+				name.title=request.data[i]['user_name'];
 				jeu.title=nomjeu;
 			}
 			div1.appendChild(name);
@@ -568,14 +566,14 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 
 			var divw100more = document.createElement("div");
 			divw100more.setAttribute("class","w100 more");
-			divw100more.innerHTML=request.data[k]['title'];
-			divw100more.title=request.data[k]['title'];
+			divw100more.innerHTML=request.data[i]['title'];
+			divw100more.title=request.data[i]['title'];
 
 			var divw15 = document.createElement("div");
 			divw15.setAttribute("class","w15");
 			var divViewer = document.createElement("div");
 			divViewer.setAttribute("class","divViewer row");
-			divViewer.innerHTML="<span>"+request.data[k]["viewer_count"]+"</span><i class='fas fa-circle pointTwitch--red'></i>";
+			divViewer.innerHTML="<span>"+request.data[i]["viewer_count"]+"</span><i class='fas fa-circle pointTwitch--red'></i>";
 			var divCheck = document.createElement("div");
 			divCheck.setAttribute("class","check row");
 			var input = document.createElement("input");
@@ -864,6 +862,11 @@ function saveTabFav(event) {
 function goToOption(){
 	console.log("goToOption");
 	chrome.tabs.create({url:"pages/page_option.html"});
+}
+
+function goToTwitch(){
+	console.log("goToTwitch");
+	chrome.tabs.create({url:"https://www.twitch.tv"});
 }
 
 function WatchCurrent(tab) {
