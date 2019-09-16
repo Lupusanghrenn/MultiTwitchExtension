@@ -512,7 +512,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 			}
 
 			
-			if(firstFav){firstFav=false;row.appendChild(divFav);}
 			var k=0;
 			while(k<request.data.length && request.data[k].user_name!=thisUser.display_name){
 				k++;
