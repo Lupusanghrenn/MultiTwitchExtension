@@ -214,7 +214,7 @@ function myajax(nomChaine,  callBack,async=true) {
 
 function myajax2(nomChaine, callBack) {
     var httpRequest = new XMLHttpRequest();
-    var url="https://api.twitch.tv/kraken/channels/"+nomChaine;
+    var url="https://api.twitch.tv/helix/users?login="+nomChaine;
     httpRequest.open("GET", url, false);
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
@@ -834,7 +834,7 @@ function saveTab(event) {
 	console.log(reponse);
 	if (reponse["error"]==null) {
 		cleanAffichage();
-		urls.push(reponse['name']);
+		urls.push(reponse.data[0].display_name);
 		localStorage['streams']=JSON.stringify(urls);
 		request=[];
 		afficherStream();
@@ -848,8 +848,8 @@ function saveTabFav(event) {
 	console.log(reponse);
 	if (reponse["error"]==null) {
 		cleanAffichage();
-		urls.push(reponse['name']);
-		favoritesChannel.push(reponse['name']);
+		urls.push(reponse.data[0].display_name);
+		favoritesChannel.push(reponse.data[0].display_name);
 		localStorage['favorites']=JSON.stringify(favoritesChannel);
 		localStorage['streams']=JSON.stringify(urls);
 		request=[];
