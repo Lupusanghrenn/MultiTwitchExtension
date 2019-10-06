@@ -1,0 +1,359 @@
+<html><head>
+	<title>Option | Multi Twitch</title>
+	<meta charset="utf-8">
+	<!--
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+-->
+	
+	<!-- <link rel="javascript" type="text/javascript" href="../scripts/script_option.js"> -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../style/style.css">
+</head>
+
+<body>
+	
+<div class="container">
+	
+	<div class="setting-g">
+		<div class="g-h2"> 
+			<h2 id="extensionOption">Options de l'extension</h2>
+		</div>
+		<div class="g-h3">
+			<h3 id="GeneralParameters">Paramètres généraux</h3>
+		</div>
+		<div id="feedback2"></div>
+		<form class="settingForm">
+			<div id="timeInterval">
+				<input type="number" name="timeInterval">
+				<label id="timeRequest">Temps entre chaque requête en seconde (min. 10s)</label>
+			</div>
+			<div class="checkbox">
+			  <input type="checkbox" id="showOffline" name="showOffline" value=""><label id="checkOffline">Activer le mode light</label>
+			</div>
+			<div class="checkbox">
+			  <input type="checkbox" id="showOverflow" name="showOverflow" value=""><label id="checkOverflow">Montrez l'overflow lors du hover</label>
+			</div>
+			<div class="checkbox">
+			  <input type="checkbox" id="sortByGames" name="sortByGames" value=""><label id="checkSort">Trier les chaînes par jeux</label>
+			</div>
+			<div class="checkbox">
+			  <input type="checkbox" id="autoSquad" name="autoSquad" value=""><label id="checkAutoSquad">Rejoindre automatiquement le mode escouade lorsque c'est possible</label>
+			</div>
+			<div class="checkbox">
+			  <input type="checkbox" id="notifOnLaunch" name="notifOnLaunch" value=""><label id="CheckOnLaunch">Notifications des streamers en ligne lors du lancement de Chrome</label>
+			</div>
+			<!-- <div class="checkbox" id="optimisation">
+			  <label><input type="checkbox" id="optimisationC" name="optimisation" value="">Cocher cette case si vous souhaitez l'affichage optimiser des channels offline (mais moins jolie) <br>Cochez cette case si vous avez une mauvaise connexion</label>
+			</div> -->
+			<!-- <div class="checkbox">
+			  <input type="checkbox" id="multitwitch" name="multitwitch" value=""><label id="checkMultistream">Cocher cette case si vous souhaitez utiliser KBMOD Multistreams au lieu de multitwitch</label>
+			</div> -->
+
+			<label for="selectMulti" id="multitwitchLabel" style="color : #eee">Sélectionnez votre site préféré de multistream</label>
+			<div class="select">
+				<select id="selectMulti">
+				       <option value="0">multitwitch.tv</option>
+				       <option value="1" selected="">multistre.am</option>
+			      </select>
+			    <div class="select-arrow"><i class="fas fa-angle-down"></i></div>
+
+		    </div>
+			<div class="save-g" id="save">
+				<span>Enregistrer</span>
+			</div>
+		</form>
+		<div class="follows">
+
+			<h3 id="GetFollowTitle">Récupérez les chaines que vous suivez</h3>
+			<div id="feedback3" ></div>
+				<div class="form-group" >
+					<label class="sr-only" for="toChannelName"></label>
+				    <div class="input-group">
+				     	<div>
+				      		<i class="fa fa-user-circle" aria-hidden="true"></i>
+				    	</div>
+				      	<input type="text" class="" id="toChannelName" placeholder="Votre pseudo (comme dans l'URL)">
+				      	<button type="submit" id="buttonChannelName"><i class="fas fa-plus-circle fa-2x"></i></button>
+				    </div>
+				  </div>
+		</div>
+		<div class="ads">
+			<div class="alert alert-success alert-dismissable" >
+				<h4>Message</h4>
+				<p id="lupusNote"> Bonjour, c'est Lupusanghren le dev de cette extension. Je pense avoir terminé avec cet extension et je me tourne vers vous pour m'aider à encore améliorer cet extension. <br>Pour ce faire, tweetez moi @Lupusanghrenn ou alors via le Chrome Web Store (là ou vous avez téléchargé l'extension).</p>
+				<div>				
+					<a href="https://twitter.com/Lupusanghrenn" target="_blank"><i class="fab fa-twitter fa-2x" ></i></a>
+					<a href="https://chrome.google.com/webstore/detail/multi-twitch-extension/jpgnbiffpoelgpegopldffmpbmfdojga" target="_blank"><i class="fab fa-chrome fa-2x"></i></a>
+					<a href="https://github.com/Lupusanghrenn" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+					
+				</div>
+				<p>Design by : <a href="http://ivan-urbanowski.fr" target="_blank">Ivan Urbanowski</a></p>
+				<!-- 
+				<a class="close" data-dismiss="info" aria-label="close">×</a>
+				-->
+			</div>
+			
+		</div>
+	</div>
+
+
+<div class="grid">	
+	<div class="setting-f">
+		<h3 id="favoriteParameters">Tous tes favoris</h3>
+		<div id="feedback4" style=""></div>
+		<div class="">
+			<form class="favori-channel" id="channelsFavorite">
+				<div class="form-group multi">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times" aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group bbb">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times" aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group ccc">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times" aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group ddd">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times" aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times" aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi ">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times " aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group  multi">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times " aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group  multi">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times " aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi ">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times " aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi ">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times " aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi ">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times " aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<div class="form-group multi ">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						
+						<input type="text" class="" id="channel" disabled="disabled">
+						<div class="btn-fav">
+							<i class="fa fa-times " aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				
+
+			</form>
+		</div>
+
+	</div>
+	
+	<div class="setting-c">
+		
+		<div class="channel-title">
+			<h3 id="ChannelParameters">Toutes tes chaines</h3>
+			
+		</div>
+		<div class="favori-channel add-channel" id="save">
+			 
+			 <div>
+			    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+			    <div class="input-group">
+
+			      <input type="text" class="" id="toSave" placeholder="Nom de la chaine (dans l'URL)">
+			      <div id="savediv">
+			      	<i class="fa fa-save" aria-hidden="true"></i>
+			      </div>
+			    </div>
+			  </div>
+
+		</div>
+		<div id="feedback" style=""></div>
+		<div>
+			<form class="favori-channel favori-channel-setting" id="channels">
+				
+				<div class="form-group">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						<input type="text" class=" " id="channel" >
+						<div class="btn-general">
+							<div>
+								<i class="fa fa-times" aria-hidden="true"></i>
+							</div>
+							<div>
+								<i class="fa fa-star" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						<input type="text" class=" text-center" id="channel" disabled="disabled">
+						<div class="btn-general">
+							<div>
+								<i class="fa fa-times" aria-hidden="true"></i>
+							</div>
+							<div>
+								<i class="fa fa-star" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						<input type="text" class=" text-center" id="channel" disabled="disabled">
+						<div class="btn-general">
+							<div>
+								<i class="fa fa-times" aria-hidden="true"></i>
+							</div>
+							<div>
+								<i class="fa fa-star" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						<input type="text" class=" text-center" id="channel" disabled="disabled">
+						<div class="btn-general">
+							<div>
+								<i class="fa fa-times" aria-hidden="true"></i>
+							</div>
+							<div>
+								<i class="fa fa-star" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="channel">Channel</label>
+					<div class="input-group">
+						<input type="text" class=" text-center" id="channel" disabled="disabled">
+						<div class="btn-general">
+							<div>
+								<i class="fa fa-times" aria-hidden="true"></i>
+							</div>
+							<div>
+								<i class="fa fa-star" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+
+			
+			<div class="trier">
+				<button id="sort">Trier les chaînes</button>
+			</div>
+		</div>
+		
+	</div>
+	
+	
+	
+	<!-- <div class="row" style="border: solid 2px black; margin-bottom: 20px">
+		<div class="col-lg-2">
+			<img class="img-responsive" src="https://static-cdn.jtvnw.net/jtv_user_pictures/zerator-profile_image-48eee9de24a47e53-300x300.png">
+		</div>
+		<div class="col-lg-9">
+			<div class="col-lg-12" style="padding: 1% 5% 1% 5%"><h2>Mon pseudo</h2></div>
+			<div class="col-lg-12" style="padding: 0% 5%;font-style: italic">Ma description</div>
+		</div>
+		
+	</div> -->
+
+	
+</div>	
+</div>
+
+
+<script type="text/javascript" src="../scripts/script_option.js"></script>
+
+
+</body></html>

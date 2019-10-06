@@ -161,41 +161,68 @@ function displayName(httpRequest, opti){
 	} else {
 		var reponse=JSON.parse(httpRequest.response);
 	}
-	
-	var div=document.createElement('div');
-	div.setAttribute('class',"form-group col-xs-4");
+
+	var formGroup = document.createElement("div");
 
 	var label=document.createElement('label')
 	label.setAttribute('class','sr-only');
 	label.setAttribute('for','channel');
 	label.innerHTML='Channel';
 
-	var div2=document.createElement('div');
-	div2.setAttribute('class','input-group');
-	var div3=document.createElement('div');
-	div3.setAttribute('class','input-group-addon');
-	div3.innerHTML="<i class='fa fa-times' aria-hidden='true'></i>";
-	div3.addEventListener('click',deleteChannel);
-	var divFav=document.createElement('div');
-	divFav.setAttribute('class','input-group-addon');
-	divFav.innerHTML="<i class='fa fa-star' aria-hidden='true'></i>";
-	if (favoritesChannels.includes(reponse['display_name'])) {divFav.style.color="#09c106";}
-	divFav.style.borderRight="0px";
-	divFav.addEventListener('click',favChannel);
-	var input=document.createElement('input');
+	var inputGroup=document.createElement('div');
+	inputGroup.setAttribute('class','input-group');
+
+	var input = document.createElement("input");
 	input.type='text';
-	input.style.marginBottom="-0.4px";
-	input.setAttribute('class','form-control text-center');
+	input.setAttribute('class','text-center');
 	input.setAttribute('id','channel');
 	input.setAttribute("disabled","disabled");
 	input.value=reponse['display_name'];
 
-	div.appendChild(label);
-	div2.appendChild(div3);
-	div2.appendChild(divFav);
-	div2.appendChild(input);
-	div.appendChild(div2);
-	channels.appendChild(div);
+	var btnGeneral = document.createElement("div");
+	btnGeneral.setAttribute("class","btn-general");
+
+	var divTimes = document.createElement("div");
+	divTimes.innerHTML="<i class='fa fa-times' aria-hidden='true'></i>";
+
+	var divStar = document.createElement("div");
+	divStar.innerHTML="<i class='fa fa-star' aria-hidden='true'></i>";
+
+	btnGeneral.appendChild(divTimes);
+	btnGeneral.appendChild(divStar);
+
+	inputGroup.appendChild(input);
+	inputGroup.appendChild(btnGeneral);
+
+	formGroup.appendChild(label);
+	formGroup.appendChild(inputGroup);
+
+	channels.appendChild(formGroup);
+
+	// var div3=document.createElement('div');
+	// div3.setAttribute('class','input-group-addon');
+	// div3.innerHTML="<i class='fa fa-times' aria-hidden='true'></i>";
+	// div3.addEventListener('click',deleteChannel);
+	// var divFav=document.createElement('div');
+	// divFav.setAttribute('class','input-group-addon');
+	// divFav.innerHTML="<i class='fa fa-star' aria-hidden='true'></i>";
+	// if (favoritesChannels.includes(reponse['display_name'])) {divFav.style.color="#09c106";}
+	// divFav.style.borderRight="0px";
+	// divFav.addEventListener('click',favChannel);
+	// var input=document.createElement('input');
+	// input.type='text';
+	// input.style.marginBottom="-0.4px";
+	// input.setAttribute('class','form-control text-center');
+	// input.setAttribute('id','channel');
+	// input.setAttribute("disabled","disabled");
+	// input.value=reponse['display_name'];
+
+	// div.appendChild(label);
+	// div2.appendChild(div3);
+	// div2.appendChild(divFav);
+	// div2.appendChild(input);
+	// div.appendChild(div2);
+	// channels.appendChild(div);
 }
 
 function displayFav(httpRequest, opti){
