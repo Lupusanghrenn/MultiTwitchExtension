@@ -106,7 +106,7 @@ function init(){
 	document.getElementById("toSave").placeholder=chrome.i18n.getMessage("placeholderUrlChannel");
 	document.getElementById("GetFollowTitle").innerHTML=chrome.i18n.getMessage("GetFollowTitle");
 	document.getElementById("toChannelName").placeholder=chrome.i18n.getMessage("placeholderUrlFollow");
-	document.getElementById("buttonChannelName").innerHTML=chrome.i18n.getMessage("GetFollow");
+	//document.getElementById("buttonChannelName").innerHTML=chrome.i18n.getMessage("GetFollow");
 	document.getElementById("lupusNote").innerHTML=chrome.i18n.getMessage("lupusNote");
 	document.getElementById('checkSort').innerHTML=chrome.i18n.getMessage("sortByGames");
 	document.getElementById('checkAutoSquad').innerHTML=chrome.i18n.getMessage("autoSquad");
@@ -163,6 +163,7 @@ function displayName(httpRequest, opti){
 	}
 
 	var formGroup = document.createElement("div");
+	formGroup.setAttribute("class","form-group");;
 
 	var label=document.createElement('label')
 	label.setAttribute('class','sr-only');
@@ -233,7 +234,7 @@ function displayFav(httpRequest, opti){
 	}
 	
 	var div=document.createElement('div');
-	div.setAttribute('class',"form-group col-xs-4");
+	div.setAttribute("class","form-group col-xs-4");
 
 	var label=document.createElement('label')
 	label.setAttribute('class','sr-only');

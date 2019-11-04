@@ -335,6 +335,7 @@ body {
 	width : 100%;
 	display: flex ;
 	flex-flow: row wrap ;
+	background-color: #22252a;
 }
 
 .bandeau {
@@ -350,7 +351,7 @@ body {
 /*************** Parametre G ********************/ 
 
 .setting-g {
-	width : 30% ;
+	width : 27% ;
 	
 }
 
@@ -516,6 +517,8 @@ body {
 			border-radius: 5px ;
 			margin: auto ;
 			transition: .2s ;
+			width: 93%; 
+    		margin: 0px 15px;
 		}
 
 		.settingForm .save-g:hover {
@@ -543,7 +546,7 @@ body {
 		}
 
 			.follows .form-group{
-			width : 80% ;
+			width : 93% ;
 			margin : 15px auto ;
 			height : 50px ;
 			background-color: rgba(255,255,255,0.1) ;
@@ -811,4 +814,8 @@ body {
 	.trier button:hover {
 		background-color: #27ae60  ;
 		cursor: pointer;
+	}
+
+	form .form-group:last-child{
+		margin-bottom: 55px;
 	}
