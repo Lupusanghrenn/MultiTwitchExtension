@@ -185,9 +185,12 @@ function displayName(httpRequest, opti){
 
 	var divTimes = document.createElement("div");
 	divTimes.innerHTML="<i class='fa fa-times' aria-hidden='true'></i>";
+	divTimes.addEventListener('click',deleteChannel);
 
 	var divStar = document.createElement("div");
 	divStar.innerHTML="<i class='fa fa-star' aria-hidden='true'></i>";
+	divStar.addEventListener('click',favChannel);
+	if (favoritesChannels.includes(reponse['display_name'])) {divStar.childNodes[0].style.color="#09c106";}
 
 	btnGeneral.appendChild(divTimes);
 	btnGeneral.appendChild(divStar);
@@ -232,8 +235,36 @@ function displayFav(httpRequest, opti){
 	} else {
 		var reponse=JSON.parse(httpRequest.response);
 	}
-	
-	var div=document.createElement('div');
+
+	var div = document.createElement('div');
+	div.setAttribute("class","form-group multi");
+
+	var label = document.createElement("label");
+	label.setAttribute("class","sr-only");
+	label.setAttribute("for","channel");
+	label.innerHTML=reponse.display_name;
+
+	var inputGroup = document.createElement('div');
+	inputGroup.setAttribute("class","input-group");
+
+	var input = document.createElement("input");
+	input.setAttribute("type","text")
+	input.setAttribute("disabled","disabled");
+	input.value=reponse['display_name'];
+
+	var btnFav = document.createElement('div');;
+	btnFav.setAttribute("class","btnFav");
+	btnFav.innerHTML="<i  class='fa fa-times' aria-hidden='true'></i>";
+
+	div.appendChild(label);
+	inputGroup.appendChild(input);
+	btnFav.addEventListener('click',deleteFav);
+	inputGroup.appendChild(btnFav);
+	div.appendChild(inputGroup);
+	favorites.appendChild(div);;
+
+
+	/*var div=document.createElement('div');
 	div.setAttribute("class","form-group col-xs-4");
 
 	var label=document.createElement('label')
@@ -259,7 +290,7 @@ function displayFav(httpRequest, opti){
 	div2.appendChild(div3);
 	div2.appendChild(input);
 	div.appendChild(div2);
-	favorites.appendChild(div);
+	favorites.appendChild(div);*/
 
 	//TODO favorites #09c106
 }
@@ -274,13 +305,14 @@ function clearChannel(){
 }
 
 function favChannel(event) {
+	console.log(event);
 	console.log("fav");
-	var index=1;
+	var index=2;
 	if(event.target.localName=="i"){
 		index++;
 		console.log(event.target.localName);
 	}
-	var name = event.path[index].childNodes[2].value;
+	var name = event.path[index].childNodes[0].value;
 	console.log(name);
 
 	if (!favoritesChannels.includes(name)) {
@@ -305,8 +337,14 @@ function favChannel(event) {
 
 function deleteFav(event){
 	console.log(event);
-	var div=event.path[2];
-	var name=div.getElementsByTagName('input')[0].value;
+	console.log("fav");
+	var index=1;
+	if(event.target.localName=="i"){
+		index++;
+		console.log(event.target.localName);
+	}
+	var name = event.path[index].childNodes[0].value;
+	console.log(name);
 	var index=favoritesChannels.indexOf(name);
 	var tab2=favoritesChannels.splice(index,1);
 	localStorage['favorites']=JSON.stringify(favoritesChannels);
@@ -583,8 +621,8 @@ function sortChannel(){
 function createFeedback(alertType,texte){
 	var feedbackDiv = document.createElement("div");
 	feedbackDiv.setAttribute("class","alert "+alertType+" alert-dismissable");
-	feedbackDiv.style.marginLeft="-1%";
-	feedbackDiv.style.marginRight="4%";
+	feedbackDiv.style.marginLeft="1%";
+	feedbackDiv.style.marginRight="1%";
 		var a = document.createElement("a");
 		a.setAttribute("class","close");
 		a.setAttribute("data-dismiss","info");

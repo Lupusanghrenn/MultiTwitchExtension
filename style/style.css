@@ -547,10 +547,12 @@ body {
 
 			.follows .form-group{
 			width : 93% ;
-			margin : 15px auto ;
+			margin : 15px 0px ;
 			height : 50px ;
 			background-color: rgba(255,255,255,0.1) ;
 			border-radius: 5px ;
+			/*//margin: 0px;*/
+			width: 100%;;
 		}
 
 			.follows .input-group  {
@@ -818,4 +820,28 @@ body {
 
 	form .form-group:last-child{
 		margin-bottom: 55px;
+	}
+
+	.alert{
+		margin-left: 1%;
+	    margin-right: 1%;
+	    border: solid black 0.5px;
+	    padding: 10px 15px;
+	    border-radius: 5px;
+	}
+
+	.alert-type{
+		background-color: #f6c96bd1;
+	}
+
+	.alert-info{
+		background-color: #1871cbd1;
+	}
+
+	.alert-success{
+		background-color: #24d4cad1;
+	}
+
+	.alert-danger{
+		background-color: #e8504dd1;
 	}
