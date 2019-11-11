@@ -134,6 +134,9 @@
 	},
 	"twitch":{
 		"message":"Aller sur Twitch"
+	},
+	"darktheme":{
+		"message":"Activer le mode dark"
 	}
 
 }

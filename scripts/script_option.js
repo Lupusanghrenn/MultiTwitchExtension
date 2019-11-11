@@ -6,6 +6,7 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage["sortByGames"]=checkboxSortByGames.checked;
 	localStorage["autoSquad"]=checkboxAutoSquad.checked;
 	localStorage["showOverflow"]=checkboxshowOverflow.checked;
+	localStorage["darktheme"]=checkboxDarktheme.checked;
 	
 	timeInterval=parseInt(inputTimeInterval.value)*1000;
 	if (timeInterval<10000) {
@@ -25,6 +26,7 @@ function init(){
 	//initialisation des variables globales
 	//showOffline=localStorage["showOffline"]=="true";
 	multitwitch=JSON.parse(localStorage["multitwitch"]);
+	darktheme=localStorage["darktheme"]=="true";
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
 	sortByGames=localStorage["sortByGames"]=="true";
 	autoSquad=localStorage["autoSquad"]=="true";
@@ -47,6 +49,11 @@ function init(){
 		favoritesChannels=JSON.parse(localStorage["favorites"]);
 	}
 
+	if (localStorage["darktheme"]==undefined) {
+		darktheme=true;
+		localStorage["darktheme"]="true";
+	}
+
 
 	//document.getElementById("multitwitch");
 	//checkboxMulti.checked=multitwitch;
@@ -56,6 +63,9 @@ function init(){
 
 	//checkboxShowOffline=document.getElementById("showOffline");
 	//checkboxShowOffline.checked=showOffline;
+
+	checkboxDarktheme=document.getElementById("darktheme");
+	checkboxDarktheme.checked=darktheme;
 
 	checkboxOnLaunch=document.getElementById("notifOnLaunch");
 	checkboxOnLaunch.checked=notifOnLaunch;
@@ -76,11 +86,13 @@ function init(){
 	buttonSort.addEventListener("click",sortChannel);
 
 
-	inputTimeInterval=document.getElementById('timeInterval').children[1];
+	inputTimeInterval=document.getElementById('timeInterval').childNodes[1];
 	inputTimeInterval.value=timeInterval/1000;
 
 	bouton=document.getElementById("save");
 	bouton.addEventListener('click',enregistrer);
+	boutonSaveG=document.getElementById("save-g");
+	boutonSaveG.addEventListener('click',enregistrer);
 	channels=document.getElementById('channels');
 	favorites=document.getElementById('channelsFavorite');
 	savediv=document.getElementById('savediv');
@@ -111,11 +123,17 @@ function init(){
 	document.getElementById('checkSort').innerHTML=chrome.i18n.getMessage("sortByGames");
 	document.getElementById('checkAutoSquad').innerHTML=chrome.i18n.getMessage("autoSquad");
 	document.getElementById('checkOverflow').innerHTML=chrome.i18n.getMessage("showOverflow");
+	document.getElementById('checkDarktheme').innerHTML=chrome.i18n.getMessage("darktheme");
 
 	//Ajout d amelioration de l UI
 	document.getElementById('CheckOnLaunch').addEventListener("click",function (event) {
 		console.log(document.getElementById('notifOnLaunch'));
 		document.getElementById('notifOnLaunch').checked=!document.getElementById('notifOnLaunch').checked;
+	});
+
+	document.getElementById('checkDarktheme').addEventListener("click",function (event) {
+		console.log(document.getElementById('notifOnLaunch'));
+		document.getElementById('darktheme').checked=!document.getElementById('darktheme').checked;
 	});
 
 	/*document.getElementById('checkOffline').addEventListener("click",function (event) {
@@ -127,6 +145,11 @@ function init(){
 		console.log(document.getElementById('sortByGames'));
 		document.getElementById('sortByGames').checked=!document.getElementById('sortByGames').checked;
 	});
+
+	/*document.getElementById('sortByGames').addEventListener("change",function(event){
+		console.log(document.getElementById('sortByGames'));
+		document.getElementById('sortByGames').checked=!document.getElementById('sortByGames').checked;
+	});*/
 
 	document.getElementById('checkAutoSquad').addEventListener("click",function (event) {
 		console.log(document.getElementById('autoSquad'));

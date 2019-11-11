@@ -397,6 +397,7 @@ body {
 
 		.settingForm input[type=number]
 		{
+			background-color:#4d4f53;
 			width : 60px ;
 			height : 20px ;	
 			text-align: center ;
@@ -481,7 +482,7 @@ body {
 			    border : none ;
 			    border-radius:  5px ;
 			    background:   #eee ;
-			    color:  #2d2d2d ;
+			    color:  #eee ;
 			    appearance:  none ;
 			    -webkit-appearance:  none ;
 			    -moz-appearance : none ;

@@ -29,7 +29,7 @@
 				<label id="timeRequest">Temps entre chaque requête en seconde (min. 10s)</label>
 			</div>
 			<div class="checkbox">
-			  <input type="checkbox" id="showOffline" name="showOffline" value=""><label id="checkOffline">Activer le mode light</label>
+			  <input type="checkbox" id="darktheme" name="darktheme" value=""><label id="checkDarktheme">Activer le mode dark</label>
 			</div>
 			<div class="checkbox">
 			  <input type="checkbox" id="showOverflow" name="showOverflow" value=""><label id="checkOverflow">Montrez l'overflow lors du hover</label>
@@ -53,14 +53,14 @@
 			<label for="selectMulti" id="multitwitchLabel" style="color : #eee">Sélectionnez votre site préféré de multistream</label>
 
 			<div class="select" style="width: 93%;margin-top: 5px;margin-right: 0px;">
-				<select id="selectMulti">
+				<select id="selectMulti" style="background-color:#4d4f53;">
 				       <option value="0">multitwitch.tv</option>
 				       <option value="1" selected="">multistre.am</option>
 			      </select>
 			    <div class="select-arrow"><i class="fas fa-angle-down"></i></div>
 
 		    </div>
-			<div class="save-g" >
+			<div class="save-g" id="save-g">
 				<span id="save"> Enregistrer </span>
 			</div>
 		</form>

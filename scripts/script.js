@@ -37,6 +37,12 @@ if (localStorage["showOverflow"]==undefined) {
 	showOverflow=localStorage["showOverflow"]=="true";
 }
 
+darktheme=localStorage["darktheme"]=="true";
+if (localStorage["darktheme"]==undefined) {
+	darktheme=true;
+	localStorage["darktheme"]="true";
+}
+
 showOffline=localStorage["showOffline"]=="true";
 optimisation=localStorage["optimisation"]=="true";
 
@@ -79,6 +85,13 @@ function init(){
 	boutonTwitch = document.getElementById('twitch');
 	boutonTwitch.title=chrome.i18n.getMessage("twitch");
 	boutonTwitch.addEventListener('click',goToTwitch);
+
+	divContenu=document.getElementsByClassName("contenu")[0];
+	if (darktheme) {
+		divContenu.setAttribute("class","contenu dark");
+	}else{
+		divContenu.setAttribute("class","contenu light");
+	}
 
 	//style
 	if(showOverflow){
@@ -433,10 +446,7 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				jeu.innerHTML=nomjeu;
 				jeu.setAttribute("class","tw-live-indicator");
 
-				if (!showOverflow) {
-					name.title=request.data[k]['user_name'];
-					jeu.title=nomjeu;
-				}
+
 				div1.appendChild(name);
 				div1.appendChild(jeu);
 				
@@ -444,7 +454,7 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				var divw100more = document.createElement("div");
 				divw100more.setAttribute("class","w100 more");
 				divw100more.innerHTML=request.data[k]['title'];
-				divw100more.title=request.data[k]['title'];
+				
 
 				var divw15 = document.createElement("div");
 				divw15.setAttribute("class","w15");
@@ -457,6 +467,12 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 				input.type="checkbox";
 				input.name=thisUser["login"];
 				input.value=thisUser["login"];
+
+				if (!showOverflow) {
+					name.title=request.data[k]['user_name'];
+					jeu.title=nomjeu;
+					divw100more.title=request.data[k]['title'];
+				}
 
 				divCheck.appendChild(input);
 				divw15.appendChild(divViewer);
@@ -556,10 +572,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 			jeu.innerHTML=nomjeu;
 			jeu.setAttribute("class","tw-live-indicator");
 
-			if (!showOverflow) {
-				name.title=request.data[i]['user_name'];
-				jeu.title=nomjeu;
-			}
 			div1.appendChild(name);
 			div1.appendChild(jeu);
 
@@ -567,7 +579,6 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 			var divw100more = document.createElement("div");
 			divw100more.setAttribute("class","w100 more");
 			divw100more.innerHTML=request.data[i]['title'];
-			divw100more.title=request.data[i]['title'];
 
 			var divw15 = document.createElement("div");
 			divw15.setAttribute("class","w15");
@@ -580,6 +591,12 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 			input.type="checkbox";
 			input.name=thisUser["login"];
 			input.value=thisUser["login"];
+
+			if (!showOverflow) {
+				name.title=request.data[i]['user_name'];
+				jeu.title=nomjeu;
+				divw100more.title=request.data[i]['title'];
+			}
 
 			divCheck.appendChild(input);
 			divw15.appendChild(divViewer);

@@ -134,5 +134,8 @@
 	},
 	"twitch":{
 		"message":"Go on Twitch"
+	},
+	"darktheme":{
+		"message":"Enable dark thème"
 	}
 }
