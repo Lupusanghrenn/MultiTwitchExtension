@@ -17,7 +17,7 @@
     "32": "images/icone32.png",
     "16": "images/icone16.png"
   },
-  "options_page": "pages/page_option.html",
+  "options_page": "pages/template_option.html",
   "permissions": [
     "https://api.twitch.tv/helix/streams/",
     "https://static-cdn.jtvnw.net/jtv_user_pictures/",
@@ -25,6 +25,6 @@
     "tabs"
   ],
   "default_locale":"en",
-  "version": "2.2.5",
+  "version": "3.0.1",
   "author":"Lupusanghren @Lupusanghrenn"
 }

@@ -878,7 +878,7 @@ function saveTabFav(event) {
 
 function goToOption(){
 	console.log("goToOption");
-	chrome.tabs.create({url:"pages/page_option.html"});
+	chrome.tabs.create({url:"pages/template_option.html"});
 }
 
 function goToTwitch(){
