@@ -47,7 +47,7 @@ body {
 
 
 		#afficher button {
-			width: 8%;
+			width: 10%;
 			transition: .5s ;
 			border : none ;
 			padding: 6px 0 ;
@@ -94,11 +94,11 @@ body {
 			margin : 0 10px ;
 		}
 
-		.dark .contact span {
+		.dark .contact span a{
 			color :#fff;
 		}
 
-		.light .contact span {
+		.light .contact span a{
 			color : #2c2c31 ;
 		}
 		

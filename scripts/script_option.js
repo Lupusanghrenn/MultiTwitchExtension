@@ -213,7 +213,7 @@ function displayName(httpRequest, opti){
 	var divStar = document.createElement("div");
 	divStar.innerHTML="<i class='fa fa-star' aria-hidden='true'></i>";
 	divStar.addEventListener('click',favChannel);
-	if (favoritesChannels.includes(reponse['display_name'])) {divStar.childNodes[0].style.color="#09c106";}
+	if (favoritesChannels.includes(reponse['display_name'])) {divStar.childNodes[0].style.color="#27ae60";}
 
 	btnGeneral.appendChild(divTimes);
 	btnGeneral.appendChild(divStar);
@@ -351,10 +351,21 @@ function favChannel(event) {
 
 		displayChannel();
 	}else{
-		feedback.innerHTML="";
+		/*feedback.innerHTML="";
 		feedback.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeebackAlreadySave")));
 		feedback.addEventListener("click",close);
-		setTimeout(close,5000);
+		setTimeout(close,5000);*/
+		var ind = favoritesChannels.indexOf(name);
+		favoritesChannels.splice(ind,1);
+
+		localStorage["favorites"]=JSON.stringify(favoritesChannels);
+
+		feedback4.innerHTML="";
+		feedback4.appendChild(createFeedback("alert-danger",chrome.i18n.getMessage("FeebackDeletedChannel")));
+		feedback4.addEventListener("click",close4);
+		setTimeout(close4,5000);
+
+		displayChannel();
 	}	
 }
 
@@ -380,7 +391,12 @@ function deleteFav(event){
 }
 
 function deleteChannel(event){
-	var div=event.path[2];
+	var index=2;
+	if(event.target.localName=="i"){
+		index++;
+		console.log(event.target.localName);
+	}
+	var div=event.path[index];
 	var name=div.getElementsByTagName('input')[0].value;
 	console.log(name);
 	var index=tab.indexOf(name);
@@ -615,7 +631,7 @@ function min(tabl){
 	//return la plus petit chaine de caractère du tab
 	var min = tabl[0];
 	for (var i = 1; i < tabl.length; i++) {
-		if (tabl[i]<min) {
+		if (tabl[i].toLowerCase()<min.toLowerCase()) {
 			min=tabl[i];
 		}
 	}

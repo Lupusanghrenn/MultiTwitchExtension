@@ -106,7 +106,7 @@
 		"message":"You need to install the Multi Twitch App to be able to use this option. Do you want to go to the Web Store page ?"
 	},
 	"lupusNote":{
-		"message":" Hi, this is Lupusanghren ! I'm the developer of this extension. I think I finished developing and now I'm asking you to help me improve the extension a little bit more. <br> To do so, tweet me @Lupusanghrenn or throught the Chrome Web Store (where you download the extension). I'm also looking for an artist to help me improve the design (paid) !"
+		"message":" Hi, this is Lupusanghren ! I'm the developer of this extension. I think I finished developing and now I'm asking you to help me improve the extension a little bit more. <br> To do so, you can join my <a href='https://www.discord.gg/sezYTYK'  target='_BLANK'> Discord</a>."
 	},
 	"NoChannelSelected":{
 		"message": "No channel selected ! (Select channels using the checkboxs)"
@@ -136,6 +136,6 @@
 		"message":"Go on Twitch"
 	},
 	"darktheme":{
-		"message":"Enable dark thème"
+		"message":"Enable dark theme"
 	}
 }
