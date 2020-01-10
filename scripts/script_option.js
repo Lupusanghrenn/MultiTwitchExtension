@@ -170,7 +170,7 @@ function displayChannel(){
 	tab=JSON.parse(localStorage['streams']);
 	for (var i = 0; i < tab.length; i++) {
 		var request=[];
-		request["display_name"]=tab[i];
+		request.login=tab[i];
 		displayName(request, true);
 		if(favoritesChannels.includes(tab[i])){
 			displayFav(request,true);
@@ -201,7 +201,7 @@ function displayName(httpRequest, opti){
 	input.setAttribute('class','text-center');
 	input.setAttribute('id','channel');
 	input.setAttribute("disabled","disabled");
-	input.value=reponse['display_name'];
+	input.value=reponse['login'];
 
 	var btnGeneral = document.createElement("div");
 	btnGeneral.setAttribute("class","btn-general");
@@ -213,7 +213,7 @@ function displayName(httpRequest, opti){
 	var divStar = document.createElement("div");
 	divStar.innerHTML="<i class='fa fa-star' aria-hidden='true'></i>";
 	divStar.addEventListener('click',favChannel);
-	if (favoritesChannels.includes(reponse['display_name'])) {divStar.childNodes[0].style.color="#27ae60";}
+	if (favoritesChannels.includes(reponse['login'])) {divStar.childNodes[0].style.color="#27ae60";}
 
 	btnGeneral.appendChild(divTimes);
 	btnGeneral.appendChild(divStar);
@@ -265,7 +265,7 @@ function displayFav(httpRequest, opti){
 	var label = document.createElement("label");
 	label.setAttribute("class","sr-only");
 	label.setAttribute("for","channel");
-	label.innerHTML=reponse.display_name;
+	label.innerHTML=reponse.login;
 
 	var inputGroup = document.createElement('div');
 	inputGroup.setAttribute("class","input-group");
@@ -273,7 +273,7 @@ function displayFav(httpRequest, opti){
 	var input = document.createElement("input");
 	input.setAttribute("type","text")
 	input.setAttribute("disabled","disabled");
-	input.value=reponse['display_name'];
+	input.value=reponse['login'];
 
 	var btnFav = document.createElement('div');;
 	btnFav.setAttribute("class","btnFav");
