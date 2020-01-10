@@ -869,7 +869,7 @@ function saveTab(event) {
 	console.log(reponse);
 	if (reponse["error"]==null) {
 		cleanAffichage();
-		urls.push(reponse.data[0].display_name);
+		urls.push(reponse.data[0].login);
 		localStorage['streams']=JSON.stringify(urls);
 		request=[];
 		afficherStream();
@@ -883,7 +883,7 @@ function saveTabFav(event) {
 	console.log(reponse);
 	if (reponse["error"]==null) {
 		cleanAffichage();
-		urls.push(reponse.data[0].display_name);
+		urls.push(reponse.data[0].login);
 		favoritesChannel.push(reponse.data[0].display_name);
 		localStorage['favorites']=JSON.stringify(favoritesChannel);
 		localStorage['streams']=JSON.stringify(urls);
