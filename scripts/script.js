@@ -1032,3 +1032,15 @@ function compareJeu(a , b) {
 		return 1;
 	}
 }
+
+//if crash
+window.onerror = function (msg, url, lineNo, columnNo, error) {
+  var div = document.createElement("div");
+  div.style.color ="red";
+  var h1 = document.createElement("h1");
+  h1.innerHTML="If you experience bug during loading, please remove all channel and re-add them ! Thank you !";
+  div.appendChild(h1);
+  document.getElementById('afficher').appendChild(div);
+
+  return false;
+}
