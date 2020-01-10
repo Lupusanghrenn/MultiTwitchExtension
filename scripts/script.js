@@ -808,6 +808,15 @@ function getCurrent(tab) {
 
 function getCurrentFav(tab) {
 	tabUrl = tab[0]['url'];
+	if(tabUrl[tabUrl.length-1]=="/"){
+		tabUrl = tabUrl.substring(0, tabUrl.length-1);
+	}
+
+	if (tabUrl.endsWith("/videos")) {
+		console.log("end with videos");
+		tabUrl = tabUrl.substring(0,tabUrl.length-7);
+		console.log(tabUrl);
+	}
 	var slash =false;
 
 	//on récupère la fin du site (apres le dernier / )
