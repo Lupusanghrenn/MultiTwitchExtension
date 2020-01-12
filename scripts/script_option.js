@@ -536,20 +536,46 @@ function checkNbFollowers(userid,tabUsers,callBack,nbIte) {
 		//on a plus de 100 follows --> renvoie de requete
 		myajaxFollow(userid,callBack,nbIte+1,tabUsers.pagination.cursor,tabUsers);
 	}else{
-		//myajaxFollowedUsers(tabUsers,callBack);
+		myajaxFollowedUsers(tabUsers,callBack);
 		console.log("tabUsers");
 		console.log(tabUsers);
-		addFollowedUsers(tabUsers);
+		//addFollowedUsers(tabUsers);
 	}
 	
 }
 
-function addFollowedUsers(tabUsers) {
+function myajaxFollowedUsers(tabUsers,callBack){
+	var httpRequest = new XMLHttpRequest();
+	console.log(tabUsers);
+	total=tabUsers.data.length;
+	for(var nbIte=0;nbIte*100<tabUsers.data.length;nbIte++){
+		var users ="";
+		for (var i = nbIte*100; i < tabUsers.data.length-1 && i<(nbIte+1)*100; i++) {
+			users+=tabUsers.data[i].to_id+"&id=";
+		}
+		users=users.substr(0,users.length-4);
+		//users+=tabUsers.data[tabUsers.data.length-1].to_id;
+		console.log(users);
+	    var url = "https://api.twitch.tv/helix/users?id="+users;
+	    httpRequest.open("GET", url, false);
+	    httpRequest.setRequestHeader('Client-ID',myid);
+	    httpRequest.setRequestHeader("Content-Type", "application/json");
+	    httpRequest.addEventListener("load", function (event) {
+	    	console.log("callBack" + callBack);
+	    	console.log(event);
+	    	
+	        callBack(JSON.parse(httpRequest.responseText));
+	    });
+	    httpRequest.send();
+	}
+}
+
+/*function addFollowedUsers(tabUsers) {
 	total=tabUsers.data.length;
 	for (var i = 0; i < tabUsers.data.length; i++) {
 		checkandaddTab(tabUsers.data[i].to_name);
 	}
-}
+}*/
 
 
 function enter(event){
@@ -593,14 +619,14 @@ function getFollow() {
 	feedback3.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeedbackGettingInProgress")));
 	feedback3.addEventListener("click",close3);
 	setTimeout(close3,5000);
-	myajaxId(username,null);
+	myajaxId(username,updateTab);
 }
 
 function updateTab(tab) {
 	//feedback3.innerHTML="";
 	close3();
 	console.log(tab);
-	total=tab.data.length;
+	//total=tab.data.length;
 	for (var i = 0; i <tab.data.length; i++) {
 		checkandaddTab(tab.data[i]);
 	}
@@ -608,13 +634,14 @@ function updateTab(tab) {
 
 function checkandaddTab(name){
 	//console.log(name);
-	var username=name;
+	var username=name.login;
 	//console.log(username);
 	total--;
-	//console.log(total);
+	
 	if (!tab.includes(username)) {
 		tab.push(username);
 	}
+	
 	if (total==0) {
 		console.log("total");
 		document.getElementById("toChannelName").value="";
