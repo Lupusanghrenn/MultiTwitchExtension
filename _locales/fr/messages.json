@@ -137,6 +137,8 @@
 	},
 	"darktheme":{
 		"message":"Activer le mode dark"
+	},
+	"removeAll":{
+		"message":"Supprimer toutes les chaînes"
 	}
-
 }

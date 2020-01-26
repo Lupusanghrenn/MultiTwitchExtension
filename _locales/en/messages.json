@@ -137,5 +137,8 @@
 	},
 	"darktheme":{
 		"message":"Enable dark theme"
+	},
+	"removeAll":{
+		"message":"Remove all channels !"
 	}
 }

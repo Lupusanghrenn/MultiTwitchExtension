@@ -28,6 +28,7 @@ function init(){
 	multitwitch=JSON.parse(localStorage["multitwitch"]);
 	darktheme=localStorage["darktheme"]=="true";
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
+	localStorage['notifOnLaunch']=notifOnLaunch;
 	sortByGames=localStorage["sortByGames"]=="true";
 	autoSquad=localStorage["autoSquad"]=="true";
 	showOverflow=localStorage["showOverflow"]=="true";
@@ -124,6 +125,7 @@ function init(){
 	document.getElementById('checkAutoSquad').innerHTML=chrome.i18n.getMessage("autoSquad");
 	document.getElementById('checkOverflow').innerHTML=chrome.i18n.getMessage("showOverflow");
 	document.getElementById('checkDarktheme').innerHTML=chrome.i18n.getMessage("darktheme");
+	document.getElementById('removeAll').innerHTML=chrome.i18n.getMessage("removeAll");
 
 	//Ajout d amelioration de l UI
 	document.getElementById('CheckOnLaunch').addEventListener("click",function (event) {
@@ -160,6 +162,12 @@ function init(){
 		console.log(document.getElementById('showOverflow'));
 		document.getElementById('showOverflow').checked=!document.getElementById('showOverflow').checked;
 	});
+
+	document.getElementById('removeAll-g').addEventListener("click",function(){
+		localStorage.favorites=JSON.stringify([]);
+		localStorage.streams=JSON.stringify([]);
+		window.location.reload(true);
+	})
 
 	//enregistrer();
 	displayChannel();
