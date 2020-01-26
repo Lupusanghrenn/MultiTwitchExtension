@@ -211,6 +211,7 @@ function myajax(nomChaine,  callBack,async=true) {
     httpRequest.setRequestHeader('Client-ID',myid);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
+    	//if (JSON.parse(httpRequest.responseText).data==undefined || JSON.parse(httpRequest.responseText).data.length>0){
     	if (JSON.parse(httpRequest.responseText).data.length>0){
     		callBack(httpRequest,nomChaine);
     	}else{
@@ -387,6 +388,56 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		console.log("favUsers");
 		console.log(tabUsers);
 
+		//if option de tri
+		//if(triPerViewers){
+		if(true){
+			var favoritesChannelSorted=[];
+			var favoritesChannelSortedViewer=[];
+
+			for(var i=0;i<favoritesChannel.length;i++){
+				//request.data[k]["viewer_count"]
+				var name =favoritesChannel[i];
+
+				var thisUser = [];
+				for (var j = 0; j < tabUsers.length; j++) {
+					if(tabUsers[j].login==name.toLowerCase() || thisUser.display_name==name){
+						thisUser=tabUsers[j];
+						j=10000;
+					}
+				}
+				if(thisUser.id!=undefined){
+					favoritesChannelSorted.push(name);
+
+					var k=0;
+					while(k<request.data.length && request.data[k].user_name!=thisUser.display_name){
+						k++;
+					}
+					favoritesChannelSortedViewer.push(request.data[k]["viewer_count"]);
+				}
+			}
+			var favSorted = [];
+			var length = favoritesChannelSorted.length
+
+			for(var i=0;i<length;i++){
+				var maxViewer=favoritesChannelSortedViewer[0];
+				var maxViewerName=favoritesChannelSorted[0];
+				var indexMax=0;
+
+				for(var j=1;j<favoritesChannelSorted.length;j++){
+					if(favoritesChannelSortedViewer[j]>maxViewer){
+						maxViewer=favoritesChannelSortedViewer[j];
+						maxViewerName=favoritesChannelSorted[j];
+						indexMax=j;
+					}
+				}
+				favSorted.push(maxViewerName);
+				favoritesChannelSorted.splice(indexMax,1);
+				favoritesChannelSortedViewer.splice(indexMax,1);
+			}
+			favoritesChannel=favSorted;
+			console.log(favSorted);
+		}
+
 		for (var i = 0; i < favoritesChannel.length; i++) {
 			var name =favoritesChannel[i];
 
@@ -510,7 +561,7 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		}
 
 		//gestion du squad stream
-		if(request.data[i].tag_ids.includes(squadTag) && !channelSquad.includes(thisUser.login)){
+		if(request.data[i].tag_ids!=null && request.data[i].tag_ids.includes(squadTag) && !channelSquad.includes(thisUser.login)){
 			channelSquad.push(thisUser.login);
 		}		
 
@@ -1038,9 +1089,12 @@ window.onerror = function (msg, url, lineNo, columnNo, error) {
   var div = document.createElement("div");
   div.style.color ="red";
   var h1 = document.createElement("h1");
-  h1.innerHTML="If you experience bug during loading, please remove all channel and re-add them ! Thank you !";
+  h1.innerHTML="If you experience bug during loading, please remove all channel and re-add them ! Thank you ! <br> You know have a button to remove all channels";
   div.appendChild(h1);
   document.getElementById('afficher').appendChild(div);
+
+  console.log(msg);
+  console.log(error);
 
   return false;
 }
