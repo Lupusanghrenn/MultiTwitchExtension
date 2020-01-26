@@ -45,6 +45,11 @@ if (localStorage["darktheme"]==undefined) {
 
 showOffline=localStorage["showOffline"]=="true";
 optimisation=localStorage["optimisation"]=="true";
+triPerViewers=localStorage["triPerViewers"]=="true";
+if (localStorage["triPerViewers"]==undefined) {
+	triPerViewers=true;
+	localStorage["triPerViewers"]="true";
+}
 
 arrayStream=[];
 
@@ -389,8 +394,7 @@ function displayStreamAsyncGames(request,tabJeu, tabUsers){
 		console.log(tabUsers);
 
 		//if option de tri
-		//if(triPerViewers){
-		if(true){
+		if(triPerViewers){
 			var favoritesChannelSorted=[];
 			var favoritesChannelSortedViewer=[];
 

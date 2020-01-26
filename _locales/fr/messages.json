@@ -140,5 +140,8 @@
 	},
 	"removeAll":{
 		"message":"Supprimer toutes les chaînes"
+	},
+	"ChecktriPerViewers":{
+		"message":"Trier les favoris selon le nombre de vue (au lieu d'alphébétique)"
 	}
 }

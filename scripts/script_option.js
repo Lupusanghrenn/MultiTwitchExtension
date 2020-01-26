@@ -7,6 +7,8 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage["autoSquad"]=checkboxAutoSquad.checked;
 	localStorage["showOverflow"]=checkboxshowOverflow.checked;
 	localStorage["darktheme"]=checkboxDarktheme.checked;
+	localStorage["triPerViewers"]=checkboxtriPerViewers.checked;
+	triPerViewers=checkboxtriPerViewers.checked;
 	
 	timeInterval=parseInt(inputTimeInterval.value)*1000;
 	if (timeInterval<10000) {
@@ -55,6 +57,12 @@ function init(){
 		localStorage["darktheme"]="true";
 	}
 
+	triPerViewers=localStorage["triPerViewers"]=="true";
+	if (localStorage["triPerViewers"]==undefined) {
+		triPerViewers=true;
+		localStorage["triPerViewers"]="true";
+	}
+
 
 	//document.getElementById("multitwitch");
 	//checkboxMulti.checked=multitwitch;
@@ -79,6 +87,9 @@ function init(){
 
 	checkboxshowOverflow=document.getElementById("showOverflow");
 	checkboxshowOverflow.checked=showOverflow;
+
+	checkboxtriPerViewers=document.getElementById("triPerViewers");
+	checkboxtriPerViewers.checked=triPerViewers;
 
 	buttonInputChannelFollow=document.getElementById("buttonChannelName");
 	buttonInputChannelFollow.addEventListener("click",getFollow);
@@ -126,6 +137,7 @@ function init(){
 	document.getElementById('checkOverflow').innerHTML=chrome.i18n.getMessage("showOverflow");
 	document.getElementById('checkDarktheme').innerHTML=chrome.i18n.getMessage("darktheme");
 	document.getElementById('removeAll').innerHTML=chrome.i18n.getMessage("removeAll");
+	document.getElementById('ChecktriPerViewers').innerHTML=chrome.i18n.getMessage("ChecktriPerViewers");
 
 	//Ajout d amelioration de l UI
 	document.getElementById('CheckOnLaunch').addEventListener("click",function (event) {

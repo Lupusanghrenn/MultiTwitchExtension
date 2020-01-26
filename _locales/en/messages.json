@@ -140,5 +140,8 @@
 	},
 	"removeAll":{
 		"message":"Remove all channels !"
+	},
+	"ChecktriPerViewers":{
+		"message":"Sort channels per wiewers count instead of alphabetical order"
 	}
 }
