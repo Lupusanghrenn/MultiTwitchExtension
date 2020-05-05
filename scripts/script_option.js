@@ -27,6 +27,12 @@ function init(){
 	console.log("init");
 	//initialisation des variables globales
 	//showOffline=localStorage["showOffline"]=="true";
+	var hash = document.location.hash;
+	if (hash!=undefined) {
+		var token =hash.slice(14,14+30);
+		localStorage.token=token;
+	}
+	
 	multitwitch=JSON.parse(localStorage["multitwitch"]);
 	darktheme=localStorage["darktheme"]=="true";
 	notifOnLaunch=localStorage["notifOnLaunch"]=="true";
@@ -63,12 +69,16 @@ function init(){
 		localStorage["triPerViewers"]="true";
 	}
 
+	if (localStorage.token==undefined) {
+		alert("You need to connect your twitch account to use the app! Go to option and click the + button");
+	}
+	token=localStorage.token;
+
 
 	//document.getElementById("multitwitch");
 	//checkboxMulti.checked=multitwitch;
 	checkboxMulti=document.getElementById("selectMulti");
 	checkboxMulti.selectedIndex=multitwitch;
-	console.log(checkboxMulti);
 
 	//checkboxShowOffline=document.getElementById("showOffline");
 	//checkboxShowOffline.checked=showOffline;
@@ -590,6 +600,14 @@ function myajaxFollowedUsers(tabUsers,callBack){
 	}
 }
 
+function myajaxToken(username){
+	//Online
+	//var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://jpgnbiffpoelgpegopldffmpbmfdojga/pages/template_option.html&scope=viewing_activity_read";
+	//offline
+	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://achklpaoiepliafpiengdcglgclngdle/pages/template_option.html&scope=viewing_activity_read";
+	chrome.tabs.create({url:urlToken});
+}
+
 /*function addFollowedUsers(tabUsers) {
 	total=tabUsers.data.length;
 	for (var i = 0; i < tabUsers.data.length; i++) {
@@ -634,12 +652,16 @@ function close4(){
 function getFollow() {
 	var username=document.getElementById("toChannelName").value;
 	document.getElementById("toChannelName").value="";
-	console.log(username);
 	feedback3.innerHTML="";
 	feedback3.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeedbackGettingInProgress")));
 	feedback3.addEventListener("click",close3);
 	setTimeout(close3,5000);
-	myajaxId(username,updateTab);
+	if(localStorage.token!=undefined){
+		myajaxId(username,updateTab);
+		//myajaxToken(username);
+	}else{
+		myajaxToken(username);
+	}
 }
 
 function updateTab(tab) {
@@ -718,6 +740,8 @@ function createFeedback(alertType,texte){
 	feedbackDiv.appendChild(a);
 	return feedbackDiv;
 }
+
+//change for the app token
 
 window.onload=init();
 

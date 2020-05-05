@@ -6,6 +6,14 @@ row = document.getElementsByClassName("channel")[0];
 var extensionID="jfaoecnmdknjhbjadnpifengnndehddh";//local
 
 //Initialisation des valeurs
+if(localStorage.token==undefined){
+	alert("You now need to use your twitch account");
+	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://achklpaoiepliafpiengdcglgclngdle/pages/template_option.html&scope=viewing_activity_read";
+	chrome.tabs.create({url:urlToken});
+}else{
+	token="Bearer "+localStorage.token;
+}
+
 if (localStorage["showOffline"]==undefined) {
 	localStorage["showOffline"]="false";	
 }
@@ -213,11 +221,13 @@ function myajax(nomChaine,  callBack,async=true) {
     var httpRequest = new XMLHttpRequest();
     var url="https://api.twitch.tv/helix/streams?user_login="+nomChaine;
     httpRequest.open("GET", url, async);
-    httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Client-ID",myid);
+    httpRequest.setRequestHeader("Authorization",token);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
-    	//if (JSON.parse(httpRequest.responseText).data==undefined || JSON.parse(httpRequest.responseText).data.length>0){
-    	if (JSON.parse(httpRequest.responseText).data.length>0){
+    	console.log(httpRequest.responseText);
+    	if (JSON.parse(httpRequest.responseText).data==undefined || JSON.parse(httpRequest.responseText).data.length>0){
+    	//if (JSON.parse(httpRequest.responseText).data.length>0){
     		callBack(httpRequest,nomChaine);
     	}else{
     		cleanAffichage();
@@ -236,6 +246,7 @@ function myajax2(nomChaine, callBack) {
     var url="https://api.twitch.tv/helix/users?login="+nomChaine;
     httpRequest.open("GET", url, false);
     httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Authorization",token);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
         callBack(httpRequest,nomChaine);
