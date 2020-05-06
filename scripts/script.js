@@ -12,6 +12,9 @@ if(localStorage.token==undefined){
 	chrome.tabs.create({url:urlToken});
 }else{
 	token="Bearer "+localStorage.token;
+	console.log(token);
+	//var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://achklpaoiepliafpiengdcglgclngdle/pages/template_option.html&scope=viewing_activity_read";
+	//chrome.tabs.create({url:urlToken});
 }
 
 if (localStorage["showOffline"]==undefined) {
@@ -324,6 +327,7 @@ function displayStreamAsync(request){
 	    var url="https://api.twitch.tv/helix/games?id="+jeux;
 	    httpRequest.open("GET", url, true);
 	    httpRequest.setRequestHeader('Client-ID',myid);
+	    httpRequest.setRequestHeader("Authorization",token);
 	    httpRequest.setRequestHeader("Content-Type", "application/json");
 	    httpRequest.addEventListener("load", function () {
 	    	var jeuR = JSON.parse(httpRequest.response);
@@ -353,6 +357,7 @@ function displayStreamAsyncUser(request,tabJeu){
 	var url="https://api.twitch.tv/helix/users?id="+users;
 	httpRequest.open("GET", url, true);
 	httpRequest.setRequestHeader('Client-ID',myid);
+	httpRequest.setRequestHeader("Authorization",token);
 	httpRequest.setRequestHeader("Content-Type", "application/json");
 	httpRequest.addEventListener("load", function () {
 		var userR = JSON.parse(httpRequest.response);

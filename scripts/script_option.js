@@ -70,7 +70,7 @@ function init(){
 	}
 
 	if (localStorage.token==undefined) {
-		alert("You need to connect your twitch account to use the app! Go to option and click the + button");
+		alert("You need to connect your twitch account to use the app! Go to the connect button");
 	}
 	token=localStorage.token;
 
@@ -504,6 +504,7 @@ function myajax(nomChaine, callBack) {
     var url="https://api.twitch.tv/helix/users?login="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Authorization",token);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
     	console.log(httpRequest);
@@ -517,6 +518,7 @@ function myajaxId(nomChaine, callBack) {
     var url="https://api.twitch.tv/helix/users?login="+nomChaine;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Authorization",token);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
         //callBack(httpRequest,false);
@@ -540,6 +542,7 @@ function myajaxFollow(userid, callBack,nbIte,cursor,formerTab) {
     var url = "https://api.twitch.tv/helix/users/follows?from_id="+userid+"&first=100&after="+cursor;
     httpRequest.open("GET", url, true);
     httpRequest.setRequestHeader('Client-ID',myid);
+    httpRequest.setRequestHeader("Authorization",token);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
     	var newTab = JSON.parse(httpRequest.response);
@@ -589,6 +592,7 @@ function myajaxFollowedUsers(tabUsers,callBack){
 	    var url = "https://api.twitch.tv/helix/users?id="+users;
 	    httpRequest.open("GET", url, false);
 	    httpRequest.setRequestHeader('Client-ID',myid);
+    	httpRequest.setRequestHeader("Authorization",token);
 	    httpRequest.setRequestHeader("Content-Type", "application/json");
 	    httpRequest.addEventListener("load", function (event) {
 	    	console.log("callBack" + callBack);
