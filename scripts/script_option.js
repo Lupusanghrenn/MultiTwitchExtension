@@ -139,7 +139,8 @@ function init(){
 	document.getElementById("sort").innerHTML=chrome.i18n.getMessage("SortChannels");
 	document.getElementById("toSave").placeholder=chrome.i18n.getMessage("placeholderUrlChannel");
 	document.getElementById("GetFollowTitle").innerHTML=chrome.i18n.getMessage("GetFollowTitle");
-	document.getElementById("toChannelName").placeholder=chrome.i18n.getMessage("placeholderUrlFollow");
+	document.getElementById("buttonChannelName").innerHTML+=" "+chrome.i18n.getMessage("ConnectTwitch");
+	//document.getElementById("toChannelName").placeholder=chrome.i18n.getMessage("placeholderUrlFollow");
 	//document.getElementById("buttonChannelName").innerHTML=chrome.i18n.getMessage("GetFollow");
 	document.getElementById("lupusNote").innerHTML=chrome.i18n.getMessage("lupusNote");
 	document.getElementById('checkSort').innerHTML=chrome.i18n.getMessage("sortByGames");

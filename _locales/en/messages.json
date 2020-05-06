@@ -143,5 +143,8 @@
 	},
 	"ChecktriPerViewers":{
 		"message":"Sort channels per wiewers count instead of alphabetical order"
+	},
+	"ConnectTwitch":{
+		"message":"Connect to your Twitch account"
 	}
 }

@@ -143,5 +143,8 @@
 	},
 	"ChecktriPerViewers":{
 		"message":"Trier les favoris selon le nombre de vue (au lieu d'alphébétique)"
+	},
+	"ConnectTwitch":{
+		"message":"Se connecter à votre compte Twitch"
 	}
 }
