@@ -2,10 +2,11 @@
 
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
 row = document.getElementsByClassName("channel")[0];
-//var extensionID="obpmmenioddcpffdelecfoogjomfhekm";//online
-var extensionID="jfaoecnmdknjhbjadnpifengnndehddh";//local
+var extensionID="obpmmenioddcpffdelecfoogjomfhekm";//online
+//var extensionID="jfaoecnmdknjhbjadnpifengnndehddh";//local
 
 //Initialisation des valeurs
+//if(localStorage.token==undefined || localStorage.token==""){
 if(localStorage.token==undefined){
 	alert("You now need to use your twitch account");
 	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://achklpaoiepliafpiengdcglgclngdle/pages/template_option.html&scope=viewing_activity_read";
@@ -916,7 +917,7 @@ function getCurrentFav(tab) {
 		console.log('surtwitch');
 		//TODO recup le display name via une requete pour la suite du code
 		if (!favoritesChannel.includes(name) && urls.includes(name)) {
-			console.log(name);
+			console.log(favoritesChannel);
 			favoritesChannel.push(name);
 			localStorage.favorites=JSON.stringify(favoritesChannel);
 			request=[];
