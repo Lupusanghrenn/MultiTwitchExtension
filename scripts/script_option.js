@@ -607,9 +607,9 @@ function myajaxFollowedUsers(tabUsers,callBack){
 
 function myajaxToken(username){
 	//Online
-	//var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://jpgnbiffpoelgpegopldffmpbmfdojga/pages/template_option.html&scope=viewing_activity_read";
+	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://jpgnbiffpoelgpegopldffmpbmfdojga/pages/template_option.html&scope=viewing_activity_read";
 	//offline
-	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://achklpaoiepliafpiengdcglgclngdle/pages/template_option.html&scope=viewing_activity_read";
+	//var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://achklpaoiepliafpiengdcglgclngdle/pages/template_option.html&scope=viewing_activity_read";
 	chrome.tabs.create({url:urlToken});
 }
 
@@ -661,7 +661,7 @@ function getFollow() {
 	feedback3.appendChild(createFeedback("alert-info",chrome.i18n.getMessage("FeedbackGettingInProgress")));
 	feedback3.addEventListener("click",close3);
 	setTimeout(close3,5000);
-	if(localStorage.token!=undefined){
+	if(localStorage.token!=undefined && localStorage.token!=""){
 		myajaxId(username,updateTab);
 		//myajaxToken(username);
 	}else{
