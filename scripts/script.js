@@ -9,7 +9,7 @@ var extensionID="jpgnbiffpoelgpegopldffmpbmfdojga";//online
 //if(localStorage.token==undefined || localStorage.token==""){
 if(localStorage.token==undefined){
 	alert("You now need to use your twitch account");
-	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://achklpaoiepliafpiengdcglgclngdle/pages/template_option.html&scope=viewing_activity_read";
+	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://jpgnbiffpoelgpegopldffmpbmfdojga/pages/template_option.html&scope=viewing_activity_read";
 	chrome.tabs.create({url:urlToken});
 }else{
 	token="Bearer "+localStorage.token;
