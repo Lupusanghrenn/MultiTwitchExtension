@@ -28,9 +28,9 @@ function init(){
 	//initialisation des variables globales
 	//showOffline=localStorage["showOffline"]=="true";
 	var hash = document.location.hash;
-	if (hash!=undefined) {
-		var token =hash.slice(14,14+30);
-		localStorage.token=token;
+	if (hash!=undefined && document.location.hash.includes("access_token")) {
+		var bearertoken =hash.slice(14,14+30);
+		localStorage.token=bearertoken;
 	}
 	
 	multitwitch=JSON.parse(localStorage["multitwitch"]);
@@ -72,7 +72,7 @@ function init(){
 	if (localStorage.token==undefined) {
 		alert("You need to connect your twitch account to use the app! Go to the connect button");
 	}
-	token=localStorage.token;
+	token="Bearer "+localStorage.token;
 
 
 	//document.getElementById("multitwitch");
