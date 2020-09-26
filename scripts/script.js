@@ -1,15 +1,15 @@
 //idapp = "jfaoecnmdknjhbjadnpifengnndehddh"
-
+isTokenErrorAlreadyLogged = false;
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
 row = document.getElementsByClassName("channel")[0];
-var extensionID="jpgnbiffpoelgpegopldffmpbmfdojga";//online
-//var extensionID="jfaoecnmdknjhbjadnpifengnndehddh";//local
+//var extensionID="jpgnbiffpoelgpegopldffmpbmfdojga";//online
+var extensionID="ladpjdnbcbdejhogjdbgcakjepfmdgac";//local
 
 //Initialisation des valeurs
 //if(localStorage.token==undefined || localStorage.token==""){
-if(localStorage.token==undefined){
+	if(localStorage.token==undefined && localStorage.token==""){
 	alert("You now need to use your twitch account");
-	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://jpgnbiffpoelgpegopldffmpbmfdojga/pages/template_option.html&scope=viewing_activity_read";
+	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://"+extensionID+"/pages/template_option.html&scope=viewing_activity_read";
 	chrome.tabs.create({url:urlToken});
 }else{
 	token="Bearer "+localStorage.token;
@@ -229,7 +229,12 @@ function myajax(nomChaine,  callBack,async=true) {
     httpRequest.setRequestHeader("Authorization",token);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
-    	console.log(httpRequest.responseText);
+		//if(httpRequest.)
+		console.log(httpRequest.responseText);
+		if(httpRequest.status==401){
+			//error with request
+			onErrorToken();
+		}
     	if (JSON.parse(httpRequest.responseText).data==undefined || JSON.parse(httpRequest.responseText).data.length>0){
     	//if (JSON.parse(httpRequest.responseText).data.length>0){
     		callBack(httpRequest,nomChaine);
@@ -1105,17 +1110,43 @@ function compareJeu(a , b) {
 	}
 }
 
-//if crash
-window.onerror = function (msg, url, lineNo, columnNo, error) {
-  var div = document.createElement("div");
-  div.style.color ="red";
-  var h1 = document.createElement("h1");
-  h1.innerHTML="If you experience bug during loading, please remove all channel and re-add them ! Thank you ! <br> You know have a button to remove all channels";
-  div.appendChild(h1);
-  document.getElementById('afficher').appendChild(div);
-
-  console.log(msg);
-  console.log(error);
-
-  return false;
+function onErrorToken(){
+	if(isTokenErrorAlreadyLogged)
+		return;
+	var div = document.createElement("div");
+	div.setAttribute("class","online w100 row");
+	div.style.color ="red";
+	var div1 = document.createElement("div");
+	div1.setAttribute("class","w85");
+	var h1 = document.createElement("h2");
+	h1.innerHTML="Error with token please click on the link";
+	div1.appendChild(h1);
+	div.appendChild(div1);
+	var a = document.createElement("button");
+	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri="+document.location.origin+"/pages/template_option.html&scope=viewing_activity_read";	
+	//a.href=urlToken;
+	a.style.width="25%";
+	a.innerText="Refresh token";
+	a.addEventListener("click",function() {chrome.tabs.create({url:urlToken});});
+	div.appendChild(a);
+	document.getElementById('afficher').appendChild(div);
+	document.getElementById("loading").style.display="none";
+	isTokenErrorAlreadyLogged=true;
 }
+//if crash
+// window.onerror = function (msg, url, lineNo, columnNo, error) {
+//   if(error!=401){
+// 	var div = document.createElement("div");
+// 	div.style.color ="red";
+// 	var h1 = document.createElement("h1");
+// 	h1.innerHTML="If you experience bug during loading, please remove all channel and re-add them ! Thank you ! <br> You know have a button to remove all channels";
+// 	div.appendChild(h1);
+// 	document.getElementById('afficher').appendChild(div);
+
+// 	console.log(msg);
+// 	console.log(error);
+//   }
+	
+
+//   return false;
+// }

@@ -1,3 +1,6 @@
+//var extensionID="jpgnbiffpoelgpegopldffmpbmfdojga";//online
+var extensionID="ladpjdnbcbdejhogjdbgcakjepfmdgac";//local
+
 function enregistrer()//enregistrer les options, fonction appelée par le click sur le bouton
 {
 	//localStorage["showOffline"]=checkboxShowOffline.checked;
@@ -607,9 +610,9 @@ function myajaxFollowedUsers(tabUsers,callBack){
 
 function myajaxToken(username){
 	//Online
-	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://jpgnbiffpoelgpegopldffmpbmfdojga/pages/template_option.html&scope=viewing_activity_read";
+	//var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://"+extensionID+"/pages/template_option.html&scope=viewing_activity_read";
 	//offline
-	//var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://achklpaoiepliafpiengdcglgclngdle/pages/template_option.html&scope=viewing_activity_read";
+	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri="+document.location.origin+"/pages/template_option.html&scope=viewing_activity_read";
 	chrome.tabs.create({url:urlToken});
 }
 
