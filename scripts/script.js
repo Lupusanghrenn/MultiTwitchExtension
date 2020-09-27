@@ -2,14 +2,14 @@
 isTokenErrorAlreadyLogged = false;
 myid="ufvj1hc6m9qg5txkz9ryvz0hk961cx";
 row = document.getElementsByClassName("channel")[0];
-//var extensionID="jpgnbiffpoelgpegopldffmpbmfdojga";//online
-var extensionID="ladpjdnbcbdejhogjdbgcakjepfmdgac";//local
+var extensionID="jpgnbiffpoelgpegopldffmpbmfdojga";//online
+//var extensionID="ladpjdnbcbdejhogjdbgcakjepfmdgac";//local
 
 //Initialisation des valeurs
 //if(localStorage.token==undefined || localStorage.token==""){
 	if(localStorage.token==undefined && localStorage.token==""){
 	alert("You now need to use your twitch account");
-	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri=chrome-extension://"+extensionID+"/pages/template_option.html&scope=viewing_activity_read";
+	var urlToken = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="+myid+"&redirect_uri="+document.location.origin+"/pages/template_option.html&scope=viewing_activity_read";
 	chrome.tabs.create({url:urlToken});
 }else{
 	token="Bearer "+localStorage.token;
