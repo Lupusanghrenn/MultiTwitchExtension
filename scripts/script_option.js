@@ -587,7 +587,7 @@ function myajaxFollowedUsers(tabUsers,callBack){
 	total=tabUsers.data.length;
 	for(var nbIte=0;nbIte*100<tabUsers.data.length;nbIte++){
 		var users ="";
-		for (var i = nbIte*100; i < tabUsers.data.length-1 && i<(nbIte+1)*100; i++) {
+		for (var i = nbIte*100; i < tabUsers.data.length && i<(nbIte+1)*100; i++) {
 			users+=tabUsers.data[i].to_id+"&id=";
 		}
 		users=users.substr(0,users.length-4);
@@ -691,7 +691,7 @@ function checkandaddTab(name){
 	if (!tab.includes(username)) {
 		tab.push(username);
 	}
-	
+	console.log(total);
 	if (total==0) {
 		console.log("total");
 		document.getElementById("toChannelName").value="";
