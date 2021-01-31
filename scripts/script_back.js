@@ -7,13 +7,13 @@ if (localStorage["timeInterval"]==undefined) {
 }
 console.log(timeInterval);
 
-if (localStorage["streams"]==undefined) {
+if (localStorage["favorites"]==undefined) {
 	var t = [];
 	t=JSON.stringify(t);
-	localStorage["streams"]=t;	
+	localStorage["favorites"]=t;	
 	urls=[];
 }else{
-	urls=JSON.parse(localStorage['streams']);
+	urls=JSON.parse(localStorage['favorites']);
 }
 
 if (localStorage["multitwitch"]==undefined) {
@@ -34,20 +34,14 @@ urlsOffline=[];
 flag=0;
 waitForOtherRequest=false;
 requestGlobal=[];
-tabUsersGlobal=[];
-tabJeuGlobal=[];
 init();
 
 function init() {
 	nbStream=urls.length;
 	chaine = "";
+	token="Bearer "+localStorage.token;
 	for (var i = 0; i < urls.length; i++) {
 		chaine+=urls[i]+"&user_login=";
-		if((i+1)%100==0 && i>1){
-			waitForOtherRequest=true;
-			myajax(chaine,iniUrls,false);
-			chaine="";			
-		}
 	}
 	waitForOtherRequest=false;
 	myajax(chaine,iniUrls,false);
@@ -59,238 +53,127 @@ function myajax(nomChaine,  callBack,async=true) {
     var url="https://api.twitch.tv/helix/streams?user_login="+nomChaine;
     url = url.substring(0,url.length-12);
     httpRequest.open("GET", url, async);
-    httpRequest.setRequestHeader('Client-ID',myid);
+	httpRequest.setRequestHeader('Client-ID',myid);
+	httpRequest.setRequestHeader("Authorization",token);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
     	httpRequest=JSON.parse(httpRequest.response);
     	console.log(async);
     	console.log(httpRequest);
-    	if (httpRequest.data.length!=0) {
-    		myajaxGames(httpRequest,callBack,async);
-    	}else{
-    		callBack(httpRequest,[],[]);
-    	}
+    	callBack(httpRequest,[],[]);
     });
     httpRequest.send();
 }
 
-function myajaxGames(request,  callBack,async=true) {
-    var httpRequest = new XMLHttpRequest();
-    var nomGames="";
-    for (var i = 0; i < request.data.length; i++) {
-    	nomGames+=request.data[i].game_id+"&id=";
-    }
-    var url="https://api.twitch.tv/helix/games?id="+nomGames;
-    url = url.substring(0,url.length-4);
-    httpRequest.open("GET", url, async);
-    httpRequest.setRequestHeader('Client-ID',myid);
-    httpRequest.setRequestHeader("Content-Type", "application/json");
-    httpRequest.addEventListener("load", function () {
-    	var tabJeu = [];
-    	var jeuR = JSON.parse(httpRequest.response);
-    	for (var i = 0; i < jeuR.data.length; i++) {
-    		tabJeu.push(jeuR.data[i]);
-    	}
-        myajaxUsers(request,tabJeu,callBack,async);
-    });
-    httpRequest.send();
-}
-
-function myajaxUsers(request,tabJeu,callBack,async=true) {
+function myajaxUsers(thisUser,callBack) {
 	var httpRequest = new XMLHttpRequest();
-    var idUser="";
-    for (var i = 0; i < request.data.length; i++) {
-    	idUser+=request.data[i].user_id+"&id=";
-    }
-    var url="https://api.twitch.tv/helix/users?id="+idUser;
-    url = url.substring(0,url.length-4);
-    httpRequest.open("GET", url, async);
-    httpRequest.setRequestHeader('Client-ID',myid);
+    var url="https://api.twitch.tv/helix/users?id="+thisUser.user_id;
+    httpRequest.open("GET", url, true);
+	httpRequest.setRequestHeader('Client-ID',myid);
+	httpRequest.setRequestHeader("Authorization",token);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.addEventListener("load", function () {
-    	var tabUsers = [];
-    	var UserR = JSON.parse(httpRequest.response);
-    	for (var i = 0; i < UserR.data.length; i++) {
-    		tabUsers.push(UserR.data[i]);
-    	}
-        callBack(request,tabJeu,tabUsers);
+        callBack(thisUser,JSON.parse(httpRequest.responseText));
     });
     httpRequest.send();
 }
 
-function iniUrls(httpRequest,tabJeu,tabUsers) {
+function iniUrls(httpRequest) {
 	console.log("iniUrls : "+waitForOtherRequest);
-	//merge des request
-	if(tabJeuGlobal.length!=0 && requestGlobal.length!=0 && httpRequest.data!=null){
-		Array.prototype.push.apply(requestGlobal.data,httpRequest.data);
-		console.log("reauestGlobal");
-		if (tabJeu!=null) {
-			Array.prototype.push.apply(tabJeuGlobal,tabJeu);
-			Array.prototype.push.apply(tabUsersGlobal,tabUsers);
-		}		
-		
-	}else{
-		requestGlobal=httpRequest;
-		tabJeuGlobal=tabJeu;
-		tabUsersGlobal=tabUsers;
+
+	requestGlobal=httpRequest;
+	
+	var tabrequest=requestGlobal.data;
+	console.log(tabrequest);
+	urlsOnline=[];
+	urlsOffline=[];
+	for (var i = 0; i < tabrequest.length; i++) {
+
+		//console.log(thisUser.login);
+		urlsOnline.push(tabrequest[i].user_login);
+
+		//test selon le onLauch
+		if (notifOnLaunch && firstLaucnh) {
+			myajaxUsers(tabrequest[i],createNotif);
+		}
 	}
-	if(!waitForOtherRequest){
-		var tabrequest=requestGlobal.data;
-		console.log(tabrequest);
-		urlsOnline=[];
-		urlsOffline=[];
-		for (var i = 0; i < tabrequest.length; i++) {
+	firstLaucnh=false;
 
-			var thisUser = [];
-			for (var j = 0; j < tabUsersGlobal.length; j++) {
-				if(tabUsersGlobal[j].id==tabrequest[i]['user_id']){
-					thisUser=tabUsersGlobal[j];
-					j=10000;
-				}
-			}
-
-			//console.log(thisUser.login);
-			urlsOnline.push(thisUser.login);
-
-			//test selon le onLauch
-			if (notifOnLaunch && firstLaucnh) {
-				var nomjeu ="";
-				for (var j = 0; j < tabJeuGlobal.length; j++) {
-					if(tabJeuGlobal[j]['id']==tabrequest[i]['game_id']){
-						nomjeu=tabJeuGlobal[j]['name'];
-						j=10000;
-					}
-				}
-
-				var name = thisUser.display_name;
-				var urlName= thisUser.login;
-				var titre = tabrequest[i].title;
-				var icon = thisUser.profile_image_url;
-				var jeu = nomjeu;
-
-
-				if(titre.length>39){
-					titre=titre.substring(0,36)+'...';
-				}
-				if (jeu.length>43) {
-					jeu=jeu.substring(0,43);
-				}
-
-				var notif = chrome.notifications.create(urlName,{
-				  type: "basic",
-				  title: name+" just went live",
-				  message: titre,
-				  contextMessage:jeu,
-				  iconUrl: icon,
-				});//name = id
-			}
+	for (var i = 0; i < urls.length; i++) {
+		if (urlsOnline.indexOf(urls[i])==-1) {
+			urlsOffline.push(urls[i]);
 		}
-		firstLaucnh=false;
-
-		for (var i = 0; i < urls.length; i++) {
-			if (urlsOnline.indexOf(urls[i])==-1) {
-				urlsOffline.push(urls[i]);
-			}
-		}
-		if (flag==0) {
-			setInterval(checkStreamAjax ,timeInterval);
-			console.log("interval set : "+ timeInterval);
-		}
-		flag=1;
 	}
+	if (flag==0) {
+		setInterval(checkStreamAjax ,timeInterval);
+		console.log("interval set : "+ timeInterval);
+	}
+	flag=1;
+	
 }
 
 function checkStreamAjax() {
 	///on vérifie si on a pas rajouté des chaines
 	requestGlobal=[];
 	console.log("checkStreamAjax");
-	var t = JSON.parse(localStorage['streams']);
+	var t = JSON.parse(localStorage['favorites']);
 	if (nbStream==t.length) {
 		nbStream=urls.length;
 		chaine = "";
 		for (var i = 0; i < urls.length; i++) {
-			//TODO
 			chaine+=urls[i]+"&user_login=";
-			if((i+1)%100==0 && i>1){
-				console.log("allo");
-				waitForOtherRequest=true;
-				myajax(chaine,checkStream,false);
-				chaine="";
-				console.log("allo Fin");
-			}
 		}
 	}
 	waitForOtherRequest=false;
 	myajax(chaine,checkStream,false);
 }
 
-function checkStream(request,tabJeu,tabUsers) {
-	console.log("checkStream : "+waitForOtherRequest);
-	if (waitForOtherRequest) {
-		//merge des request
-		if(requestGlobal.length ==0){
-			requestGlobal=request;
-		}else{
-			Array.prototype.push.apply(requestGlobal.data,request.data);
-		}
-	}else{
-		console.log(requestGlobal);
-		if (requestGlobal.data.length>urlsOnline.length) {
-			//quelqu un vient de lancer son live
-			console.log("dans le if");
-			displayStream(requestGlobal,tabJeuGlobal,tabUsersGlobal);
-		}else if (requestGlobal.data.length<urlsOnline.length){
-			//quelqu un vient de shutdown son live
-			iniUrls(requestGlobal,tabJeuGlobal,tabUsersGlobal);
-		}
+function checkStream(request) {
+	requestGlobal=request;
+	console.log(requestGlobal);
+	if (requestGlobal.data.length>urlsOnline.length) {
+		//quelqu un vient de lancer son live
+		console.log("dans le if");
+		displayStream(requestGlobal);
+	}else if (requestGlobal.data.length<urlsOnline.length){
+		//quelqu un vient de shutdown son live
+		iniUrls(requestGlobal);
 	}
 	console.log("checkStream");	
 }
 
-function displayStream(request,tabJeu,tabUsers) {
+function createNotif(thisUser,UserRequest){
+	var name = thisUser.user_name;
+	var urlName= thisUser.user_login;
+	var titre = thisUser.title;
+	var icon = UserRequest.data[0].profile_image_url;;
+	var jeu = thisUser.game_name;
+	var userid=thisUser.user_id;
+	if(titre.length>39){
+		titre=titre.substring(0,36)+'...';
+	}
+	if (jeu.length>43) {
+		jeu=jeu.substring(0,43);
+	}
+	
+	var notif = chrome.notifications.create(urlName,{
+		type: "basic",
+		title: name+" just went live",
+		message: titre,
+		contextMessage:jeu,
+		iconUrl: icon,
+	});
+	console.log(notif);
+}
+
+function displayStream(request) {
 	//on crée la notification
 	console.log("displayStream");
 	var tabrequest=request.data;
 	for (var i = 0; i < tabrequest.length; i++) {
-		var thisUser = [];
-		for (var j = 0; j < tabUsers.length; j++) {
-			if(tabUsers[j].id==tabrequest[i]['user_id']){
-				thisUser=tabUsers[j];
-				j=tabUsers.length;
-			}
-		}
-
-		if(urlsOnline.indexOf(thisUser.login)==-1){
-
-			var nomjeu ="";
-			for (var j = 0; j < tabJeu.length; j++) {
-				if(tabJeu[j]['id']==tabrequest[i]['game_id']){
-					nomjeu=tabJeu[j]['name'];
-					j=10000;
-				}
-			}
-
-			var name = thisUser.display_name;
-			var urlName= thisUser.login;
-			var titre = tabrequest[i].title;
-			var icon = thisUser.profile_image_url;
-			var jeu = nomjeu;
-			var userid=thisUser.id;
-			if(titre.length>39){
-				titre=titre.substring(0,36)+'...';
-			}
-			if (jeu.length>43) {
-				jeu=jeu.substring(0,43);
-			}
-
-			var notif = chrome.notifications.create(urlName,{
-			  type: "basic",
-			  title: name+" just went live",
-			  message: titre,
-			  contextMessage:jeu,
-			  iconUrl: icon,
-			});
-			console.log(notif);
+		if(urlsOnline.indexOf(tabrequest[i].user_login)==-1){
+			var thisUser = tabrequest[i];
+			myajaxUsers(thisUser,createNotif);
 		}		
 	}
 
@@ -298,13 +181,6 @@ function displayStream(request,tabJeu,tabUsers) {
 	urlsOnline=[];
 	urlsOffline=[];
 	for (var i = 0; i < tabrequest.length; i++) {
-		var thisUser = [];
-		for (var j = 0; j < tabUsers.length; j++) {
-			if(tabUsers[j].id==tabrequest[i]['user_id']){
-				thisUser=tabUsers[j];
-				j=10000;
-			}
-		}
 		urlsOnline.push(thisUser.login);
 	}
 
