@@ -194,6 +194,12 @@ function displayStream(request) {
 function replyBtnClick(notificationId) {
 	//Write function to respond to user action.
 	console.log(notificationId);
-	chrome.tabs.create({url:'https://www.twitch.tv/'+notificationId});
+	//todo option for this
+	myOption = true;
+	if(localStorage.chaine!=null && myOption){
+		chrome.tabs.create({url:JSON.parse(localStorage.chaine)+notificationId});
+	}else{
+		chrome.tabs.create({url:'https://www.twitch.tv/'+notificationId});
+	}
 	chrome.notifications.clear(notificationId);
 }
