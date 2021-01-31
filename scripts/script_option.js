@@ -477,7 +477,7 @@ function save(){
 function testRetour(httpRequest,nomChaine){
 	console.log(httpRequest);
 	reponse=JSON.parse(httpRequest.response);
-	if (reponse['error']!=null) {
+	if (reponse['error']!=null || reponse.data.length == 0) {
 		//il y a une error
 		//alert("Cet utilisateur n'existe pas");
 		feedback.innerHTML="";
@@ -587,12 +587,14 @@ function myajaxFollowedUsers(tabUsers,callBack){
 	total=tabUsers.data.length;
 	for(var nbIte=0;nbIte*100<tabUsers.data.length;nbIte++){
 		var users ="";
+		var nbUser = 0;
 		for (var i = nbIte*100; i < tabUsers.data.length && i<(nbIte+1)*100; i++) {
 			users+=tabUsers.data[i].to_id+"&id=";
+			nbUser++;
 		}
 		users=users.substr(0,users.length-4);
 		//users+=tabUsers.data[tabUsers.data.length-1].to_id;
-		console.log(users);
+		console.log(nbUser + "/ " + users);
 	    var url = "https://api.twitch.tv/helix/users?id="+users;
 	    httpRequest.open("GET", url, false);
 	    httpRequest.setRequestHeader('Client-ID',myid);
@@ -600,9 +602,12 @@ function myajaxFollowedUsers(tabUsers,callBack){
 	    httpRequest.setRequestHeader("Content-Type", "application/json");
 	    httpRequest.addEventListener("load", function (event) {
 	    	console.log("callBack" + callBack);
-	    	console.log(event);
-	    	
-	        callBack(JSON.parse(httpRequest.responseText));
+			console.log(event);
+			console.log(nbUser);
+			var response = JSON.parse(httpRequest.responseText)
+			if(nbUser!=response.data.length)
+				total-= (nbUser-response.data.length);//fix banned user
+	        callBack(response);
 	    });
 	    httpRequest.send();
 	}
