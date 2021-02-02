@@ -11,6 +11,7 @@ function enregistrer()//enregistrer les options, fonction appelée par le click 
 	localStorage["showOverflow"]=checkboxshowOverflow.checked;
 	localStorage["darktheme"]=checkboxDarktheme.checked;
 	localStorage["triPerViewers"]=checkboxtriPerViewers.checked;
+	localStorage["autoMultitwitchNotification"]=checkboxmultitwitchOnNotif.checked;
 	triPerViewers=checkboxtriPerViewers.checked;
 	
 	timeInterval=parseInt(inputTimeInterval.value)*1000;
@@ -55,6 +56,7 @@ function init(){
 		multitwitch=localStorage["multitwitch"];
 	}
 	if (localStorage["favorites"]==undefined) {
+		console.log("Favorites reset");
 		favoritesChannels=[];
 		localStorage["favorites"]=JSON.stringify(favoritesChannels);
 	}else{
@@ -70,6 +72,12 @@ function init(){
 	if (localStorage["triPerViewers"]==undefined) {
 		triPerViewers=true;
 		localStorage["triPerViewers"]="true";
+	}
+
+	multitwitchOnNotif=localStorage["autoMultitwitchNotification"]=="true";
+	if (localStorage["autoMultitwitchNotification"]==undefined) {
+		multitwitchOnNotif=false;
+		localStorage["autoMultitwitchNotification"]="false";
 	}
 
 	if (localStorage.token==undefined) {
@@ -103,6 +111,9 @@ function init(){
 
 	checkboxtriPerViewers=document.getElementById("triPerViewers");
 	checkboxtriPerViewers.checked=triPerViewers;
+
+	checkboxmultitwitchOnNotif=document.getElementById("multitwitchOnNotif");
+	checkboxmultitwitchOnNotif.checked=multitwitchOnNotif;
 
 	buttonInputChannelFollow=document.getElementById("buttonChannelName");
 	buttonInputChannelFollow.addEventListener("click",getFollow);
@@ -152,6 +163,7 @@ function init(){
 	document.getElementById('checkDarktheme').innerHTML=chrome.i18n.getMessage("darktheme");
 	document.getElementById('removeAll').innerHTML=chrome.i18n.getMessage("removeAll");
 	document.getElementById('ChecktriPerViewers').innerHTML=chrome.i18n.getMessage("ChecktriPerViewers");
+	document.getElementById('checkMultitwitchOnNotif').innerHTML=chrome.i18n.getMessage("checkMultitwitchOnNotif");
 
 	//Ajout d amelioration de l UI
 	document.getElementById('CheckOnLaunch').addEventListener("click",function (event) {

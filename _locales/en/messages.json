@@ -146,5 +146,8 @@
 	},
 	"ConnectTwitch":{
 		"message":"Connect to your Twitch account"
+	},
+	"checkMultitwitchOnNotif":{
+		"message":"Notification auto adding the selected channel to your multitwitch tab"
 	}
 }

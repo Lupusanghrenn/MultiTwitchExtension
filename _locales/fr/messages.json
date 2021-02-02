@@ -146,5 +146,8 @@
 	},
 	"ConnectTwitch":{
 		"message":"Se connecter à votre compte Twitch"
+	},
+	"checkMultitwitchOnNotif":{
+		"message":"Les notification s'ajoute automatiquement à votre onglet multitwitch"
 	}
 }

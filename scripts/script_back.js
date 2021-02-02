@@ -31,6 +31,7 @@ var firstLaucnh=true;
 
 urlsOnline=[];
 urlsOffline=[];
+currentChannel="";
 flag=0;
 waitForOtherRequest=false;
 requestGlobal=[];
@@ -195,11 +196,48 @@ function replyBtnClick(notificationId) {
 	//Write function to respond to user action.
 	console.log(notificationId);
 	//todo option for this
-	myOption = true;
-	if(localStorage.chaine!=null && myOption){
-		chrome.tabs.create({url:JSON.parse(localStorage.chaine)+notificationId});
+	var autoMultiOption = localStorage.autoMultitwitchNotification == "true";
+	multitwitchOnNotif=localStorage["autoMultitwitchNotification"]=="true";
+	if (localStorage["autoMultitwitchNotification"]==undefined) {
+		autoMultiOption=true;
+		localStorage["autoMultitwitchNotification"]="true";
+	}
+	if(localStorage.chaine!=null && autoMultiOption){
+		//chrome.tabs.create({url:JSON.parse(localStorage.chaine)+notificationId});
+		currentChannel=notificationId;
+		chrome.windows.getAll({populate:true}, getAllOpenWindows);
 	}else{
 		chrome.tabs.create({url:'https://www.twitch.tv/'+notificationId});
 	}
 	chrome.notifications.clear(notificationId);
 }
+
+function getAllOpenWindows(winData) {
+
+	var tabs = [];
+	var tabSite = ["http://www.multitwitch.tv/","https://multistre.am/"];
+	var chaine= tabSite[multitwitch];
+	var finalI,finalJ=0;
+	for (var i in winData) {
+	  	for(var j in winData[i].tabs){
+			if(winData[i].tabs[j].url.includes(chaine)){
+				console.log(winData[i].tabs[j].url)
+				tabs = winData[i].tabs[j].url.split("/");
+				tabs[tabs.length-2]=currentChannel;
+				finalI=i;
+				finalJ=j;
+				break;
+			}
+	  	}
+	}
+	if(tabs!=[]){
+		var url = chaine;
+		for(var i=3;i<tabs.length-1;i++){
+			url+=tabs[i]+"/";
+		}
+		chrome.tabs.update(winData[finalI].tabs[finalJ].id,{url:url});
+	}else{
+		chrome.tabs.create({url:'https://www.twitch.tv/'+currentChannel});
+	}
+	console.log(tabs);
+  }
