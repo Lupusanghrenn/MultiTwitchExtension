@@ -22,8 +22,16 @@
     "https://api.twitch.tv/helix/streams/",
     "https://static-cdn.jtvnw.net/jtv_user_pictures/",
     "notifications",
-    "tabs"
+    "tabs",
+    "identity"
   ],
+  "key" : "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAprbVqpW1cANmN97ls/6rKQFzYeWO6XAZWNSjbzS6URn+9/PgZiaVvsxHwbwM3RD1F5b0YtUfpRLwNV8bmeZh65Erdol05ys7ghOwCNA25TkNMCTKWpr4jGIr56kjdDarcs/vFCXJmE1ob9OOTqtDXi5qIUWnCn9J216kUpSnFz6ByRQt7cOkcu6edCGdE2hXB5cLhcavTAUxsOPS4R/xbFyzeK/RslfqCQIQNcj75jsdMK+Kdgz5J0P0ksMcnrzwWaeZ3WUF4md0v+ZMe2dgK3kPl7jbguUS3OQPSPrE8pcj+DH161C2SMeoj3Px64hGTgtGTwZKjZ8tis0/WQXJRwIDAQAB",
+  "oauth2":{
+    "client_id" : "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ufvj1hc6m9qg5txkz9ryvz0hk961cx",
+    "scopes" : [
+      "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ufvj1hc6m9qg5txkz9ryvz0hk961cx"
+    ]
+  },
   "default_locale":"en",
   "version": "3.2.0",
   "author":"Lupusanghren @Lupusanghrenn"
